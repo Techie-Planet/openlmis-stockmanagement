@@ -288,6 +288,24 @@ traits:
               application/json:
                 schema: uuid
 
+  /issuedStockItemsNumber:
+      get:
+        is: [ secured ]
+        description: get Stock Line item
+        queryParameters:
+          program:
+            required: false
+          facility:
+            required: false
+
+        responses:
+          201:
+            description: Stock event has been processed with no validatoin error or persistence error.
+            headers:
+              Keep-Alive:
+            body:
+              application/json:
+                schema: uuid
 
   /stockCardSummaries:
       get:

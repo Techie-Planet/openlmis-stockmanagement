@@ -22,8 +22,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.openlmis.stockmanagement.domain.event.StockEventLineItem;
 import org.openlmis.stockmanagement.dto.StockEventDto;
+import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
 import org.openlmis.stockmanagement.repository.StockEventLineItemRepository;
 import org.openlmis.stockmanagement.service.HomeFacilityPermissionService;
 import org.openlmis.stockmanagement.service.PermissionService;
@@ -118,7 +120,7 @@ public class StockEventsController extends BaseController {
    * @return stockEventLineItem.
    */
   @RequestMapping(value = "issuedStockItems", method = GET)
-  public ResponseEntity<List<StockEventLineItem>> getStockLineItemIssuedToFacility(
+  public ResponseEntity<List<StockEventLineItemDto>> getStockLineItemIssuedToFacility(
       @RequestParam(value = "program") UUID programId,
       @RequestParam(value = "facility") UUID facilityId,
       @RequestParam(value = "documentNumber") String documentNumber) {
@@ -127,6 +129,29 @@ public class StockEventsController extends BaseController {
                                                     programId,
                                                     facilityId,
                                                     documentNumber
+      );
+    List<StockEventLineItemDto> stockEventLineItemDtos = result
+        .stream()
+        .map(StockEventLineItem::toEventLineItemDto)
+        .collect(Collectors.toList());
+    return new ResponseEntity<>(stockEventLineItemDtos, OK);
+  }
+
+  /**
+   * Fetch Stock Line Item ISSUE ID Issued to Facility.
+   *
+   * @param programId UUID of Program.
+   * @param facilityId UUID of Facility.
+   * @return string.
+   */
+  @RequestMapping(value = "issuedStockItemsNumber", method = GET)
+  public ResponseEntity<List<String>> getStockLineItemIssuedToFacilityNumber(
+      @RequestParam(value = "program") UUID programId,
+      @RequestParam(value = "facility") UUID facilityId) {
+    List<String> result = stockEventLineItemRepository
+                                                .getAllLineItemIssuedToFacilityNumber(
+                                                    programId,
+                                                    facilityId
       );
     return new ResponseEntity<>(result, OK);
   }

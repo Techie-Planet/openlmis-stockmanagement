@@ -50,6 +50,7 @@ public class StockEventLineItemDto implements IdentifiableByOrderableLot, VvmApp
   private String sourceFreeText;
   private UUID destinationId;
   private String destinationFreeText;
+  private UUID supplyingFacilityId;
   private List<StockEventAdjustmentDto> stockAdjustments;
 
   StockEventLineItem toEventLineItem() {

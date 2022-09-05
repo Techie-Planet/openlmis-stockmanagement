@@ -28,12 +28,22 @@ public interface StockEventLineItemRepository
     
   @Query("SELECT DISTINCT sel"
       + " FROM StockEventLineItem AS sel"
-      + " JOIN Node n on n.id = sel.destinationId and isRefDataFacility = true"
+      + " JOIN Node n on n.id = sel.destinationId and n.isRefDataFacility = true"
       + " WHERE n.referenceId = :facilityId" 
       + " AND sel.stockEvent.programId = :programId"
-      + " AND sel.stockEvent.documentNumber =: documentNumber")
+      + " AND sel.stockEvent.documentNumber = :documentNumberRef")
   List<StockEventLineItem> getAllLineItemIssuedToFacility(
                                             @Param("programId") UUID program,
                                             @Param("facilityId") UUID facility,
-                                            @Param("documentNumber") String documentNumber);
+                                            @Param("documentNumberRef") String documentNumber);
+
+  @Query("SELECT DISTINCT  sel.stockEvent.documentNumber"
+      + " FROM StockEventLineItem AS sel"
+      + " JOIN Node n on n.id = sel.destinationId and n.isRefDataFacility = true"
+      + " WHERE n.referenceId = :facilityId" 
+      + " AND sel.stockEvent.programId = :programId"
+      + " AND sel.stockEvent.documentNumber IS NOT NULL")
+  List<String> getAllLineItemIssuedToFacilityNumber(
+                                            @Param("programId") UUID program,
+                                            @Param("facilityId") UUID facility);
 }

@@ -17,6 +17,7 @@ package org.openlmis.stockmanagement.domain.event;
 
 import static javax.persistence.CascadeType.ALL;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ import org.openlmis.stockmanagement.domain.ExtraDataConverter;
 import org.openlmis.stockmanagement.domain.common.VvmApplicable;
 import org.openlmis.stockmanagement.domain.identity.IdentifiableByOrderableLot;
 import org.openlmis.stockmanagement.domain.physicalinventory.PhysicalInventoryLineItemAdjustment;
+import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
 
 @Data
 @Builder
@@ -72,7 +74,8 @@ public class StockEventLineItem extends BaseEntity
 
   private UUID destinationId;
   private String destinationFreeText;
-
+  
+  @JsonIgnore
   @ManyToOne()
   @JoinColumn(nullable = false)
   private StockEvent stockEvent;
@@ -100,5 +103,15 @@ public class StockEventLineItem extends BaseEntity
     }
     return null;
   }
+
+  /**
+   * Returns clean copy of StockEventLineItemDto.
+   */
+  public StockEventLineItemDto toEventLineItemDto() {
+    return new StockEventLineItemDto(
+        orderableId, lotId, quantity, extraData, occurredDate, reasonId, reasonFreeText, sourceId,
+        sourceFreeText, destinationId, destinationFreeText, stockEvent.getFacilityId(), null
+    );
+  } 
 
 }
