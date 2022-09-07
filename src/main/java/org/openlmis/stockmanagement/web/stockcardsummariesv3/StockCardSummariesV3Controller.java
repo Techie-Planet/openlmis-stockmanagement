@@ -13,12 +13,12 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
 
-package org.openlmis.stockmanagement.web.stockcardsummariesv2;
+package org.openlmis.stockmanagement.web.stockcardsummariesv3;
 
 import java.util.List;
 import org.openlmis.stockmanagement.service.StockCardSummaries;
 import org.openlmis.stockmanagement.service.StockCardSummariesService;
-import org.openlmis.stockmanagement.service.StockCardSummariesV2SearchParams;
+import org.openlmis.stockmanagement.service.StockCardSummariesV3SearchParams;
 import org.openlmis.stockmanagement.web.Pagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-//import org.springframework.security.access.prepost.PreAuthorize;
+// import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,58 +35,52 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v2/stockCardSummaries")
-public class StockCardSummariesV2Controller {
+@RequestMapping("/api/v3/stockCardSummaries")
+public class StockCardSummariesV3Controller {
 
   private static final Logger LOGGER =
-      LoggerFactory.getLogger(StockCardSummariesV2Controller.class);
+           LoggerFactory.getLogger(StockCardSummariesV3Controller.class);
 
   @Autowired
   private StockCardSummariesService stockCardSummariesService;
 
   @Autowired
-  private StockCardSummariesV2DtoBuilder stockCardSummariesV2DtoBuilder;
+  private StockCardSummariesV3DtoBuilder stockCardSummariesV3DtoBuilder;
 
   /**
    * Get stock card summaries by program and facility.
    *
    * @return Stock card summaries.
    */
-
-  //  @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
+  // @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
   @GetMapping
-  public Page<StockCardSummaryV2Dto> getStockCardSummaries(
+  public Page<StockCardSummaryV3Dto> getStockCardSummaries(
       @RequestParam MultiValueMap<String, String> parameters,
       @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable) {
 
-    Profiler profiler = new Profiler("GET_STOCK_CARDS_V2");
+    Profiler profiler = new Profiler("GET_STOCK_CARDS_V3");
     profiler.setLogger(LOGGER);
 
     profiler.start("VALIDATE_PARAMS");
-    StockCardSummariesV2SearchParams params = new StockCardSummariesV2SearchParams(parameters);
+    StockCardSummariesV3SearchParams params =
+            new StockCardSummariesV3SearchParams(parameters);
 
     profiler.start("GET_STOCK_CARD_SUMMARIES");
 
     StockCardSummaries summaries = stockCardSummariesService.findStockCards(params);
 
     profiler.start("TO_DTO");
-    List<StockCardSummaryV2Dto> dtos = stockCardSummariesV2DtoBuilder.build(
-        summaries.getPageOfApprovedProducts(),
-        summaries.getStockCardsForFulfillOrderables(),
-        summaries.getOrderableFulfillMap(),
-        params.isNonEmptyOnly());
+    List<StockCardSummaryV3Dto> dtos = stockCardSummariesV3DtoBuilder.build(
+            summaries.getPageOfApprovedProducts(),
+            summaries.getStockCardsForFulfillOrderables(),
+            summaries.getOrderableFulfillMap(),
+            params.getVvmStatus(),
+            params.isNonEmptyOnly());
 
     profiler.start("GET_PAGE");
-    Page<StockCardSummaryV2Dto> page = Pagination.getPage(dtos, pageable);
+    Page<StockCardSummaryV3Dto> page = Pagination.getPage(dtos, pageable);
 
     profiler.stop().log();
     return page;
-  }
-
-  @GetMapping("/test")
-  public String getStockCardSummariesTest(
-          @RequestParam MultiValueMap<String, String> parameters,
-          @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable) {
-    return "{message: Inside v3 contoller}";
   }
 }

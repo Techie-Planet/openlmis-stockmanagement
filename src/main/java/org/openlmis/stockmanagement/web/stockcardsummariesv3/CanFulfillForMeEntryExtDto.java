@@ -13,34 +13,28 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
 
-package org.openlmis.stockmanagement.web.stockcardsummariesv2;
+package org.openlmis.stockmanagement.web.stockcardsummariesv3;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
 import org.openlmis.stockmanagement.dto.ObjectReferenceDto;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-
-/**
- * Previous class declaration:
- * public final class CanFulfillForMeEntryDto {}
- *
- * Dropping the final class so we can inherit this class and add more fields
- * as needed to the child classes.
- */
-public final class CanFulfillForMeEntryDto {
+public class CanFulfillForMeEntryExtDto {
 
   @Getter
   @Setter
@@ -71,4 +65,8 @@ public final class CanFulfillForMeEntryDto {
   @Getter
   @Setter
   private boolean active;
+
+  @Getter
+  @Setter
+  private Map<String, String> extraData;
 }

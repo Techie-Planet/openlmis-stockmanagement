@@ -36,7 +36,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.collections.MapUtils;
 import org.openlmis.stockmanagement.exception.ValidationMessageException;
-import org.openlmis.stockmanagement.service.abstracts.IStockCardSummariesV2SearchParams;
+import org.openlmis.stockmanagement.service.abstracts.IStockCardSummariesV3SearchParams;
 import org.openlmis.stockmanagement.util.Message;
 import org.springframework.util.MultiValueMap;
 
@@ -46,7 +46,7 @@ import org.springframework.util.MultiValueMap;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public final class StockCardSummariesV2SearchParams implements IStockCardSummariesV2SearchParams {
+public final class StockCardSummariesV3SearchParams implements IStockCardSummariesV3SearchParams {
 
   static final String PROGRAM_ID = "programId";
   static final String FACILITY_ID = "facilityId";
@@ -56,6 +56,8 @@ public final class StockCardSummariesV2SearchParams implements IStockCardSummari
   static final String ORDERABLE_CODE = "orderableCode";
   static final String ORDERABLE_NAME = "orderableName";
   static final String LOT_CODE = "lotCode";
+
+  static final String VVM_STATUS = "vvmStatus";
 
   private UUID programId;
   private UUID facilityId;
@@ -67,10 +69,12 @@ public final class StockCardSummariesV2SearchParams implements IStockCardSummari
   private String orderableName;
   private String lotCode;
 
+  private String vvmStatus;
+
   /**
    * Creates stock card summaries search params from multi value map.
    */
-  public StockCardSummariesV2SearchParams(MultiValueMap<String, String> parameters) {
+  public StockCardSummariesV3SearchParams(MultiValueMap<String, String> parameters) {
     if (!MapUtils.isEmpty(parameters)) {
       this.programId = getId(PROGRAM_ID, parameters);
       this.facilityId = getId(FACILITY_ID, parameters);
@@ -89,6 +93,7 @@ public final class StockCardSummariesV2SearchParams implements IStockCardSummari
       this.orderableCode = parameters.getFirst(ORDERABLE_CODE);
       this.orderableName = parameters.getFirst(ORDERABLE_NAME);
       this.lotCode = parameters.getFirst(LOT_CODE);
+      this.vvmStatus = parameters.getFirst(VVM_STATUS);
     }
   }
 

@@ -49,6 +49,7 @@ import org.openlmis.stockmanagement.dto.referencedata.OrderableFulfillDto;
 import org.openlmis.stockmanagement.dto.referencedata.OrderablesAggregator;
 import org.openlmis.stockmanagement.repository.CalculatedStockOnHandRepository;
 import org.openlmis.stockmanagement.repository.StockCardRepository;
+import org.openlmis.stockmanagement.service.abstracts.IStockCardSummariesV2SearchParams;
 import org.openlmis.stockmanagement.service.referencedata.ApprovedProductReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.LotReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.OrderableFulfillReferenceDataService;
@@ -131,10 +132,10 @@ public class StockCardSummariesService extends StockCardBaseService {
   /**
    * Get a page of stock cards.
    *
-   * @param params stock cards summaries search params.
+   * @param params interface - stock cards summaries search params.
    * @return page of stock cards.
    */
-  public StockCardSummaries findStockCards(StockCardSummariesV2SearchParams params) {
+  public StockCardSummaries findStockCards(IStockCardSummariesV2SearchParams params) {
     Profiler profiler = new Profiler("FIND_STOCK_CARD_SUMMARIES_FOR_PARAMS");
     profiler.setLogger(LOGGER);
 
@@ -152,7 +153,6 @@ public class StockCardSummariesService extends StockCardBaseService {
         approvedProducts.getIdentifiers());
 
     profiler.start("FIND_STOCK_CARD_BY_PROGRAM_AND_FACILITY");
-
     List<UUID> orderableIdForStockCard = Collections.emptyList();
     String lotCode = params.getLotCode();
 
@@ -187,6 +187,7 @@ public class StockCardSummariesService extends StockCardBaseService {
     StockCardSummaries result = new StockCardSummaries(
         orderablesPage.getContent(), stockCards, orderableFulfillMap,
         params.getAsOfDate(), orderablesPage.getTotalElements());
+
     profiler.stop().log();
     return result;
   }

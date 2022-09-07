@@ -75,7 +75,7 @@ public class ResourceServerSecurityConfiguration implements ResourceServerConfig
         // We don't want to allow access to a resource with no token so clear
         // the security context in case it is actually an OAuth2Authentication
         if (tokenExtractor.extract(request) == null) {
-          SecurityContextHolder.clearContext();
+            SecurityContextHolder.clearContext();
         }
         filterChain.doFilter(request, response);
       }
@@ -87,6 +87,8 @@ public class ResourceServerSecurityConfiguration implements ResourceServerConfig
             .antMatchers(
                     "/stockmanagement",
                     "/webjars/**",
+                    // "/api/v2/stockCardSummaries/**",
+                    // "/api/v3/stockCardSummaries/**",
                     "/stockmanagement/webjars/**",
                     "/stockmanagement/docs/**"
             ).permitAll()
