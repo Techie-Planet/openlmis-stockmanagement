@@ -70,8 +70,6 @@ public class StockCardSummariesV3DtoBuilder {
     List<StockCardSummaryV3Dto> summariesList = buildSummariesList(
             approvedProducts, stockCards, orderables);
 
-    System.out.println("VVMStatus Param: " + vvmStatus);
-
     if (Objects.nonNull(vvmStatus)) {
       summariesList = filterVvmStatus(summariesList, vvmStatus);
     }
@@ -133,8 +131,6 @@ public class StockCardSummariesV3DtoBuilder {
       while (iterator.hasNext()) {
         CanFulfillForMeEntryExtDto cffm = iterator.next();
 
-        System.out.println("CanFulfillForMeEntryExtDto: " + cffm.toString());
-
         if (Objects.isNull(cffm.getExtraData())) {
           continue;
         }
@@ -144,7 +140,6 @@ public class StockCardSummariesV3DtoBuilder {
           continue;
         }
 
-        System.out.println("extraData.get(\"vvmStatus\"): " + extraData.get("vvmStatus"));
         if (!extraData.get("vvmStatus").equalsIgnoreCase(vvmStatus)) {
           iterator.remove();
         }
