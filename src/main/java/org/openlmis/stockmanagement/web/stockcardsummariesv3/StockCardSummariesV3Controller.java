@@ -75,7 +75,8 @@ public class StockCardSummariesV3Controller {
             summaries.getStockCardsForFulfillOrderables(),
             summaries.getOrderableFulfillMap(),
             params.getVvmStatus(),
-            params.isNonEmptyOnly());
+            params.isNonEmptyOnly(),
+            params.isHideZeroItems());
 
     profiler.start("GET_PAGE");
     Page<StockCardSummaryV3Dto> page = Pagination.getPage(dtos, pageable);

@@ -65,13 +65,18 @@ public class StockCardSummariesV3DtoBuilder {
                                            List<StockCard> stockCards,
                                            Map<UUID, OrderableFulfillDto> orderables,
                                            String vvmStatus,
-                                           boolean nonEmptySummariesOnly) {
+                                           boolean nonEmptySummariesOnly,
+                                           boolean hideZeroItems) {
 
     List<StockCardSummaryV3Dto> summariesList = buildSummariesList(
             approvedProducts, stockCards, orderables);
 
     if (Objects.nonNull(vvmStatus)) {
       summariesList = filterVvmStatus(summariesList, vvmStatus);
+    }
+
+    if (hideZeroItems) {
+      summariesList = filterZeroItems(summariesList, hideZeroItems);
     }
 
     if (nonEmptySummariesOnly) {
@@ -141,6 +146,25 @@ public class StockCardSummariesV3DtoBuilder {
         }
 
         if (!extraData.get("vvmStatus").equalsIgnoreCase(vvmStatus)) {
+          iterator.remove();
+        }
+      }
+      return summary;
+    });
+
+    return summariesStream.sorted().collect(toList());
+  }
+
+  private List<StockCardSummaryV3Dto> filterZeroItems(
+          List<StockCardSummaryV3Dto> summariesList, boolean hideZeroItems) {
+
+    // Set<CanFulfillForMeEntryExtDto>
+    Stream<StockCardSummaryV3Dto> summariesStream = summariesList.stream().map(summary -> {
+      Iterator<CanFulfillForMeEntryExtDto> iterator = summary.getCanFulfillForMe().iterator();
+      while (iterator.hasNext()) {
+        CanFulfillForMeEntryExtDto cffm = iterator.next();
+
+        if (cffm.getStockOnHand() == 0) {
           iterator.remove();
         }
       }

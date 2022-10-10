@@ -58,12 +58,15 @@ public final class StockCardSummariesV3SearchParams implements IStockCardSummari
   static final String LOT_CODE = "lotCode";
 
   static final String VVM_STATUS = "vvmStatus";
+  static final String HIDE_ZERO_ITEMS = "hideZeroItems";
 
   private UUID programId;
   private UUID facilityId;
   private List<UUID> orderableIds;
   private LocalDate asOfDate;
   private boolean nonEmptyOnly;
+
+  private boolean hideZeroItems;
 
   private String orderableCode;
   private String orderableName;
@@ -90,6 +93,7 @@ public final class StockCardSummariesV3SearchParams implements IStockCardSummari
       this.asOfDate = getDate(AS_OF_DATE, parameters);
       this.orderableIds = getIds(ORDERABLE_ID, parameters);
       this.nonEmptyOnly = Boolean.valueOf(parameters.getFirst(NON_EMPTY_ONLY));
+      this.hideZeroItems = Boolean.valueOf(parameters.getFirst(HIDE_ZERO_ITEMS));
       this.orderableCode = parameters.getFirst(ORDERABLE_CODE);
       this.orderableName = parameters.getFirst(ORDERABLE_NAME);
       this.lotCode = parameters.getFirst(LOT_CODE);

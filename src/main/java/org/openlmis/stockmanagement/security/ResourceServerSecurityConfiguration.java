@@ -87,7 +87,6 @@ public class ResourceServerSecurityConfiguration implements ResourceServerConfig
             .antMatchers(
                     "/stockmanagement",
                     "/webjars/**",
-                    // "/api/v2/stockCardSummaries/**",
                     // "/api/v3/stockCardSummaries/**",
                     "/stockmanagement/webjars/**",
                     "/stockmanagement/docs/**"
