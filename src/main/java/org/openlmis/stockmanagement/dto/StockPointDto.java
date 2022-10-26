@@ -35,7 +35,7 @@ public class StockPointDto {
     private String facilityType;
     private String facility;
     private String productType;
-    private Integer stockOnHand;
+    private Long stockOnHand;
     private Integer minimumStockPoint;
     private Integer reorderStockPoint;
     private Integer maximumStockPoint;

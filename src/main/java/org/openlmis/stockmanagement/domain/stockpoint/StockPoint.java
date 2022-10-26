@@ -62,7 +62,7 @@ public class StockPoint {
     private String productType;
 
     @Column(nullable = false)
-    private Integer stockOnHand;
+    private Long stockOnHand;
 
     @Column(nullable = false, name="min")
     private Integer minimumStockPoint;
