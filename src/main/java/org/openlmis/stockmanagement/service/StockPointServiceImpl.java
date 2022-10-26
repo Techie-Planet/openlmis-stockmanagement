@@ -17,7 +17,7 @@ package org.openlmis.stockmanagement.service;
 
 import java.util.*;
 
-import main.java.org.openlmis.stockmanagement.repository.StockPointRepository;
+import org.openlmis.stockmanagement.repository.StockPointRepository;
 import org.openlmis.stockmanagement.domain.stockpoint.StockPoint;
 import org.openlmis.stockmanagement.repository.StockPointRepository;
 import org.slf4j.Logger;
