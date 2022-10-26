@@ -52,6 +52,22 @@ schemas:
   - stockCardPage: !include schemas/stockCard.json
   - stockCardSummariesPage: !include schemas/stockCardSummaryV2Page.json
   - stockCardSummaries: !include schemas/stockCardSummaries.json
+  - stockPoints: |
+      [
+          {
+              "id": "22f6166c-ba13-49d2-a3f3-42b26849a05f",
+              "facilityId": "4f22127c-43ef-4f48-bbc0-34f39b3c1371",
+              "facilityTypeId": "f3a7c5c3-5db6-4c6d-9894-b4508969d3c2",
+              "facilityType": "National Cold Store",
+              "facility": "National Strategic Cold Store",
+              "productType": "MEASLES",
+              "stockOnHand": 35000,
+              "minimumStockPoint": 391892,
+              "reorderStockPoint": 979730,
+              "maximumStockPoint": 1959459,
+              "status": "UNDERSTOCKED"
+          }
+      ]
   - stockCardReasonSummaryPage: !include schemas/stockCardRangeSummaryPage.json
   - validSourceDestination: !include schemas/validSourceDestination.json
   - validSourceDestinations: |
@@ -544,6 +560,25 @@ traits:
               schema: localizedMessage
         403:
           description: User does not have permission to view stock cards of given facility and program.
+          body:
+            application/json:
+              schema: localizedMessage
+
+  /stockPoints:
+    get:
+      is: [ secured ]
+      description: Get list of critical stock points.
+      responses:
+        200:
+          body:
+            application/json:
+              schema: stockPoints
+        400:
+          body:
+            application/json:
+              schema: localizedMessage
+        403:
+          description: User does not have permission to view stock points.
           body:
             application/json:
               schema: localizedMessage
