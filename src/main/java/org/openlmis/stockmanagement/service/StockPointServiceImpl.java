@@ -37,7 +37,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class StockPointServiceImpl implements StockPointService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(org.openlmis.stockmanagement.service.StockPointServiceImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(
+          org.openlmis.stockmanagement.service.StockPointServiceImpl.class);
 
   @Autowired
   StockPointRepository pointRepository;
