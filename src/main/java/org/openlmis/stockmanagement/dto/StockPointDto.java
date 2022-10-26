@@ -12,6 +12,7 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
+
 package org.openlmis.stockmanagement.dto;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
@@ -30,14 +31,14 @@ import org.openlmis.stockmanagement.domain.stockpoint.StockPoint;
 
 public class StockPointDto {
 
-    private UUID facilityId;
-    private UUID facilityTypeId;
-    private String facilityType;
-    private String facility;
-    private String productType;
-    private Long stockOnHand;
-    private Integer minimumStockPoint;
-    private Integer reorderStockPoint;
-    private Integer maximumStockPoint;
-    private Integer status;
+  private UUID facilityId;
+  private UUID facilityTypeId;
+  private String facilityType;
+  private String facility;
+  private String productType;
+  private Long stockOnHand;
+  private Integer minimumStockPoint;
+  private Integer reorderStockPoint;
+  private Integer maximumStockPoint;
+  private Integer status;
 }

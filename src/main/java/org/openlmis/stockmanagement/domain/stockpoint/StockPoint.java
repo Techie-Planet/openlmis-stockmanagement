@@ -42,37 +42,37 @@ import lombok.NoArgsConstructor;
         indexes = @Index(columnList = "facilitytypeid,facilityId"))
 public class StockPoint {
 
-    @Id
-    @Column(nullable = false)
-    private UUID id;
+  @Id
+  @Column(nullable = false)
+  private UUID id;
 
-    @Column(nullable = false)
-    private UUID facilityId;
+  @Column(nullable = false)
+  private UUID facilityId;
 
-    @Column(nullable = false)
-    private UUID facilityTypeId;
+  @Column(nullable = false)
+  private UUID facilityTypeId;
 
-    @Column(nullable = false)
+  @Column(nullable = false)
     private String facilityType;
 
-    @Column(nullable = false)
-    private String facility;
+  @Column(nullable = false)
+  private String facility;
 
-    @Column(nullable = false)
-    private String productType;
+  @Column(nullable = false)
+  private String productType;
 
-    @Column(nullable = false)
-    private Long stockOnHand;
+  @Column(nullable = false)
+  private Long stockOnHand;
 
-    @Column(nullable = false, name="min")
-    private Integer minimumStockPoint;
+  @Column(nullable = false, name = "min")
+  private Integer minimumStockPoint;
 
-    @Column(nullable = false, name="reorder")
-    private Integer reorderStockPoint;
+  @Column(nullable = false, name = "reorder")
+  private Integer reorderStockPoint;
 
-    @Column(nullable = false, name="max")
-    private Integer maximumStockPoint;
+  @Column(nullable = false, name = "max")
+  private Integer maximumStockPoint;
 
-    @Column(nullable = false)
-    private String status;
+  @Column(nullable = false)
+  private String status;
 }

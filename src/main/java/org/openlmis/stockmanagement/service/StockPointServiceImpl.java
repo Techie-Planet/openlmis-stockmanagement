@@ -15,7 +15,7 @@
 
 package org.openlmis.stockmanagement.service;
 
-import java.util.*;
+import java.util.List;
 
 import org.openlmis.stockmanagement.domain.stockpoint.StockPoint;
 import org.openlmis.stockmanagement.repository.StockPointRepository;
@@ -37,17 +37,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class StockPointServiceImpl implements StockPointService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(org.openlmis.stockmanagement.service.StockPointServiceImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(org.openlmis.stockmanagement.service.StockPointServiceImpl.class);
 
-    @Autowired
-    StockPointRepository pointRepository;
+  @Autowired
+  StockPointRepository pointRepository;
 
-    /**
-     * Get a list of all stock points.
-     * @return list of stock points.
-     */
-    public List<StockPoint> findStockPoints() {
-        LOGGER.info("Finding the stock points");
-        return pointRepository.findAll();
-    }
+  /**
+   * Get a list of all stock points.
+   * @return list of stock points.
+   */
+  public List<StockPoint> findStockPoints() {
+    LOGGER.info("Finding the stock points");
+    return pointRepository.findAll();
+  }
 }

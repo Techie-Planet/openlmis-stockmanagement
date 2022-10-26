@@ -31,12 +31,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/stockPoints")
 public class StockPointController {
-    @Autowired
-    StockPointService stockPointService;
+  @Autowired
+  StockPointService stockPointService;
 
-    // @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
-    @GetMapping
-    public List<StockPoint> getStockPoints() {
-        return stockPointService.findStockPoints();
-    }
+  // @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
+  @GetMapping
+  public List<StockPoint> getStockPoints() {
+    return stockPointService.findStockPoints();
+  }
 }
