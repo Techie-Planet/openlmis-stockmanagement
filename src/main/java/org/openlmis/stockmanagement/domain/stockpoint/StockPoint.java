@@ -74,5 +74,5 @@ public class StockPoint {
     private Integer maximumStockPoint;
 
     @Column(nullable = false)
-    private Integer status;
+    private String status;
 }
