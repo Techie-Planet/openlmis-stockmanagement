@@ -17,9 +17,9 @@ package org.openlmis.stockmanagement.service;
 
 import java.util.*;
 
-import org.openlmis.stockmanagement.repository.StockPointRepository;
 import org.openlmis.stockmanagement.domain.stockpoint.StockPoint;
 import org.openlmis.stockmanagement.repository.StockPointRepository;
+import org.openlmis.stockmanagement.service.abstracts.StockPointService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ import org.springframework.stereotype.Service;
  * Its purpose is for users to view the levels of stock per facility
  */
 @Service
-public class StockPointServiceImpl {
+public class StockPointServiceImpl implements StockPointService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(org.openlmis.stockmanagement.service.StockPointServiceImpl.class);
 
