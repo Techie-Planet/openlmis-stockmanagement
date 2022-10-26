@@ -29,11 +29,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/v3/stockCardSummaries")
+@RequestMapping("/api/stockPoints")
 public class StockPointController {
     @Autowired
     StockPointService stockPointService;
 
+    @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
+    @GetMapping
     public List<StockPoint> getStockPoints() {
         return stockPointService.findStockPoints();
     }
