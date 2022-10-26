@@ -12,67 +12,32 @@
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
+package org.openlmis.stockmanagement.dto;
 
-package org.openlmis.stockmanagement.domain.stockpoint;
+import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static java.util.stream.Collectors.toList;
 
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.PostLoad;
-import javax.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.openlmis.stockmanagement.domain.stockpoint.StockPoint;
 
+public class StockPointDto {
 
-@Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "critical_stock_points", schema = "stockmanagement",
-        indexes = @Index(columnList = "facilitytypeid,facilityId"))
-public class StockPoint {
-
-    @Id
-    @Column(nullable = false)
-    private UUID id;
-
-    @Column(nullable = false)
     private UUID facilityId;
-
-    @Column(nullable = false)
     private UUID facilityTypeId;
-
-    @Column(nullable = false)
     private String facilityType;
-
-    @Column(nullable = false)
     private String facility;
-
-    @Column(nullable = false)
     private String productType;
-
-    @Column(nullable = false)
     private Integer stockOnHand;
-
-    @Column(nullable = false, name="min")
     private Integer minimumStockPoint;
-
-    @Column(nullable = false, name="reorder")
     private Integer reorderStockPoint;
-
-    @Column(nullable = false, name="max")
     private Integer maximumStockPoint;
-
-    @Column(nullable = false)
     private Integer status;
 }
