@@ -22,6 +22,7 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Immutable;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,11 +36,11 @@ import lombok.NoArgsConstructor;
 
 
 @Entity
+@Immutable
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "critical_stock_points", schema = "stockmanagement",
-        indexes = @Index(columnList = "facilitytypeid,facilityId"))
+@Table(name = "critical_stock_points", schema = "stockmanagement")
 public class StockPoint {
 
   @Id
