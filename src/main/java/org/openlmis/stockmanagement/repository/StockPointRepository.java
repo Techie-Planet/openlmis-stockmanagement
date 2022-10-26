@@ -13,10 +13,10 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
 
-package main.java.org.openlmis.stockmanagement.repository;
+package org.openlmis.stockmanagement.repository;
 
-//import java.util.Collection;
-//import java.util.List;
+// import java.util.Collection;
+// import java.util.List;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.stockpoint.StockPoint;
 import org.springframework.data.domain.Page;

@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
 
-package main.java.org.openlmis.stockmanagement.web;
+package org.openlmis.stockmanagement.web;
 
 import java.util.List;
 import org.openlmis.stockmanagement.domain.stockpoint.StockPoint;
