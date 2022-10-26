@@ -86,4 +86,28 @@ public class ReportsController {
             "inline; filename=stock_card_summaries" + program + "_" + facility + ".pdf")
         .body(report);
   }
+
+  /**
+   * Get issue summary report.
+   *
+   * @return generated PDF report
+   */
+  @RequestMapping(value = "/issueSummary/print", method = GET)
+  @ResponseBody
+  public ResponseEntity<byte[]> getIssueSummary(
+          @RequestParam("program") UUID program,
+          @RequestParam("facility") UUID facility,
+          @RequestParam("stockEventId") UUID stockEventId) {
+    LOGGER.info("Try to generate stock issue summary report by stockeventId %s.",
+            stockEventId.toString());
+    permissionService.canViewStockCard(program, facility);
+    byte[] report = reportService.generateIssueSummaryReport(stockEventId);
+
+    return ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_PDF)
+            .header("Content-Disposition",
+                    "inline; filename=stock_issue_summary" + "_" + stockEventId + ".pdf")
+            .body(report);
+  }
 }

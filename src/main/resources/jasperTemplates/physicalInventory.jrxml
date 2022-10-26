@@ -33,42 +33,62 @@
 	<field name="processeddate" class="java.sql.Timestamp"/>
 	<field name="username" class="java.lang.String"/>
 	<background>
-		<band splitType="Stretch"/>
+		<band height="390" splitType="Stretch">
+			<image>
+				<reportElement x="270" y="70" width="352" height="320" uuid="ee07bebe-35aa-4bfa-bafd-d43009f44dd1"/>
+				<imageExpression><![CDATA["images/Background.png"]]></imageExpression>
+			</image>
+		</band>
 	</background>
 	<title>
-		<band height="115">
+		<band height="122">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<image onErrorType="Blank">
+				<reportElement x="20" y="-1" width="79" height="79" uuid="652148fb-5d09-4b36-81d8-11beb8e62be8"/>
+				<imageExpression><![CDATA["images/nphcda.png"]]></imageExpression>
+			</image>
+			<image onErrorType="Blank">
+				<reportElement x="741" y="-1" width="79" height="79" uuid="1a26fbda-bcb5-46c7-a212-109a0e134a3b"/>
+				<imageExpression><![CDATA["images/nigeria.png"]]></imageExpression>
+			</image>
 			<staticText>
-				<reportElement x="20" y="10" width="800" height="20" uuid="8b895ad8-e565-41e4-87f4-fe70fea7b9f1"/>
-				<textElement verticalAlignment="Middle">
-					<font size="16" pdfFontName="Helvetica-Bold" isBold="true"/>
+				<reportElement x="99" y="30" width="642" height="30" uuid="8b895ad8-e565-41e4-87f4-fe70fea7b9f1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Submitted Physical Inventory]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="20" y="40" width="800" height="20" uuid="ec47a93b-983c-447f-85cf-4775e800330a"/>
-				<textElement>
-					<font size="13" pdfFontName="Helvetica-Bold" isBold="true"/>
+				<reportElement x="99" y="60" width="642" height="20" uuid="ec47a93b-983c-447f-85cf-4775e800330a"/>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<textFieldExpression><![CDATA[MessageFormat.format("Physical inventory for date: {0}",
 					DateTimeFormatter.ofPattern($P{dateFormat}).format(LocalDate.parse($F{occurreddate})))]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="20" y="65" width="800" height="15" uuid="a035b2b6-8c32-4db2-89fd-6444a109b1d7"/>
+				<reportElement x="20" y="82" width="800" height="15" uuid="a035b2b6-8c32-4db2-89fd-6444a109b1d7"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[MessageFormat.format("Facility: {0}; Program: {1}", $F{facility}, $F{program})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="20" y="80" width="800" height="15" uuid="08e7b43c-4f44-4e33-88f6-92324585772e"/>
+				<reportElement x="20" y="97" width="800" height="15" uuid="08e7b43c-4f44-4e33-88f6-92324585772e"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[MessageFormat.format("Submitted into system on {0} by {1}",
 				 DateTimeFormatter.ofPattern($P{dateTimeFormat}).format(ZonedDateTime.ofInstant(
-				 $F{processeddate}.toInstant(), ZoneId.of($P{timeZoneId}))),$F{username})]]>
-				</textFieldExpression>
+				 $F{processeddate}.toInstant(), ZoneId.of($P{timeZoneId}))),$F{username})]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="99" y="0" width="642" height="30" uuid="16442742-203f-4f71-9742-08d4b6b5b84d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[NATIONAL PRIMARY HEALTH CARE DEVELOPMENT AGENCY]]></text>
+			</staticText>
 		</band>
 	</title>
 	<detail>

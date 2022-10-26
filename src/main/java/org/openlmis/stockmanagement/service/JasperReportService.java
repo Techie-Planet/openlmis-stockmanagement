@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 import javax.sql.DataSource;
@@ -46,9 +47,13 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.openlmis.stockmanagement.domain.JasperTemplate;
+import org.openlmis.stockmanagement.domain.event.StockEvent;
 import org.openlmis.stockmanagement.dto.StockCardDto;
 import org.openlmis.stockmanagement.exception.JasperReportViewException;
 import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
+import org.openlmis.stockmanagement.repository.StockEventsRepository;
+import org.openlmis.stockmanagement.service.referencedata.FacilityReferenceDataService;
+import org.openlmis.stockmanagement.service.referencedata.ProgramReferenceDataService;
 import org.openlmis.stockmanagement.util.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,14 +65,21 @@ public class JasperReportService {
   static final String CARD_REPORT_URL = "/jasperTemplates/stockCard.jrxml";
   static final String CARD_SUMMARY_REPORT_URL = "/jasperTemplates/stockCardSummary.jrxml";
   static final String PI_LINES_REPORT_URL = "/jasperTemplates/physicalinventoryLines.jrxml";
+  static final String ISSUE_SUMMARY_REPORT_URL = "/jasperTemplates/issueSummary.jrxml";
 
   private static final String PARAM_DATASOURCE = "datasource";
-  
+
   @Autowired
   private StockCardService stockCardService;
 
   @Autowired
   private StockCardSummariesService stockCardSummariesService;
+  @Autowired
+  private StockEventsRepository stockEventsRepository;
+  @Autowired
+  private FacilityReferenceDataService facilityReferenceDataService;
+  @Autowired
+  private ProgramReferenceDataService programReferenceDataService;
 
   @Autowired
   private DataSource replicationDataSource;
@@ -83,6 +95,7 @@ public class JasperReportService {
 
   @Value("${groupingSize}")
   private String groupingSize;
+
 
   /**
    * Generate stock card report in PDF format.
@@ -107,6 +120,30 @@ public class JasperReportService {
   }
 
   /**
+   * Generate issue summary report in PDF format.
+   *
+   * @param stockEventId stock card id
+   * @return generated issue summary report.
+   */
+  public byte[] generateIssueSummaryReport(UUID stockEventId) {
+    Optional<StockEvent> stockEvent = stockEventsRepository.findById(stockEventId);
+    if (!stockEvent.isPresent()) {
+      throw new ResourceNotFoundException(new Message(ERROR_REPORT_ID_NOT_FOUND));
+    }
+
+    //Collections.reverse(stockEvent.getLineItems());
+    Map<String, Object> params = new HashMap<>();
+    params.put(PARAM_DATASOURCE, singletonList(stockEvent));
+    params.put("stockEventId", stockEventId.toString());
+    params.put("facility", facilityReferenceDataService.findOne(stockEvent.get().getFacilityId()));
+    params.put("program", programReferenceDataService.findOne(stockEvent.get().getProgramId()));
+    params.put("dateFormat", dateFormat);
+    params.put("decimalFormat", createDecimalFormat());
+
+    return fillAndExportReport(compileReportFromTemplateUrl(ISSUE_SUMMARY_REPORT_URL), params);
+  }
+
+  /**
    * Generate stock card summary report in PDF format.
    *
    * @param program  program id
@@ -115,7 +152,7 @@ public class JasperReportService {
    */
   public byte[] generateStockCardSummariesReport(UUID program, UUID facility) {
     List<StockCardDto> cards = stockCardSummariesService
-        .findStockCards(program, facility);
+            .findStockCards(program, facility);
     StockCardDto firstCard = cards.get(0);
     Map<String, Object> params = new HashMap<>();
     params.put("stockCardSummaries", cards);
@@ -172,19 +209,20 @@ public class JasperReportService {
       JasperPrint jasperPrint;
       if (params.containsKey(PARAM_DATASOURCE)) {
         jasperPrint = JasperFillManager.fillReport(compiledReport, params,
-            new JRBeanCollectionDataSource((List<StockCardDto>) params.get(PARAM_DATASOURCE)));
+                new JRBeanCollectionDataSource((List<StockCardDto>) params.get(PARAM_DATASOURCE)));
       } else if (params.containsKey("stockCardSummaries")) {
-        jasperPrint = JasperFillManager.fillReport(compiledReport, params, 
-            new JREmptyDataSource());
+        jasperPrint = JasperFillManager.fillReport(compiledReport, params,
+                new JREmptyDataSource());
       } else {
         try (Connection connection = replicationDataSource.getConnection()) {
           jasperPrint = JasperFillManager.fillReport(compiledReport, params,
-              connection);
+                  connection);
         }
       }
-
+      System.out.println("final point");
       bytes = JasperExportManager.exportReportToPdf(jasperPrint);
     } catch (Exception e) {
+      System.out.println("compilation error final");
       throw new JasperReportViewException(ERROR_GENERATE_REPORT_FAILED, e);
     }
 
@@ -196,8 +234,10 @@ public class JasperReportService {
 
       return JasperCompileManager.compileReport(inputStream);
     } catch (IOException ex) {
+      System.out.println("compilation error 1");
       throw new JasperReportViewException(new Message((ERROR_IO), ex.getMessage()), ex);
     } catch (JRException ex) {
+      System.out.println("compilation error 2");
       throw new JasperReportViewException(new Message(ERROR_GENERATE_REPORT_FAILED), ex);
     }
   }
@@ -210,14 +250,14 @@ public class JasperReportService {
   JasperReport getReportFromTemplateData(JasperTemplate jasperTemplate) {
 
     try (ObjectInputStream inputStream =
-             new ObjectInputStream(new ByteArrayInputStream(jasperTemplate.getData()))) {
+                 new ObjectInputStream(new ByteArrayInputStream(jasperTemplate.getData()))) {
 
       return (JasperReport) inputStream.readObject();
     } catch (IOException ex) {
       throw new JasperReportViewException(new Message((ERROR_IO), ex.getMessage()), ex);
     } catch (ClassNotFoundException ex) {
       throw new JasperReportViewException(
-          new Message(ERROR_CLASS_NOT_FOUND, JasperReport.class.getName()), ex);
+              new Message(ERROR_CLASS_NOT_FOUND, JasperReport.class.getName()), ex);
     }
   }
 

@@ -24,6 +24,10 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -31,6 +35,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
 import org.openlmis.stockmanagement.domain.JasperTemplate;
 import org.openlmis.stockmanagement.domain.physicalinventory.PhysicalInventory;
 import org.openlmis.stockmanagement.dto.PhysicalInventoryDto;
@@ -190,7 +197,8 @@ public class PhysicalInventoryController {
    */
   @GetMapping(value = ID_PATH_VARIABLE, params = "format")
   @ResponseBody
-  public ResponseEntity<byte[]> print(@PathVariable("id") UUID id, @RequestParam String format) {
+  public ResponseEntity<byte[]> print(@PathVariable("id") UUID id, @RequestParam String format)
+          throws IOException, JRException {
     checkPermission(id);
     checkFormat(format.toLowerCase());
 
@@ -199,8 +207,18 @@ public class PhysicalInventoryController {
       throw new ValidationMessageException(
           new Message(ERROR_REPORTING_TEMPLATE_NOT_FOUND_WITH_NAME, PRINT_PI));
     }
+    ClassLoader classLoader = getClass().getClassLoader();
+    byte[] bytes;
+    String filePath = "jasperTemplates/physicalInventory.jrxml";
+    try (InputStream fis = classLoader.getResourceAsStream(filePath)) {
+      JasperReport report = JasperCompileManager.compileReport(fis);
 
-    byte[] bytes = jasperReportService.generateReport(printTemplate, getParams(id, format));
+      ByteArrayOutputStream bos = new ByteArrayOutputStream();
+      ObjectOutputStream out = new ObjectOutputStream(bos);
+      out.writeObject(report);
+      printTemplate.setData(bos.toByteArray());
+      bytes = jasperReportService.generateReport(printTemplate, getParams(id, format));
+    }
 
     MediaType mediaType;
     if ("csv".equals(format)) {
