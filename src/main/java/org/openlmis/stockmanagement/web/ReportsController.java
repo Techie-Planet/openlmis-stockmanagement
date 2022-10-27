@@ -118,13 +118,8 @@ public class ReportsController {
    */
   @RequestMapping(value = "/criticalStockPoints/print", method = GET)
   @ResponseBody
-  public ResponseEntity<byte[]> getCriticalStockPointsReport(
-    //          @RequestParam("program") UUID program,
-    //          @RequestParam("facility") UUID facility,
-    //          @RequestParam("stockEventId") UUID stockEventId
-  ) {
+  public ResponseEntity<byte[]> getCriticalStockPointsReport() {
     LOGGER.info("Try to generate critical stock points report");
-    // permissionService.canViewStockCard(program, facility);
     byte[] report = reportService.generateCriticalStockPointsReport();
 
     return ResponseEntity
