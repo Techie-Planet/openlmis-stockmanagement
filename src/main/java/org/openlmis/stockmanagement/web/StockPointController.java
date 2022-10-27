@@ -51,7 +51,7 @@ public class StockPointController {
    *
    * @return generated PDF report
    */
-  @RequestMapping(value = "/print", method = GET)
+  @GetMapping(value = "/print")
   public ResponseEntity<byte[]> getCriticalStockPointsReport() {
     byte[] report = reportService.generateCriticalStockPointsReport();
 
