@@ -69,7 +69,11 @@
 	</style>
 	<style name="Crosstab 1_CD" style="Crosstab 1_CH" mode="Opaque" backcolor="#FFFFFF">
 		<conditionalStyle>
-			<conditionExpression><![CDATA[$V{status_MEASURE}.equalsIgnoreCase("understocked")]]></conditionExpression>
+			<conditionExpression><![CDATA[$V{status_MEASURE}.equalsIgnoreCase("understocked") || $V{status_MEASURE} == null]]></conditionExpression>
+			<style backcolor="#F95F4A"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{status_MEASURE} == null]]></conditionExpression>
 			<style backcolor="#F95F4A"/>
 		</conditionalStyle>
 		<conditionalStyle>
@@ -162,7 +166,7 @@
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<image onErrorType="Blank">
 				<reportElement x="0" y="2" width="55" height="55" uuid="652148fb-5d09-4b36-81d8-11beb8e62be8"/>
-				<imageExpression><![CDATA["images/npdch.png"]]></imageExpression>
+				<imageExpression><![CDATA["images/nphcda.png"]]></imageExpression>
 			</image>
 			<image onErrorType="Blank">
 				<reportElement x="750" y="2" width="55" height="55" uuid="1a26fbda-bcb5-46c7-a212-109a0e134a3b"/>
@@ -244,7 +248,7 @@
 						<textField>
 							<reportElement style="Crosstab 1_CD" mode="Opaque" x="0" y="0" width="60" height="20" uuid="5ee76854-b0a5-45ea-853a-1dfd51c6deea"/>
 							<textElement textAlignment="Center" verticalAlignment="Middle"/>
-							<textFieldExpression><![CDATA[$V{stockonhand_MEASURE}]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$V{stockonhand_MEASURE} != null ? $V{stockonhand_MEASURE} : "0"]]></textFieldExpression>
 						</textField>
 					</cellContents>
 				</crosstabCell>
