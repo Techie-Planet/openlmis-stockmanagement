@@ -423,6 +423,48 @@ traits:
               application/json:
                 schema: localizedMessage
 
+  /criticalStockPoints:
+    get:
+      is: [ secured , paginated ]
+      description: Get critical stock points report.
+
+      responses:
+        200:
+          body:
+            application/json:
+              schema: stockCardSummaries
+        404:
+          description: No critical stock point report found.
+          body:
+            application/json:
+              schema: localizedMessage
+        403:
+          description: User does not have permission to view critical stock points.
+          body:
+            application/json:
+              schema: localizedMessage
+
+    /print:
+      get:
+        is: [ secured ]
+        description: Get critical stock points report in PDF format to print.
+
+        responses:
+          200:
+            description: Stock card summary report generated successfully.
+            body:
+              application/pdf:
+          404:
+            description: No critical stock points were found.
+            body:
+              application/json:
+                schema: localizedMessage
+          403:
+            description: User does not have permission to critical stock points report.
+            body:
+              application/json:
+                schema: localizedMessage
+
   /v2/stockCardSummaries:
     get:
       is: [ secured, paginated ]

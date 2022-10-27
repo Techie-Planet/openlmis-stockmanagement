@@ -66,6 +66,7 @@ public class JasperReportService {
   static final String CARD_SUMMARY_REPORT_URL = "/jasperTemplates/stockCardSummary.jrxml";
   static final String PI_LINES_REPORT_URL = "/jasperTemplates/physicalinventoryLines.jrxml";
   static final String ISSUE_SUMMARY_REPORT_URL = "/jasperTemplates/issueSummary.jrxml";
+  static final String CRITICAL_STOCK_POINTS_REPORT_URL = "/jasperTemplates/criticalStockPoints.jrxml";
 
   private static final String PARAM_DATASOURCE = "datasource";
 
@@ -141,6 +142,16 @@ public class JasperReportService {
     params.put("decimalFormat", createDecimalFormat());
 
     return fillAndExportReport(compileReportFromTemplateUrl(ISSUE_SUMMARY_REPORT_URL), params);
+  }
+
+  /**
+   * Generate issue summary report in PDF format.
+   *
+   * @return generated issue summary report.
+   */
+  public byte[] generateCriticalStockPointsReport() {
+    Map<String, Object> params = new HashMap<>();
+    return fillAndExportReport(compileReportFromTemplateUrl(CRITICAL_STOCK_POINTS_REPORT_URL), params);
   }
 
   /**
