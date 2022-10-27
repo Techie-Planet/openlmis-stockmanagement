@@ -110,23 +110,4 @@ public class ReportsController {
                     "inline; filename=stock_issue_summary" + "_" + stockEventId + ".pdf")
             .body(report);
   }
-
-  /**
-   * Get critical stock points report.
-   *
-   * @return generated PDF report
-   */
-  @RequestMapping(value = "/criticalStockPoints/print", method = GET)
-  @ResponseBody
-  public ResponseEntity<byte[]> getCriticalStockPointsReport() {
-    LOGGER.info("Try to generate critical stock points report");
-    byte[] report = reportService.generateCriticalStockPointsReport();
-
-    return ResponseEntity
-            .ok()
-            .contentType(MediaType.APPLICATION_PDF)
-            .header("Content-Disposition",
-                    "inline; filename=critical_stock_points" + "_" + ".pdf")
-            .body(report);
-  }
 }
