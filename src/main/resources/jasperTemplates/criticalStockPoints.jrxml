@@ -84,7 +84,7 @@
 			<style backcolor="#86F0FA"/>
 		</conditionalStyle>
 	</style>
-	<queryString>
+	<queryString language="SQL">
 		<![CDATA[SELECT 
 		forecast.facilitytypeid,
 		forecast.facilitytype,
