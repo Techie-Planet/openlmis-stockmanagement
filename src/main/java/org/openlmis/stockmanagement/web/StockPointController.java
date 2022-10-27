@@ -17,8 +17,8 @@ package org.openlmis.stockmanagement.web;
 
 import java.util.List;
 import org.openlmis.stockmanagement.domain.stockpoint.StockPoint;
-import org.openlmis.stockmanagement.service.abstracts.StockPointService;
 import org.openlmis.stockmanagement.service.JasperReportService;
+import org.openlmis.stockmanagement.service.abstracts.StockPointService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.profiler.Profiler;
