@@ -88,6 +88,7 @@ public class ResourceServerSecurityConfiguration implements ResourceServerConfig
                     "/stockmanagement",
                     "/webjars/**",
                     // "/api/v3/stockCardSummaries/**",
+                    // "/api/stockPoints/**",
                     "/stockmanagement/webjars/**",
                     "/stockmanagement/docs/**"
             ).permitAll()
