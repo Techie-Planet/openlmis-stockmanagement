@@ -582,7 +582,7 @@ traits:
               schema: localizedMessage
     /print:
       get:
-        is: [ secured ]
+    #      is: [ secured ]
         description: Get critical stock points report in PDF format to print.
 
         responses:
@@ -658,7 +658,7 @@ traits:
 
   /stockCardSummaries/noCards:
       get:
-  #      is: [ secured ]
+        is: [ secured ]
         description: Get dummy stock card summaries for approved products and lots that don't have cards yet. This can be used by front end to determine what new stock cards can be created.
         queryParameters:
           facility:

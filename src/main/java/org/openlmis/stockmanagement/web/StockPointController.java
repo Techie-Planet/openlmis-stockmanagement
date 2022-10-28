@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.profiler.Profiler;
 import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,6 +51,7 @@ public class StockPointController {
    *
    * @return generated PDF report
    */
+  @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
   @GetMapping(value = "/print")
   public ResponseEntity<byte[]> getCriticalStockPointsReport() {
     byte[] report = reportService.generateCriticalStockPointsReport();
