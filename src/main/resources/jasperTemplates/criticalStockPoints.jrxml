@@ -182,12 +182,19 @@
 				<text><![CDATA[NATIONAL PRIMARY HEALTH CARE DEVELOPMENT AGENCY]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="25" width="804" height="23" uuid="ecab56ef-a62f-486f-bc7d-c1431467efc4"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement x="209" y="29" width="210" height="23" uuid="ecab56ef-a62f-486f-bc7d-c1431467efc4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Critical Stock Points Report]]></text>
+				<text><![CDATA[Vaccine Stock Report For:  ]]></text>
 			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="419" y="29" width="210" height="26" uuid="91672e4a-0d73-460a-aa2b-59e36dc5bcc2"/>
+				<textElement textAlignment="Left">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<summary>
