@@ -281,6 +281,29 @@ traits:
               application/json:
                   schema: localizedMessage
 
+      /initialize:
+        post:
+          is: [ secured ]
+          description: Create a new stock event with one or more orderables, no permissions checks
+          body:
+            application/json:
+              schema: stockEventDto
+
+          responses:
+            201:
+              description: Stock event has been processed with no validatoin error or persistence error.
+              headers:
+                Keep-Alive:
+              body:
+                application/json:
+                  schema: uuid
+
+            400:
+              description: Failed to process stock event due to validation error.
+              body:
+                application/json:
+                  schema: localizedMessage
+
   /issuedStockItems:
       get:
         is: [ secured ]
