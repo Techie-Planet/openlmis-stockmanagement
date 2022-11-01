@@ -77,7 +77,7 @@ public class StockEventsController extends BaseController {
 
     Profiler profiler = getProfiler("CREATE_STOCK_EVENT", eventDto);
 
-    checkPermission(eventDto, profiler.startNested("CHECK_PERMISSION"));
+    // checkPermission(eventDto, profiler.startNested("CHECK_PERMISSION"));
 
     profiler.start("PROCESS");
     UUID createdEventId = stockEventProcessor.process(eventDto);
