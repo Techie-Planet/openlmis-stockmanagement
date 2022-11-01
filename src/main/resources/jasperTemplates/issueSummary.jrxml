@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.19.0  -->
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.4.3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="issue_summary" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3582c0ce-f51b-43c0-a5b2-60bd40dca41d">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
@@ -13,28 +13,30 @@
 	<parameter name="dateTimeFormat" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="timeZoneId" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="decimalFormat" class="java.text.DecimalFormat" isForPrompting="false"/>
+	<parameter name="nigeria" class="java.io.InputStream" isForPrompting="false">
+		<property name="displayName" value="InputStream"/>
+	</parameter>
+	<parameter name="nphcda" class="java.io.InputStream" isForPrompting="false">
+		<property name="displayName" value="InputStream"/>
+	</parameter>
+	<parameter name="background" class="java.io.InputStream" isForPrompting="false">
+		<property name="displayName" value="InputStream"/>
+	</parameter>
 	<queryString language="SQL">
-		<![CDATA[select 
+		<![CDATA[select
 se.occurreddate as issueDate, o.code as productCode, o.extradata::json->>'productType' as productType,
 o.extradata::json->>'productManufacturer' as productManufacturer, l.lotcode as lotcode, l.expirationdate as expiryDate,
 se.extradata::json->>'vvmStatus' as vvmStatus, f.name as receivingFacility, r.name as reason, se.quantity as quantity
 
 
-from stockmanagement.stock_events s 
+from stockmanagement.stock_events s
 join stockmanagement.stock_event_line_items se on se.stockeventid = s.id
 join stockmanagement.stock_card_line_item_reasons r on r.id = se.reasonid
 join referencedata.orderables o on se.orderableid = o.id
 join referencedata.lots l on l.id = se.lotid
 left join referencedata.facilities f on f.id = se.destinationid
-where s.id = $P!{stockEventId}]]>
+where s.id = 'd4295252-24ef-4009-8bd5-e1873082a5fa'::uuid]]>
 	</queryString>
-	<field name="facility" class="org.openlmis.stockmanagement.dto.referencedata.FacilityDto">
-		<fieldDescription><![CDATA[facility]]></fieldDescription>
-	</field>
-	<field name="program" class="org.openlmis.stockmanagement.dto.referencedata.ProgramDto">
-		<fieldDescription><![CDATA[program]]></fieldDescription>
-	</field>
-	<field name="creationdate" class="java.sql.Date"/>
 	<field name="issuedate" class="java.sql.Date">
 		<property name="com.jaspersoft.studio.field.name" value="issuedate"/>
 		<property name="com.jaspersoft.studio.field.label" value="issuedate"/>
@@ -95,11 +97,11 @@ where s.id = $P!{stockEventId}]]>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<image onErrorType="Blank">
 				<reportElement x="0" y="-1" width="79" height="79" uuid="652148fb-5d09-4b36-81d8-11beb8e62be8"/>
-				<imageExpression><![CDATA["images/nphcda.png"]]></imageExpression>
+				<imageExpression><![CDATA["images/npdch.png"]]></imageExpression>
 			</image>
 			<image onErrorType="Blank">
 				<reportElement x="720" y="0" width="79" height="79" uuid="1a26fbda-bcb5-46c7-a212-109a0e134a3b"/>
-				<imageExpression><![CDATA["images/nigeria.png"]]></imageExpression>
+				<imageExpression><![CDATA["images/Background.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="78" y="31" width="642" height="30" uuid="8b895ad8-e565-41e4-87f4-fe70fea7b9f1"/>
@@ -135,7 +137,7 @@ where s.id = $P!{stockEventId}]]>
 				<textElement>
 					<font size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{facility}.getName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="10" y="20" width="55" height="10" uuid="e70d1a9b-4bcc-460c-8ffe-c238d8d4e9af">
@@ -151,7 +153,7 @@ where s.id = $P!{stockEventId}]]>
 				<textElement>
 					<font size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{facility}.getCode()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="272" y="0" width="40" height="10" uuid="f932b782-290f-45d4-9fdf-f2cc21d3088c">
@@ -172,7 +174,7 @@ where s.id = $P!{stockEventId}]]>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{program}.getName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="504" y="0" width="76" height="10" uuid="f233a52e-358f-492e-972b-5893cca24c7f">
@@ -204,7 +206,7 @@ where s.id = $P!{stockEventId}]]>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{program}.getCode()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="590" y="0" width="76" height="10" uuid="4592c534-9fbd-4b6e-933b-526df3a34a8e">
@@ -215,7 +217,6 @@ where s.id = $P!{stockEventId}]]>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[DateTimeFormatter.ofPattern($P{dateTimeFormat}).format($F{creationdate}.toInstant())]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="590" y="20" width="76" height="10" uuid="86a3715a-6a62-478f-9745-4e5ba2f7317d">
