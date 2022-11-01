@@ -77,7 +77,35 @@ public class StockEventsController extends BaseController {
 
     Profiler profiler = getProfiler("CREATE_STOCK_EVENT", eventDto);
 
-    // checkPermission(eventDto, profiler.startNested("CHECK_PERMISSION"));
+    checkPermission(eventDto, profiler.startNested("CHECK_PERMISSION"));
+
+    profiler.start("PROCESS");
+    UUID createdEventId = stockEventProcessor.process(eventDto);
+
+    profiler.start("CREATE_RESPONSE");
+    ResponseEntity<UUID> response = new ResponseEntity<>(createdEventId, CREATED);
+
+    return stopProfiler(profiler, response);
+  }
+
+
+  /**
+   * THIS METHOD IS USED TO INITIALIZE STOCK FOR ALL FACILITIES AND PRODUCTS
+   * DURING UAT.
+   * IT SHOULD NOT BE USED IN PRODUCTION AND SHOULD BE MADE UNAVAILABLE AFTER USE.
+   * THE NAIN DIFFERENCE FROM THE ACTIVE POST ENDPOINT IS THAT THIS METHOD DOES NOT
+   * CHECK FOR PERMISSIONS WHILE THE ACTIVE ONE DOES
+   *
+   * Create stock event.
+   *
+   * @param eventDto a stock event bound to request body.
+   * @return created stock event's ID.
+   */
+  @RequestMapping(value = "stockEvents/initialize", method = POST)
+  public ResponseEntity<UUID> initializeStocks(@RequestBody StockEventDto eventDto) {
+    LOGGER.debug("Try to create a stock event");
+
+    Profiler profiler = getProfiler("CREATE_STOCK_EVENT", eventDto);
 
     profiler.start("PROCESS");
     UUID createdEventId = stockEventProcessor.process(eventDto);
