@@ -135,7 +135,7 @@ public class JasperReportService {
 
     //Collections.reverse(stockEvent.getLineItems());
     Map<String, Object> params = new HashMap<>();
-    params.put(PARAM_DATASOURCE, singletonList(stockEvent));
+//    params.put(PARAM_DATASOURCE, singletonList(stockEvent));
     params.put("stockEventId", stockEventId.toString());
     params.put("facility", facilityReferenceDataService.findOne(stockEvent.get().getFacilityId()));
     params.put("program", programReferenceDataService.findOne(stockEvent.get().getProgramId()));
