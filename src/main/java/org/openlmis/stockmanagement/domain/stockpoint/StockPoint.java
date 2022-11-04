@@ -51,13 +51,13 @@ public class StockPoint {
   private UUID facilityId;
 
   @Column(nullable = false)
+  private String facility;
+
+  @Column(nullable = false)
   private UUID facilityTypeId;
 
   @Column(nullable = false)
-    private String facilityType;
-
-  @Column(nullable = false)
-  private String facility;
+  private String facilityType;
 
   @Column(nullable = false)
   private String productType;

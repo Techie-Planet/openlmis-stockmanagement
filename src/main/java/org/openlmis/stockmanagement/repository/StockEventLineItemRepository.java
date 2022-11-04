@@ -42,7 +42,12 @@ public interface StockEventLineItemRepository
       + " JOIN Node n on n.id = sel.destinationId and n.isRefDataFacility = true"
       + " WHERE n.referenceId = :facilityId" 
       + " AND sel.stockEvent.programId = :programId"
-      + " AND sel.stockEvent.documentNumber IS NOT NULL")
+      + " AND sel.stockEvent.documentNumber IS NOT NULL"
+      + " AND sel.stockEvent.documentNumber NOT IN ("
+      + " SELECT DISTINCT sEvent.documentNumber FROM StockEvent sEvent"
+      + " WHERE sEvent.programId = :programId"
+      + " AND sEvent.facilityId = :facilityId"
+      + " AND sEvent.documentNumber IS NOT NULL )")
   List<String> getAllLineItemIssuedToFacilityNumber(
                                             @Param("programId") UUID program,
                                             @Param("facilityId") UUID facility);

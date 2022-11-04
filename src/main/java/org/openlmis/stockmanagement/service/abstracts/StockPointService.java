@@ -17,7 +17,8 @@ package org.openlmis.stockmanagement.service.abstracts;
 
 import java.util.List;
 import org.openlmis.stockmanagement.domain.stockpoint.StockPoint;
+import org.springframework.util.MultiValueMap;
 
 public interface StockPointService {
-  List<StockPoint> findStockPoints();
+  List<StockPoint> findStockPoints(MultiValueMap<String, String> parameters);
 }
