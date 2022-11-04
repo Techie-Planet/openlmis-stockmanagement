@@ -42,6 +42,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@SuppressWarnings("PMD.TooManyMethods")
 public class StockCardSummariesV3DtoBuilder {
 
   static final String ORDERABLES = "orderables";
