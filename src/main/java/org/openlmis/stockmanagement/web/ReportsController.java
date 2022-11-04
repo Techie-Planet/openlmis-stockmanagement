@@ -100,7 +100,8 @@ public class ReportsController {
           @RequestParam("stockEventId") UUID stockEventId) {
     LOGGER.info("Try to generate stock issue summary report by stockeventId %s.",
             stockEventId.toString());
-    permissionService.canViewStockCard(program, facility);
+    // permissionService.canViewStockCard(program, facility);
+    System.out.println("PRINTING");
     byte[] report = reportService.generateIssueSummaryReport(stockEventId);
 
     return ResponseEntity

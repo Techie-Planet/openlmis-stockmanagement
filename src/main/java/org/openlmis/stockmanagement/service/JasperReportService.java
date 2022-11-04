@@ -51,7 +51,7 @@ import org.openlmis.stockmanagement.domain.event.StockEvent;
 import org.openlmis.stockmanagement.dto.StockCardDto;
 import org.openlmis.stockmanagement.exception.JasperReportViewException;
 import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
-import org.openlmis.stockmanagement.repository.StockEventsRepository;
+//import org.openlmis.stockmanagement.repository.StockEventsRepository;
 import org.openlmis.stockmanagement.service.referencedata.FacilityReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.ProgramReferenceDataService;
 import org.openlmis.stockmanagement.util.Message;
@@ -76,8 +76,8 @@ public class JasperReportService {
 
   @Autowired
   private StockCardSummariesService stockCardSummariesService;
-  @Autowired
-  private StockEventsRepository stockEventsRepository;
+  //@Autowired
+  //private StockEventsRepository stockEventsRepository;
   @Autowired
   private FacilityReferenceDataService facilityReferenceDataService;
   @Autowired
@@ -128,17 +128,17 @@ public class JasperReportService {
    * @return generated issue summary report.
    */
   public byte[] generateIssueSummaryReport(UUID stockEventId) {
-    Optional<StockEvent> stockEvent = stockEventsRepository.findById(stockEventId);
-    if (!stockEvent.isPresent()) {
-      throw new ResourceNotFoundException(new Message(ERROR_REPORT_ID_NOT_FOUND));
-    }
+    //Optional<StockEvent> stockEvent = stockEventsRepository.findById(stockEventId);
+    //if (!stockEvent.isPresent()) {
+    //  throw new ResourceNotFoundException(new Message(ERROR_REPORT_ID_NOT_FOUND));
+    //}
 
     //Collections.reverse(stockEvent.getLineItems());
     Map<String, Object> params = new HashMap<>();
     //    params.put(PARAM_DATASOURCE, singletonList(stockEvent));
     params.put("stockEventId", stockEventId.toString());
-    params.put("facility", facilityReferenceDataService.findOne(stockEvent.get().getFacilityId()));
-    params.put("program", programReferenceDataService.findOne(stockEvent.get().getProgramId()));
+    //params.put("facility", facilityReferenceDataService.findOne(stockEvent.get().getFacilityId()));
+    //params.put("program", programReferenceDataService.findOne(stockEvent.get().getProgramId()));
     params.put("dateFormat", dateFormat);
     params.put("decimalFormat", createDecimalFormat());
 
@@ -227,6 +227,7 @@ public class JasperReportService {
         jasperPrint = JasperFillManager.fillReport(compiledReport, params,
                 new JREmptyDataSource());
       } else {
+        System.out.println("ACCESSED RIGHT CONNECTION");
         try (Connection connection = replicationDataSource.getConnection()) {
           jasperPrint = JasperFillManager.fillReport(compiledReport, params,
                   connection);
@@ -236,6 +237,8 @@ public class JasperReportService {
       bytes = JasperExportManager.exportReportToPdf(jasperPrint);
     } catch (Exception e) {
       System.out.println("compilation error final");
+      System.out.println(e.getMessage());
+      e.printStackTrace();
       throw new JasperReportViewException(ERROR_GENERATE_REPORT_FAILED, e);
     }
 
