@@ -15,8 +15,7 @@
 
 package org.openlmis.stockmanagement.repository;
 
-// import java.util.Collection;
- import java.util.List;
+import java.util.List;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.stockpoint.StockPoint;
 import org.springframework.data.domain.Page;
@@ -26,7 +25,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface StockPointRepository extends JpaRepository<StockPoint, UUID> {
-    List<StockPoint> findByFacilityTypeIdAndFacilityId(UUID facilityTypeId, UUID facilityId);
-    List<StockPoint> findByFacilityTypeId(UUID facilityTypeId);
-    List<StockPoint> findByFacilityId(UUID facilityId);
+  List<StockPoint> findByFacilityTypeIdAndFacilityId(UUID facilityTypeId, UUID facilityId);
+
+  List<StockPoint> findByFacilityTypeId(UUID facilityTypeId);
+
+  List<StockPoint> findByFacilityId(UUID facilityId);
 }
