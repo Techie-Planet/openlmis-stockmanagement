@@ -51,7 +51,7 @@ import org.openlmis.stockmanagement.domain.event.StockEvent;
 import org.openlmis.stockmanagement.dto.StockCardDto;
 import org.openlmis.stockmanagement.exception.JasperReportViewException;
 import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
-//import org.openlmis.stockmanagement.repository.StockEventsRepository;
+import org.openlmis.stockmanagement.repository.StockEventsRepository;
 import org.openlmis.stockmanagement.service.referencedata.FacilityReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.ProgramReferenceDataService;
 import org.openlmis.stockmanagement.util.Message;
@@ -76,8 +76,8 @@ public class JasperReportService {
 
   @Autowired
   private StockCardSummariesService stockCardSummariesService;
-  //@Autowired
-  //private StockEventsRepository stockEventsRepository;
+  @Autowired
+  private StockEventsRepository stockEventsRepository;
   @Autowired
   private FacilityReferenceDataService facilityReferenceDataService;
   @Autowired
@@ -128,10 +128,10 @@ public class JasperReportService {
    * @return generated issue summary report.
    */
   public byte[] generateIssueSummaryReport(UUID stockEventId) {
-    //Optional<StockEvent> stockEvent = stockEventsRepository.findById(stockEventId);
-    //if (!stockEvent.isPresent()) {
-    //  throw new ResourceNotFoundException(new Message(ERROR_REPORT_ID_NOT_FOUND));
-    //}
+    Optional<StockEvent> stockEvent = stockEventsRepository.findById(stockEventId);
+    if (!stockEvent.isPresent()) {
+      throw new ResourceNotFoundException(new Message(ERROR_REPORT_ID_NOT_FOUND));
+    }
 
     //Collections.reverse(stockEvent.getLineItems());
     Map<String, Object> params = new HashMap<>();

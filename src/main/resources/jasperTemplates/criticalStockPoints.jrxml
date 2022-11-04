@@ -4,316 +4,315 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
-	<style name="Crosstab_CH" mode="Opaque" backcolor="#F0F8FF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Crosstab_CG" mode="Opaque" backcolor="#BFE1FF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Crosstab_CT" mode="Opaque" backcolor="#005FB3">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Crosstab_CD" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Crosstab 1_CH" mode="Opaque" backcolor="#F0F8FF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Crosstab 1_CG" mode="Opaque" backcolor="#BFE1FF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Crosstab 1_CT" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Crosstab 1_CD" style="Crosstab 1_CH" mode="Opaque" backcolor="#FFFFFF">
-		<conditionalStyle>
-			<conditionExpression><![CDATA[$V{status_MEASURE}.equalsIgnoreCase("understocked") || $V{status_MEASURE} == null]]></conditionExpression>
-			<style backcolor="#F95F4A"/>
-		</conditionalStyle>
-		<conditionalStyle>
-			<conditionExpression><![CDATA[$V{status_MEASURE} == null]]></conditionExpression>
-			<style backcolor="#F95F4A"/>
-		</conditionalStyle>
-		<conditionalStyle>
-			<conditionExpression><![CDATA[$V{status_MEASURE}.equalsIgnoreCase("ADEQUATELY STOCKED")]]></conditionExpression>
-			<style backcolor="#4FDA54"/>
-		</conditionalStyle>
-		<conditionalStyle>
-			<conditionExpression><![CDATA[$V{status_MEASURE}.equalsIgnoreCase("REORDER")]]></conditionExpression>
-			<style backcolor="#FAFD9F"/>
-		</conditionalStyle>
-		<conditionalStyle>
-			<conditionExpression><![CDATA[$V{status_MEASURE}.equalsIgnoreCase("OVERSTOCKED")]]></conditionExpression>
-			<style backcolor="#86F0FA"/>
-		</conditionalStyle>
-	</style>
-	<queryString language="SQL">
-		<![CDATA[SELECT 
-		forecast.facilitytypeid,
-		forecast.facilitytype,
-		forecast.facilityid,
-		forecast.facility,
-		forecast.producttype,
-		forecast.stockonhand,
-		forecast.min,
-		forecast.reorder,
-		forecast.max,
-		forecast.status
-		FROM stockmanagement.critical_stock_points forecast]]>
-	</queryString>
-	<field name="facilitytypeid" class="java.util.UUID">
-		<property name="com.jaspersoft.studio.field.name" value="facilitytypeid"/>
-		<property name="com.jaspersoft.studio.field.label" value="facilitytypeid"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
-	</field>
-	<field name="facilitytype" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="facilitytype"/>
-		<property name="com.jaspersoft.studio.field.label" value="facilitytype"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
-	</field>
-	<field name="facilityid" class="java.util.UUID">
-		<property name="com.jaspersoft.studio.field.name" value="facilityid"/>
-		<property name="com.jaspersoft.studio.field.label" value="facilityid"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
-	</field>
-	<field name="facility" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="facility"/>
-		<property name="com.jaspersoft.studio.field.label" value="facility"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
-	</field>
-	<field name="producttype" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="producttype"/>
-		<property name="com.jaspersoft.studio.field.label" value="producttype"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
-	</field>
-	<field name="stockonhand" class="java.lang.Long">
-		<property name="com.jaspersoft.studio.field.name" value="stockonhand"/>
-		<property name="com.jaspersoft.studio.field.label" value="stockonhand"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
-	</field>
-	<field name="min" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="min"/>
-		<property name="com.jaspersoft.studio.field.label" value="min"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
-	</field>
-	<field name="reorder" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="reorder"/>
-		<property name="com.jaspersoft.studio.field.label" value="reorder"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
-	</field>
-	<field name="max" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="max"/>
-		<property name="com.jaspersoft.studio.field.label" value="max"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
-	</field>
-	<field name="status" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="status"/>
-		<property name="com.jaspersoft.studio.field.label" value="status"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
-	</field>
-	<background>
-		<band height="387" splitType="Stretch">
-			<image>
-				<reportElement x="260" y="80" width="331" height="307" uuid="ee07bebe-35aa-4bfa-bafd-d43009f44dd1"/>
-				<imageExpression><![CDATA["images/Background.png"]]></imageExpression>
-			</image>
-		</band>
-	</background>
-	<title>
-		<band height="57" splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<image onErrorType="Blank">
-				<reportElement x="0" y="2" width="55" height="55" uuid="652148fb-5d09-4b36-81d8-11beb8e62be8"/>
-				<imageExpression><![CDATA["images/nphcda.png"]]></imageExpression>
-			</image>
-			<image onErrorType="Blank">
-				<reportElement x="750" y="2" width="55" height="55" uuid="1a26fbda-bcb5-46c7-a212-109a0e134a3b"/>
-				<imageExpression><![CDATA["images/nigeria.png"]]></imageExpression>
-			</image>
-			<staticText>
-				<reportElement x="74" y="7" width="655" height="31" uuid="1f4f6580-e7d0-48fb-946e-b2e2b840fc1a">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[NATIONAL PRIMARY HEALTH CARE DEVELOPMENT AGENCY]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="209" y="29" width="210" height="23" uuid="ecab56ef-a62f-486f-bc7d-c1431467efc4"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="16" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Vaccine Stock Report For:  ]]></text>
-			</staticText>
-			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="419" y="29" width="210" height="26" uuid="91672e4a-0d73-460a-aa2b-59e36dc5bcc2"/>
-				<textElement textAlignment="Left">
-					<font size="16" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="37">
-			<staticText>
-				<reportElement x="36" y="0" width="80" height="21" uuid="62dce70b-71b2-4d16-8369-87957de2646c"/>
-				<textElement>
-					<font size="16" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Key:-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="144" y="0" width="110" height="21" backcolor="#F95F4A" uuid="f23a0a4a-60c3-4511-a930-10f2689bd9ed"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Understocked]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="297" y="0" width="110" height="21" backcolor="#FAFD9F" uuid="954d6a49-8f98-46e4-93cd-ca5b585b8ba5"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Re-order]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="459" y="0" width="150" height="21" backcolor="#4FDA54" uuid="67483184-c400-494f-8659-ff64b00d92cb"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Adequately Stocked]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="657" y="0" width="110" height="21" backcolor="#86F0FA" uuid="0910cf09-6f4a-4db1-9a25-068caac95fba"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Overstocked]]></text>
-			</staticText>
-		</band>
-	</pageHeader>
-	<summary>
-		<band height="284" splitType="Stretch">
-			<crosstab>
-				<reportElement x="0" y="10" width="804" height="180" uuid="13b9cf3a-e6c9-41c8-8fc3-6c516cd73814">
-					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
-					<property name="com.jaspersoft.studio.crosstab.style.header" value="Crosstab 1_CH"/>
-					<property name="com.jaspersoft.studio.crosstab.style.group" value="Crosstab 1_CG"/>
-					<property name="com.jaspersoft.studio.crosstab.style.total" value="Crosstab 1_CT"/>
-					<property name="com.jaspersoft.studio.crosstab.style.detail" value="Crosstab 1_CD"/>
-				</reportElement>
-				<crosstabDataset>
-					<dataset resetType="Report"/>
-				</crosstabDataset>
-				<rowGroup name="facility" width="110" totalPosition="End">
-					<bucket class="java.lang.String">
-						<bucketExpression><![CDATA[$F{facility}]]></bucketExpression>
-					</bucket>
-					<crosstabRowHeader>
-						<cellContents mode="Opaque" style="Crosstab 1_CH">
-							<textField>
-								<reportElement mode="Opaque" x="0" y="0" width="110" height="20" uuid="b53bf5cc-3f5d-4532-b980-0102db77d0c0"/>
-								<textElement textAlignment="Left" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$V{facility}]]></textFieldExpression>
-							</textField>
-						</cellContents>
-					</crosstabRowHeader>
-					<crosstabTotalRowHeader>
-						<cellContents mode="Opaque" style="Crosstab 1_CT"/>
-					</crosstabTotalRowHeader>
-				</rowGroup>
-				<columnGroup name="producttype" height="20" totalPosition="End">
-					<bucket class="java.lang.String">
-						<bucketExpression><![CDATA[$F{producttype}]]></bucketExpression>
-					</bucket>
-					<crosstabColumnHeader>
-						<cellContents mode="Opaque" style="Crosstab 1_CH">
-							<textField>
-								<reportElement x="0" y="0" width="60" height="20" uuid="c4c3587d-190b-4ce6-8bb7-93384b4ea0a2"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$V{producttype}]]></textFieldExpression>
-							</textField>
-						</cellContents>
-					</crosstabColumnHeader>
-					<crosstabTotalColumnHeader>
-						<cellContents mode="Opaque" style="Crosstab 1_CT"/>
-					</crosstabTotalColumnHeader>
-				</columnGroup>
-				<measure name="stockonhand_MEASURE" class="java.lang.Long">
-					<measureExpression><![CDATA[$F{stockonhand}]]></measureExpression>
-				</measure>
-				<measure name="status_MEASURE" class="java.lang.String">
-					<measureExpression><![CDATA[$F{status}]]></measureExpression>
-				</measure>
-				<crosstabCell width="60" height="20">
-					<cellContents mode="Opaque" style="Crosstab 1_CD">
-						<textField>
-							<reportElement style="Crosstab 1_CD" mode="Opaque" x="0" y="0" width="60" height="20" uuid="5ee76854-b0a5-45ea-853a-1dfd51c6deea"/>
-							<textElement textAlignment="Center" verticalAlignment="Middle"/>
-							<textFieldExpression><![CDATA[$V{stockonhand_MEASURE} != null ? $V{stockonhand_MEASURE} : "0"]]></textFieldExpression>
-						</textField>
-					</cellContents>
-				</crosstabCell>
-				<crosstabCell width="60" height="20" columnTotalGroup="producttype">
-					<cellContents mode="Opaque" style="Crosstab 1_CT"/>
-				</crosstabCell>
-				<crosstabCell width="60" height="20" rowTotalGroup="facility">
-					<cellContents mode="Opaque" style="Crosstab 1_CT"/>
-				</crosstabCell>
-				<crosstabCell width="60" height="20" rowTotalGroup="facility" columnTotalGroup="producttype">
-					<cellContents mode="Opaque" style="Crosstab 1_CT"/>
-				</crosstabCell>
-			</crosstab>
-			<rectangle>
-				<reportElement mode="Opaque" x="0" y="10" width="110" height="20" uuid="7ac6a49e-c9d7-434b-8eba-04d8f6028d91"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineStyle="Solid"/>
-				</graphicElement>
-			</rectangle>
-		</band>
-	</summary>
+    <style name="Crosstab_CH" mode="Opaque" backcolor="#F0F8FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <leftPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+            <rightPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Crosstab_CG" mode="Opaque" backcolor="#BFE1FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <leftPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+            <rightPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Crosstab_CT" mode="Opaque" backcolor="#005FB3">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <leftPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+            <rightPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Crosstab_CD" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <leftPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+            <rightPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Crosstab 1_CH" mode="Opaque" backcolor="#F0F8FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <leftPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+            <rightPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Crosstab 1_CG" mode="Opaque" backcolor="#BFE1FF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <leftPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+            <rightPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Crosstab 1_CT" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <pen lineWidth="0.5" lineColor="#000000"/>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <leftPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+            <rightPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Crosstab 1_CD" style="Crosstab 1_CH" mode="Opaque" backcolor="#FFFFFF">
+        <conditionalStyle>
+            <conditionExpression><![CDATA[$V{status_MEASURE}.equalsIgnoreCase("understocked") || $V{status_MEASURE} == null]]></conditionExpression>
+            <style backcolor="#F95F4A"/>
+        </conditionalStyle>
+        <conditionalStyle>
+            <conditionExpression><![CDATA[$V{status_MEASURE} == null]]></conditionExpression>
+            <style backcolor="#F95F4A"/>
+        </conditionalStyle>
+        <conditionalStyle>
+            <conditionExpression><![CDATA[$V{status_MEASURE}.equalsIgnoreCase("ADEQUATELY STOCKED")]]></conditionExpression>
+            <style backcolor="#4FDA54"/>
+        </conditionalStyle>
+        <conditionalStyle>
+            <conditionExpression><![CDATA[$V{status_MEASURE}.equalsIgnoreCase("REORDER")]]></conditionExpression>
+            <style backcolor="#FAFD9F"/>
+        </conditionalStyle>
+        <conditionalStyle>
+            <conditionExpression><![CDATA[$V{status_MEASURE}.equalsIgnoreCase("OVERSTOCKED")]]></conditionExpression>
+            <style backcolor="#86F0FA"/>
+        </conditionalStyle>
+    </style>
+    <queryString>
+        <![CDATA[SELECT
+forecast.facilitytypeid,
+    forecast.facilitytype,
+    forecast.facilityid,
+    forecast.facility,
+    forecast.producttype,
+    forecast.stockonhand,
+    forecast.min,
+    forecast.reorder,
+    forecast.max,
+    forecast.status FROM stockmanagement.critical_stock_points forecast]]>
+    </queryString>
+    <field name="facilitytypeid" class="java.util.UUID">
+        <property name="com.jaspersoft.studio.field.name" value="facilitytypeid"/>
+        <property name="com.jaspersoft.studio.field.label" value="facilitytypeid"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
+    </field>
+    <field name="facilitytype" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="facilitytype"/>
+        <property name="com.jaspersoft.studio.field.label" value="facilitytype"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
+    </field>
+    <field name="facilityid" class="java.util.UUID">
+        <property name="com.jaspersoft.studio.field.name" value="facilityid"/>
+        <property name="com.jaspersoft.studio.field.label" value="facilityid"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
+    </field>
+    <field name="facility" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="facility"/>
+        <property name="com.jaspersoft.studio.field.label" value="facility"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
+    </field>
+    <field name="producttype" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="producttype"/>
+        <property name="com.jaspersoft.studio.field.label" value="producttype"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
+    </field>
+    <field name="stockonhand" class="java.lang.Long">
+        <property name="com.jaspersoft.studio.field.name" value="stockonhand"/>
+        <property name="com.jaspersoft.studio.field.label" value="stockonhand"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
+    </field>
+    <field name="min" class="java.lang.Integer">
+        <property name="com.jaspersoft.studio.field.name" value="min"/>
+        <property name="com.jaspersoft.studio.field.label" value="min"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
+    </field>
+    <field name="reorder" class="java.lang.Integer">
+        <property name="com.jaspersoft.studio.field.name" value="reorder"/>
+        <property name="com.jaspersoft.studio.field.label" value="reorder"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
+    </field>
+    <field name="max" class="java.lang.Integer">
+        <property name="com.jaspersoft.studio.field.name" value="max"/>
+        <property name="com.jaspersoft.studio.field.label" value="max"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
+    </field>
+    <field name="status" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="status"/>
+        <property name="com.jaspersoft.studio.field.label" value="status"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="critical_stock_points"/>
+    </field>
+    <background>
+        <band height="387" splitType="Stretch">
+            <image>
+                <reportElement x="260" y="80" width="331" height="307" uuid="ee07bebe-35aa-4bfa-bafd-d43009f44dd1"/>
+                <imageExpression><![CDATA["src/main/resources/images/Background.png"]]></imageExpression>
+            </image>
+        </band>
+    </background>
+    <title>
+        <band height="70" splitType="Stretch">
+            <property name="com.jaspersoft.studio.unit.height" value="px"/>
+            <image onErrorType="Blank">
+                <reportElement x="0" y="2" width="55" height="55" uuid="652148fb-5d09-4b36-81d8-11beb8e62be8"/>
+                <imageExpression><![CDATA["src/main/resources/images/npdch.png"]]></imageExpression>
+            </image>
+            <image onErrorType="Blank">
+                <reportElement x="750" y="2" width="55" height="55" uuid="1a26fbda-bcb5-46c7-a212-109a0e134a3b"/>
+                <imageExpression><![CDATA["src/main/resources/images/nigeria.png"]]></imageExpression>
+            </image>
+            <staticText>
+                <reportElement x="74" y="7" width="655" height="31" uuid="1f4f6580-e7d0-48fb-946e-b2e2b840fc1a">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[NATIONAL PRIMARY HEALTH CARE DEVELOPMENT AGENCY]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="128" y="29" width="289" height="23" uuid="ecab56ef-a62f-486f-bc7d-c1431467efc4"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="16" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Vaccine Stock Report For:  ]]></text>
+            </staticText>
+            <textField pattern="MMMMM dd, yyyy">
+                <reportElement x="421" y="27" width="251" height="26" uuid="91672e4a-0d73-460a-aa2b-59e36dc5bcc2"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font size="16" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="47">
+            <staticText>
+                <reportElement x="36" y="9" width="80" height="21" uuid="62dce70b-71b2-4d16-8369-87957de2646c"/>
+                <textElement verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Key:-]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="144" y="9" width="110" height="21" backcolor="#F95F4A" uuid="f23a0a4a-60c3-4511-a930-10f2689bd9ed"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Understocked]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="297" y="9" width="110" height="21" backcolor="#FAFD9F" uuid="954d6a49-8f98-46e4-93cd-ca5b585b8ba5"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Re-order]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="459" y="9" width="150" height="21" backcolor="#4FDA54" uuid="67483184-c400-494f-8659-ff64b00d92cb"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Adequately Stocked]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="657" y="9" width="110" height="21" backcolor="#86F0FA" uuid="0910cf09-6f4a-4db1-9a25-068caac95fba"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Overstocked]]></text>
+            </staticText>
+        </band>
+    </pageHeader>
+    <summary>
+        <band height="284" splitType="Stretch">
+            <crosstab>
+                <reportElement x="0" y="8" width="804" height="180" uuid="13b9cf3a-e6c9-41c8-8fc3-6c516cd73814">
+                    <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+                    <property name="com.jaspersoft.studio.crosstab.style.header" value="Crosstab 1_CH"/>
+                    <property name="com.jaspersoft.studio.crosstab.style.group" value="Crosstab 1_CG"/>
+                    <property name="com.jaspersoft.studio.crosstab.style.total" value="Crosstab 1_CT"/>
+                    <property name="com.jaspersoft.studio.crosstab.style.detail" value="Crosstab 1_CD"/>
+                </reportElement>
+                <crosstabDataset>
+                    <dataset resetType="Report"/>
+                </crosstabDataset>
+                <rowGroup name="facility" width="110" totalPosition="End">
+                    <bucket class="java.lang.String">
+                        <bucketExpression><![CDATA[$F{facility}]]></bucketExpression>
+                    </bucket>
+                    <crosstabRowHeader>
+                        <cellContents mode="Opaque" style="Crosstab 1_CH">
+                            <textField>
+                                <reportElement mode="Opaque" x="0" y="0" width="110" height="20" uuid="b53bf5cc-3f5d-4532-b980-0102db77d0c0"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$V{facility}]]></textFieldExpression>
+                            </textField>
+                        </cellContents>
+                    </crosstabRowHeader>
+                    <crosstabTotalRowHeader>
+                        <cellContents mode="Opaque" style="Crosstab 1_CT"/>
+                    </crosstabTotalRowHeader>
+                </rowGroup>
+                <columnGroup name="producttype" height="20" totalPosition="End">
+                    <bucket class="java.lang.String">
+                        <bucketExpression><![CDATA[$F{producttype}]]></bucketExpression>
+                    </bucket>
+                    <crosstabColumnHeader>
+                        <cellContents mode="Opaque" style="Crosstab 1_CH">
+                            <textField>
+                                <reportElement x="0" y="0" width="60" height="20" uuid="c4c3587d-190b-4ce6-8bb7-93384b4ea0a2"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$V{producttype}]]></textFieldExpression>
+                            </textField>
+                        </cellContents>
+                    </crosstabColumnHeader>
+                    <crosstabTotalColumnHeader>
+                        <cellContents mode="Opaque" style="Crosstab 1_CT"/>
+                    </crosstabTotalColumnHeader>
+                </columnGroup>
+                <measure name="stockonhand_MEASURE" class="java.lang.Long">
+                    <measureExpression><![CDATA[$F{stockonhand}]]></measureExpression>
+                </measure>
+                <measure name="status_MEASURE" class="java.lang.String">
+                    <measureExpression><![CDATA[$F{status}]]></measureExpression>
+                </measure>
+                <crosstabCell width="60" height="20">
+                    <cellContents mode="Opaque" style="Crosstab 1_CD">
+                        <textField>
+                            <reportElement style="Crosstab 1_CD" mode="Opaque" x="0" y="0" width="60" height="20" uuid="5ee76854-b0a5-45ea-853a-1dfd51c6deea"/>
+                            <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                            <textFieldExpression><![CDATA[$V{stockonhand_MEASURE} != null ? $V{stockonhand_MEASURE} : "0"]]></textFieldExpression>
+                        </textField>
+                    </cellContents>
+                </crosstabCell>
+                <crosstabCell width="60" height="20" columnTotalGroup="producttype">
+                    <cellContents mode="Opaque" style="Crosstab 1_CT"/>
+                </crosstabCell>
+                <crosstabCell width="60" height="20" rowTotalGroup="facility">
+                    <cellContents mode="Opaque" style="Crosstab 1_CT"/>
+                </crosstabCell>
+                <crosstabCell width="60" height="20" rowTotalGroup="facility" columnTotalGroup="producttype">
+                    <cellContents mode="Opaque" style="Crosstab 1_CT"/>
+                </crosstabCell>
+            </crosstab>
+            <rectangle>
+                <reportElement mode="Opaque" x="0" y="8" width="110" height="20" uuid="7ac6a49e-c9d7-434b-8eba-04d8f6028d91"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineStyle="Solid"/>
+                </graphicElement>
+            </rectangle>
+        </band>
+    </summary>
 </jasperReport>
