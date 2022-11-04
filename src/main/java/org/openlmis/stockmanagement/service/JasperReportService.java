@@ -137,7 +137,8 @@ public class JasperReportService {
     Map<String, Object> params = new HashMap<>();
     //    params.put(PARAM_DATASOURCE, singletonList(stockEvent));
     params.put("stockEventId", stockEventId.toString());
-    //params.put("facility", facilityReferenceDataService.findOne(stockEvent.get().getFacilityId()));
+    //params.put("facility",
+    // facilityReferenceDataService.findOne(stockEvent.get().getFacilityId()));
     //params.put("program", programReferenceDataService.findOne(stockEvent.get().getProgramId()));
     params.put("dateFormat", dateFormat);
     params.put("decimalFormat", createDecimalFormat());
