@@ -259,7 +259,7 @@
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<text><![CDATA[Lot code]]></text>
+				<text><![CDATA[Batch Number]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="82" y="0" width="162" height="25" backcolor="#CCCCCC" uuid="f75fae81-e6b8-4993-898d-632ddf29d1e8"/>
@@ -334,7 +334,7 @@
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[(new org.json.JSONObject($F{extradata}).getString("vvmStatus")) == "null" ? "" : new org.json.JSONObject($F{extradata}).getString("vvmStatus")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[(new org.json.JSONObject($F{extradata}).getString("vvmStatus")) == "null" ? "" : new org.json.JSONObject($F{extradata}).getString("vvmStatus").replace("STAGE_","").replace("1","I").replace("2", "II").replace("3","III").replace("4", "IV")]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Group" evaluationGroup="lineItemGroup" isBlankWhenNull="true">
 				<reportElement x="520" y="0" width="72" height="25" printWhenGroupChanges="lineItemGroup" forecolor="#848484" uuid="547fa08c-24e6-4617-aa94-09384a952a19">

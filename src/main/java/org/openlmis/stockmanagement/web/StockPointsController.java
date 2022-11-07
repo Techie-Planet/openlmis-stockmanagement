@@ -17,11 +17,13 @@ package org.openlmis.stockmanagement.web;
 
 import java.util.List;
 import org.openlmis.stockmanagement.domain.stockpoint.StockPoint;
+import org.openlmis.stockmanagement.service.JasperReportService;
 import org.openlmis.stockmanagement.service.abstracts.StockPointService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.profiler.Profiler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,9 +38,29 @@ public class StockPointsController {
   @Autowired
   StockPointService stockPointService;
 
+  @Autowired
+  private JasperReportService reportService;
+
   @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
   @GetMapping
   public List<StockPoint> getStockPoints(@RequestParam MultiValueMap<String, String> parameters) {
     return stockPointService.findStockPoints(parameters);
+  }
+  /**
+   * Get critical stock points report.
+   *
+   * @return generated PDF report
+   */
+  @GetMapping(value = "/print")
+  @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
+  public ResponseEntity<byte[]> getCriticalStockPointsReport() {
+    byte[] report = reportService.generateCriticalStockPointsReport();
+
+    return ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_PDF)
+            .header("Content-Disposition",
+                    "inline; filename=critical_stock_points" + "_" + ".pdf")
+            .body(report);
   }
 }

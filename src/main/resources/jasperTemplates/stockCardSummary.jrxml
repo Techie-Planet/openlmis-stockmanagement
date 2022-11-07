@@ -440,7 +440,7 @@
 								<reportElement x="0" y="0" width="65" height="30" uuid="c2ebc713-6bee-420b-998c-97370d028aee"/>
 								<box padding="2"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{orderable}.getExtraData().get("vvmStatus") ]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{orderable}.getExtraData().get("vvmStatus").replace("STAGE_","").replace("1","I").replace("2", "II").replace("3","III").replace("4", "IV")]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
