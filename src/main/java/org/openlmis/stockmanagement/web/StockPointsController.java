@@ -47,6 +47,7 @@ public class StockPointsController {
   public List<StockPoint> getStockPoints(@RequestParam MultiValueMap<String, String> parameters) {
     return stockPointService.findStockPoints(parameters);
   }
+
   /**
    * Get critical stock points report.
    *
