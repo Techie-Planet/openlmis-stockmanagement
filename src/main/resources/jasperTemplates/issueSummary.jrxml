@@ -12,7 +12,7 @@
 se.occurreddate as issueDate, o.code as productCode, o.extradata::json->>'productType' as productType,
 o.extradata::json->>'productManufacturer' as productManufacturer, l.lotcode as lotcode, l.expirationdate as expiryDate,
 se.extradata::json->>'vvmStatus' as vvmStatus, f.name as receivingFacility, r.name as reason, se.quantity as quantity
-
+from stockmanagement.stock_events s
 join stockmanagement.stock_event_line_items se on se.stockeventid = s.id
 join stockmanagement.stock_card_line_item_reasons r on r.id = se.reasonid
 join referencedata.orderables o on se.orderableid = o.id
