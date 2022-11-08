@@ -252,9 +252,13 @@ public class JasperReportService {
       return JasperCompileManager.compileReport(inputStream);
     } catch (IOException ex) {
       System.out.println("compilation error 1");
+      System.out.println(ex.getMessage());
+      ex.printStackTrace();
       throw new JasperReportViewException(new Message((ERROR_IO), ex.getMessage()), ex);
     } catch (JRException ex) {
       System.out.println("compilation error 2");
+      System.out.println(ex.getMessage());
+      ex.printStackTrace();
       throw new JasperReportViewException(new Message(ERROR_GENERATE_REPORT_FAILED), ex);
     }
   }
