@@ -74,7 +74,7 @@ WHERE s.id = $P{stockEventId}::uuid]]>
 		<band height="390" splitType="Stretch">
 			<image>
 				<reportElement x="270" y="70" width="352" height="320" uuid="ee07bebe-35aa-4bfa-bafd-d43009f44dd1"/>
-				<imageExpression><![CDATA["src/main/resources/images/Background.png"]]></imageExpression>
+				<imageExpression><![CDATA["images/Background.png"]]></imageExpression>
 			</image>
 		</band>
 	</background>
@@ -83,11 +83,11 @@ WHERE s.id = $P{stockEventId}::uuid]]>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<image onErrorType="Blank">
 				<reportElement x="0" y="-1" width="79" height="79" uuid="652148fb-5d09-4b36-81d8-11beb8e62be8"/>
-				<imageExpression><![CDATA["src/main/resources/images/npdch.png"]]></imageExpression>
+				<imageExpression><![CDATA["images/npdch.png"]]></imageExpression>
 			</image>
 			<image onErrorType="Blank">
 				<reportElement x="720" y="0" width="79" height="79" uuid="1a26fbda-bcb5-46c7-a212-109a0e134a3b"/>
-				<imageExpression><![CDATA["src/main/resources/images/Background.png"]]></imageExpression>
+				<imageExpression><![CDATA["images/Background.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="78" y="31" width="642" height="30" uuid="8b895ad8-e565-41e4-87f4-fe70fea7b9f1"/>
