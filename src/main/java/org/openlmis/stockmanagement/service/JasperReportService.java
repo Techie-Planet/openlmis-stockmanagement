@@ -133,9 +133,7 @@ public class JasperReportService {
       throw new ResourceNotFoundException(new Message(ERROR_REPORT_ID_NOT_FOUND));
     }
 
-    //Collections.reverse(stockEvent.getLineItems());
     Map<String, Object> params = new HashMap<>();
-    //    params.put(PARAM_DATASOURCE, singletonList(stockEvent));
     params.put("stockEventId", stockEventId.toString());
     //params.put("facility",
     // facilityReferenceDataService.findOne(stockEvent.get().getFacilityId()));
