@@ -139,7 +139,7 @@ public class JasperReportService {
      facilityReferenceDataService.findOne(stockEvent.get().getFacilityId()));
     params.put("program", programReferenceDataService.findOne(stockEvent.get().getProgramId()));
     params.put("stockEventType", stockEventType);
-    params.put("creationDate", stockEvent.getProcessedDate().toLocalDate());
+    params.put("creationDate", stockEvent.get().getProcessedDate().toLocalDate());
     params.put("dateFormat", dateFormat);
     params.put("decimalFormat", createDecimalFormat());
 
