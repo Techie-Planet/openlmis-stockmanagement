@@ -421,9 +421,12 @@ traits:
           stockEventId:
             required: true
             description: Stock event id
+          stockEventType:
+            required: true
+            description: Stock event type
         responses:
           200:
-            description: Stock issue summary report generated successfully.
+            description: Stock adjustment report generated successfully.
             body:
               application/pdf:
           404:
@@ -580,6 +583,26 @@ traits:
           body:
             application/json:
               schema: localizedMessage
+
+    /print:
+      get:
+        is: [ secured ]
+        description: Get stock points report in PDF format to print.
+        responses:
+          200:
+            description: Stock points report generated successfully.
+            body:
+              application/pdf:
+          404:
+            description: No stock points report found.
+            body:
+              application/json:
+                schema: localizedMessage
+          403:
+            description: User does not have permission to get stock points report.
+            body:
+              application/json:
+                schema: localizedMessage
 
   /stockCardRangeSummaries:
       get:

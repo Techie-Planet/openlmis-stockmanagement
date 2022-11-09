@@ -127,7 +127,7 @@ public class JasperReportService {
    * @param stockEventId stock card id
    * @return generated issue summary report.
    */
-  public byte[] generateIssueSummaryReport(UUID stockEventId) {
+  public byte[] generateIssueSummaryReport(UUID stockEventId, String stockEventType) {
     Optional<StockEvent> stockEvent = stockEventsRepository.findById(stockEventId);
     if (!stockEvent.isPresent()) {
       throw new ResourceNotFoundException(new Message(ERROR_REPORT_ID_NOT_FOUND));
@@ -135,9 +135,11 @@ public class JasperReportService {
 
     Map<String, Object> params = new HashMap<>();
     params.put("stockEventId", stockEventId.toString());
-    //params.put("facility",
-    // facilityReferenceDataService.findOne(stockEvent.get().getFacilityId()));
-    //params.put("program", programReferenceDataService.findOne(stockEvent.get().getProgramId()));
+    params.put("facility",
+     facilityReferenceDataService.findOne(stockEvent.get().getFacilityId()));
+    params.put("program", programReferenceDataService.findOne(stockEvent.get().getProgramId()));
+    params.put("stockEventType", stockEventType);
+    params.put("creationDate", stockEvent.getProcessedDate().toLocalDate());
     params.put("dateFormat", dateFormat);
     params.put("decimalFormat", createDecimalFormat());
 

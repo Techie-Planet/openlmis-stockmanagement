@@ -4,6 +4,8 @@
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
+	<import value="org.openlmis.stockmanagement.dto.referencedata.FacilityDto"/>
+	<import value="org.openlmis.stockmanagement.dto.referencedata.ProgramDto"/>
 	<import value="java.time.format.DateTimeFormatter"/>
 	<import value="java.time.ZonedDateTime"/>
 	<import value="java.text.*"/>
@@ -11,6 +13,17 @@
 	<parameter name="stockEventId" class="java.lang.String"/>
 	<parameter name="dateFormat" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="dateTimeFormat" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="stockEventType" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="decimalFormat" class="java.text.DecimalFormat" isForPrompting="false"/>
+	<parameter name="facility" class="org.openlmis.stockmanagement.dto.referencedata.FacilityDto" isForPrompting="false">
+		<property name="displayName" value="Facility"/>
+	</parameter>
+	<parameter name="program" class="org.openlmis.stockmanagement.dto.referencedata.ProgramDto" isForPrompting="false">
+		<property name="displayName" value="Program"/>
+	</parameter>
+	<parameter name="creationDate" class="java.time.LocalDate" isForPrompting="false">
+		<property name="displayName" value="CreationDate"/>
+	</parameter>
 	<queryString language="SQL">
 		<![CDATA[select
 se.occurreddate as issueDate, o.code as productCode, o.extradata::json->>'productType' as productType,
@@ -94,19 +107,19 @@ WHERE s.id = $P{stockEventId}::uuid]]>
 				<imageExpression><![CDATA["images/nigeria.png"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="78" y="31" width="642" height="30" uuid="8b895ad8-e565-41e4-87f4-fe70fea7b9f1"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="16" isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<text><![CDATA[Store Issue Summary]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="78" y="1" width="642" height="30" uuid="16442742-203f-4f71-9742-08d4b6b5b84d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[NATIONAL PRIMARY HEALTH CARE DEVELOPMENT AGENCY]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="82" y="31" width="638" height="30" uuid="921ec0f3-98dc-4eac-89b0-4611c734663a"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["STORE " + $P{stockEventType}.toUpperCase() + " SUMMARY"]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -127,6 +140,7 @@ WHERE s.id = $P{stockEventId}::uuid]]>
 				<textElement>
 					<font size="8" isBold="false"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$P{facility}.getName()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="10" y="30" width="55" height="20" uuid="e70d1a9b-4bcc-460c-8ffe-c238d8d4e9af">
@@ -142,6 +156,7 @@ WHERE s.id = $P{stockEventId}::uuid]]>
 				<textElement>
 					<font size="8" isBold="false"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$P{facility}.getCode()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="272" y="0" width="40" height="20" uuid="f932b782-290f-45d4-9fdf-f2cc21d3088c">
@@ -162,6 +177,7 @@ WHERE s.id = $P{stockEventId}::uuid]]>
 				<textElement>
 					<font size="8"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$P{program}.getName()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="504" y="0" width="76" height="20" uuid="f233a52e-358f-492e-972b-5893cca24c7f">
@@ -175,7 +191,7 @@ WHERE s.id = $P{stockEventId}::uuid]]>
 				<text><![CDATA[Creation Date:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="272" y="30" width="70" height="20" uuid="dbb8c60d-f18c-4662-82a9-1469ba5ee29b">
+				<reportElement x="272" y="30" width="40" height="20" uuid="dbb8c60d-f18c-4662-82a9-1469ba5ee29b">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -183,27 +199,18 @@ WHERE s.id = $P{stockEventId}::uuid]]>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Program Code:]]></text>
+				<text><![CDATA[Zone:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="342" y="30" width="70" height="20" uuid="1155efb4-d80b-4867-bc2c-4708e21299cb">
+				<reportElement x="322" y="30" width="90" height="20" uuid="1155efb4-d80b-4867-bc2c-4708e21299cb">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement>
 					<font size="8"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$P{facility}.getGeographicZone().getName()]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="590" y="0" width="76" height="20" uuid="4592c534-9fbd-4b6e-933b-526df3a34a8e">
-					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-			</staticText>
 			<staticText>
 				<reportElement x="590" y="30" width="76" height="20" uuid="86a3715a-6a62-478f-9745-4e5ba2f7317d">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
@@ -226,6 +233,16 @@ WHERE s.id = $P{stockEventId}::uuid]]>
 				</textElement>
 				<text><![CDATA[Transaction ID:]]></text>
 			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="590" y="0" width="90" height="20" uuid="e5da3717-bf78-42cb-8b86-2e79940f92eb">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{creationDate}.format(DateTimeFormatter.ofPattern($P{dateFormat}))]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -280,7 +297,7 @@ WHERE s.id = $P{stockEventId}::uuid]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Product Manufacturer]]></text>
+				<text><![CDATA[Manufacturer]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="350" y="0" width="80" height="30" uuid="b7de122a-30dd-4337-8d60-a4896ba7ea24">

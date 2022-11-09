@@ -97,18 +97,19 @@ public class ReportsController {
   public ResponseEntity<byte[]> getIssueSummary(
           @RequestParam("program") UUID program,
           @RequestParam("facility") UUID facility,
+          @RequestParam("stockEventType") String stockEventType,
           @RequestParam("stockEventId") UUID stockEventId) {
     LOGGER.info("Try to generate stock issue summary report by stockeventId %s.",
             stockEventId.toString());
     permissionService.canViewStockCard(program, facility);
     System.out.println("PRINTING");
-    byte[] report = reportService.generateIssueSummaryReport(stockEventId);
+    byte[] report = reportService.generateIssueSummaryReport(stockEventId, stockEventType);
 
     return ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_PDF)
             .header("Content-Disposition",
-                    "inline; filename=stock_issue_summary" + "_" + stockEventId + ".pdf")
+                    "inline; filename=stock_adjustment_summary" + "_" + stockEventId + ".pdf")
             .body(report);
   }
 }
