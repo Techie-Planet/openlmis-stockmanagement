@@ -38,6 +38,7 @@
 		</box>
 	</style>
 	<subDataset name="summary" uuid="f1d8cfe5-8173-4124-a76e-5864159057a8">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 		<parameter name="stockEventId" class="java.lang.String"/>
 		<queryString language="SQL">
@@ -93,12 +94,13 @@ se.extradata::json->>'vvmStatus' as vvmStatus, f.name as receivingFacility, r.na
 from stockmanagement.stock_events s
 join stockmanagement.stock_event_line_items se on se.stockeventid = s.id
 join stockmanagement.stock_card_line_item_reasons r on r.id = se.reasonid
+join stockmanagement.nodes n on n.id = se.destinationid or n.id = se.sourceid
+join referencedata.facilities f on n.referenceid = f.id
 join referencedata.orderables o on se.orderableid = o.id
 INNER JOIN (SELECT id, MAX (versionNumber) AS versionNumber
 FROM referencedata.orderables GROUP BY id) AS latest
 ON o.id = latest.id AND o.versionNumber = latest.versionNumber
 join referencedata.lots l on l.id = se.lotid
-left join referencedata.facilities f on f.id = se.destinationid
 WHERE s.id = $P{stockEventId}::uuid]]>
 	</queryString>
 	<field name="issuedate" class="java.sql.Date">
