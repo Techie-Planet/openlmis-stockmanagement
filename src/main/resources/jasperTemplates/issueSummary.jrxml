@@ -82,6 +82,9 @@ group by productType]]>
 	<parameter name="creationDate" class="java.time.LocalDate" isForPrompting="false">
 		<property name="displayName" value="CreationDate"/>
 	</parameter>
+	<parameter name="transactionId" class="java.lang.String" isForPrompting="false">
+		<property name="displayName" value="TransactionId"/>
+	</parameter>
 	<queryString language="SQL">
 		<![CDATA[select
 se.occurreddate as issueDate, o.code as productCode, o.extradata::json->>'productType' as productType,
