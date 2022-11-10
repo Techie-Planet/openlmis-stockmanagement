@@ -40,7 +40,7 @@
 	<subDataset name="summary" uuid="f1d8cfe5-8173-4124-a76e-5864159057a8">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-		<parameter name="stockEventId" class="java.lang.String"/>
+		<parameter name="stockEventIdSub" class="java.lang.String"/>
 		<queryString language="SQL">
 			<![CDATA[select
 o.extradata::json->>'productType' as productType, sum(se.quantity)
@@ -51,7 +51,7 @@ INNER JOIN (SELECT id, MAX (versionNumber) AS versionNumber
 FROM referencedata.orderables GROUP BY id) AS latest
 ON o.id = latest.id AND o.versionNumber = latest.versionNumber
 join referencedata.lots l on l.id = se.lotid
-where s.id = $P{stockEventId}::uuid
+where s.id = $P{stockEventIdSub}::uuid
 group by productType]]>
 		</queryString>
 		<field name="producttype" class="java.lang.String">
@@ -590,6 +590,9 @@ WHERE s.id = $P{stockEventId}::uuid]]>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="summary" uuid="9ec5ce3f-66ec-4db6-8cc3-200648cb7418">
+						<datasetParameter name="stockEventIdSub">
+							<datasetParameterExpression><![CDATA[$P{stockEventId}]]></datasetParameterExpression>
+						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
 					<jr:column width="175" uuid="9e20cfd7-5dd9-4a1b-87e1-fb351b5db8f1">
