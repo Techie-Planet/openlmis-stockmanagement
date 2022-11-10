@@ -135,6 +135,7 @@ public class JasperReportService {
 
     Map<String, Object> params = new HashMap<>();
     params.put("stockEventId", stockEventId.toString());
+    params.put("transactionId", stockEvent.get().getDocumentNumber());
     params.put("facility",
         facilityReferenceDataService.findOne(stockEvent.get().getFacilityId()));
     params.put("program", programReferenceDataService.findOne(stockEvent.get().getProgramId()));
