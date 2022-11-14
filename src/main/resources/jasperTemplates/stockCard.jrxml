@@ -495,7 +495,7 @@
 								<reportElement x="0" y="0" width="63" height="30" uuid="5629b2c0-76c4-4e54-b053-9bc829d12719"/>
 								<box padding="2"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{lineItem}.getExtraData().get("vvmStatus").replace("STAGE_","").replace("1","I").replace("2", "II").replace("3","III").replace("4", "IV")]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{lineItem}.getExtraData().get("vvmStatus") != null ? $F{lineItem}.getExtraData().get("vvmStatus").replace("STAGE_","").replace("1","I").replace("2", "II").replace("3","III").replace("4", "IV") : "N/A"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

@@ -92,6 +92,9 @@
 		<field name="stockOnHand" class="java.lang.Integer"/>
 		<field name="lastUpdate" class="java.time.LocalDate"/>
 		<field name="lot" class="org.openlmis.stockmanagement.dto.referencedata.LotDto"/>
+		<field name="lineItems" class="java.util.List">
+			<fieldDescription><![CDATA[lineItems]]></fieldDescription>
+		</field>
 	</subDataset>
 	<parameter name="program" class="org.openlmis.stockmanagement.dto.referencedata.ProgramDto" isForPrompting="false"/>
 	<parameter name="facility" class="org.openlmis.stockmanagement.dto.referencedata.FacilityDto" isForPrompting="false"/>
@@ -440,7 +443,7 @@
 								<reportElement x="0" y="0" width="65" height="30" uuid="c2ebc713-6bee-420b-998c-97370d028aee"/>
 								<box padding="2"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{orderable}.getExtraData().get("vvmStatus").replace("STAGE_","").replace("1","I").replace("2", "II").replace("3","III").replace("4", "IV")]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{lineItems}.get(0).getExtraData().get("vvmStatus") != null ? $F{lineItems}.get(0).getExtraData().get("vvmStatus").replace("STAGE_","").replace("1","I").replace("2", "II").replace("3","III").replace("4", "IV") : "N/A"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
