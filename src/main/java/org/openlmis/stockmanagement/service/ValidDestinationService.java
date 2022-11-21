@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+//import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ValidDestinationService extends SourceDestinationBaseService {
@@ -77,6 +78,7 @@ public class ValidDestinationService extends SourceDestinationBaseService {
    * @param assignment assignment JPA model
    * @return a valid source destination dto
    */
+  //  @Transactional
   public ValidSourceDestinationDto findByProgramFacilityDestination(
       ValidDestinationAssignment assignment) {
     return findAssignment(assignment, validDestinationRepository);
