@@ -156,7 +156,7 @@ forecast.facilitytypeid,
         <band height="387" splitType="Stretch">
             <image>
                 <reportElement x="260" y="80" width="331" height="307" uuid="ee07bebe-35aa-4bfa-bafd-d43009f44dd1"/>
-                <imageExpression><![CDATA["images/Background.png"]]></imageExpression>
+                <imageExpression><![CDATA["src/main/resources/images/Background.png"]]></imageExpression>
             </image>
         </band>
     </background>
@@ -165,11 +165,11 @@ forecast.facilitytypeid,
             <property name="com.jaspersoft.studio.unit.height" value="px"/>
             <image onErrorType="Blank">
                 <reportElement x="0" y="2" width="55" height="55" uuid="652148fb-5d09-4b36-81d8-11beb8e62be8"/>
-                <imageExpression><![CDATA["images/nphcda.png"]]></imageExpression>
+                <imageExpression><![CDATA["src/main/resources/images/npdch.png"]]></imageExpression>
             </image>
             <image onErrorType="Blank">
                 <reportElement x="750" y="2" width="55" height="55" uuid="1a26fbda-bcb5-46c7-a212-109a0e134a3b"/>
-                <imageExpression><![CDATA["images/nigeria.png"]]></imageExpression>
+                <imageExpression><![CDATA["src/main/resources/images/nigeria.png"]]></imageExpression>
             </image>
             <staticText>
                 <reportElement x="74" y="7" width="655" height="31" uuid="1f4f6580-e7d0-48fb-946e-b2e2b840fc1a">
@@ -248,21 +248,25 @@ forecast.facilitytypeid,
                 <crosstabDataset>
                     <dataset resetType="Report"/>
                 </crosstabDataset>
-                <rowGroup name="facility" width="110" totalPosition="End">
+                <rowGroup name="facility" width="100" totalPosition="End">
                     <bucket class="java.lang.String">
                         <bucketExpression><![CDATA[$F{facility}]]></bucketExpression>
                     </bucket>
                     <crosstabRowHeader>
                         <cellContents mode="Opaque" style="Crosstab 1_CH">
                             <textField>
-                                <reportElement mode="Opaque" x="0" y="0" width="110" height="20" uuid="b53bf5cc-3f5d-4532-b980-0102db77d0c0"/>
-                                <textElement textAlignment="Left" verticalAlignment="Middle"/>
+                                <reportElement mode="Opaque" x="0" y="0" width="100" height="20" uuid="b53bf5cc-3f5d-4532-b980-0102db77d0c0"/>
+                                <textElement textAlignment="Left" verticalAlignment="Middle">
+                                    <font size="8"/>
+                                </textElement>
                                 <textFieldExpression><![CDATA[$V{facility}]]></textFieldExpression>
                             </textField>
                         </cellContents>
                     </crosstabRowHeader>
                     <crosstabTotalRowHeader>
-                        <cellContents mode="Opaque" style="Crosstab 1_CT"/>
+                        <cellContents mode="Opaque" style="Crosstab 1_CT">
+                            <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        </cellContents>
                     </crosstabTotalRowHeader>
                 </rowGroup>
                 <columnGroup name="producttype" height="20" totalPosition="End">
@@ -271,15 +275,20 @@ forecast.facilitytypeid,
                     </bucket>
                     <crosstabColumnHeader>
                         <cellContents mode="Opaque" style="Crosstab 1_CH">
+                            <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
                             <textField>
-                                <reportElement x="0" y="0" width="60" height="20" uuid="c4c3587d-190b-4ce6-8bb7-93384b4ea0a2"/>
-                                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                <reportElement x="0" y="0" width="50" height="20" uuid="c4c3587d-190b-4ce6-8bb7-93384b4ea0a2"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font size="8"/>
+                                </textElement>
                                 <textFieldExpression><![CDATA[$V{producttype}]]></textFieldExpression>
                             </textField>
                         </cellContents>
                     </crosstabColumnHeader>
                     <crosstabTotalColumnHeader>
-                        <cellContents mode="Opaque" style="Crosstab 1_CT"/>
+                        <cellContents mode="Opaque" style="Crosstab 1_CT">
+                            <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                        </cellContents>
                     </crosstabTotalColumnHeader>
                 </columnGroup>
                 <measure name="stockonhand_MEASURE" class="java.lang.Long">
@@ -288,27 +297,30 @@ forecast.facilitytypeid,
                 <measure name="status_MEASURE" class="java.lang.String">
                     <measureExpression><![CDATA[$F{status}]]></measureExpression>
                 </measure>
-                <crosstabCell width="60" height="20">
+                <crosstabCell width="50" height="20">
                     <cellContents mode="Opaque" style="Crosstab 1_CD">
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
                         <textField>
-                            <reportElement style="Crosstab 1_CD" mode="Opaque" x="0" y="0" width="60" height="20" uuid="5ee76854-b0a5-45ea-853a-1dfd51c6deea"/>
-                            <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                            <reportElement style="Crosstab 1_CD" mode="Opaque" x="0" y="0" width="50" height="20" uuid="5ee76854-b0a5-45ea-853a-1dfd51c6deea"/>
+                            <textElement textAlignment="Center" verticalAlignment="Middle">
+                                <font size="8"/>
+                            </textElement>
                             <textFieldExpression><![CDATA[$V{stockonhand_MEASURE} != null ? $V{stockonhand_MEASURE} : "0"]]></textFieldExpression>
                         </textField>
                     </cellContents>
                 </crosstabCell>
-                <crosstabCell width="60" height="20" columnTotalGroup="producttype">
+                <crosstabCell width="0" height="20" columnTotalGroup="producttype">
                     <cellContents mode="Opaque" style="Crosstab 1_CT"/>
                 </crosstabCell>
-                <crosstabCell width="60" height="20" rowTotalGroup="facility">
+                <crosstabCell width="50" height="0" rowTotalGroup="facility">
                     <cellContents mode="Opaque" style="Crosstab 1_CT"/>
                 </crosstabCell>
-                <crosstabCell width="60" height="20" rowTotalGroup="facility" columnTotalGroup="producttype">
+                <crosstabCell width="0" height="0" rowTotalGroup="facility" columnTotalGroup="producttype">
                     <cellContents mode="Opaque" style="Crosstab 1_CT"/>
                 </crosstabCell>
             </crosstab>
             <rectangle>
-                <reportElement mode="Opaque" x="0" y="8" width="110" height="20" uuid="7ac6a49e-c9d7-434b-8eba-04d8f6028d91"/>
+                <reportElement mode="Opaque" x="0" y="8" width="100" height="20" uuid="7ac6a49e-c9d7-434b-8eba-04d8f6028d91"/>
                 <graphicElement>
                     <pen lineWidth="0.5" lineStyle="Solid"/>
                 </graphicElement>

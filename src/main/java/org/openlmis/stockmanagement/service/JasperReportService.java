@@ -28,13 +28,9 @@ import java.io.ObjectInputStream;
 import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import javax.sql.DataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -170,7 +166,7 @@ public class JasperReportService {
             .findStockCards(program, facility);
     StockCardDto firstCard = cards.get(0);
     Map<String, Object> params = new HashMap<>();
-    params.put("stockCardSummaries", cards);
+    params.put("stockCardSummaries", sortStockCards(cards));
 
     params.put("program", firstCard.getProgram());
     params.put("facility", firstCard.getFacility());
@@ -289,5 +285,17 @@ public class JasperReportService {
     DecimalFormat decimalFormat = new DecimalFormat("", decimalFormatSymbols);
     decimalFormat.setGroupingSize(Integer.parseInt(groupingSize));
     return decimalFormat;
+  }
+
+  private List<StockCardDto> sortStockCards(List<StockCardDto> cards){
+    return cards
+            .stream()
+            .sorted(Comparator.comparing(StockCardDto::getOrderable,
+                            (o1,o2)-> o1.getProductCode()
+                                    .compareTo(o2.getProductCode()))
+                    .thenComparing(StockCardDto::getOrderable,
+                            (o1,o2)-> o1.getFullProductName()
+                                    .compareTo(o2.getFullProductName())))
+            .collect(Collectors.toList());
   }
 }
