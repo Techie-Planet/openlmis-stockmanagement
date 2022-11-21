@@ -297,7 +297,7 @@ public class JasperReportService {
     return cards
             .stream()
             .sorted(Comparator.comparing(StockCardDto::getOrderable,
-              (o1,o2)-> o1.getProductCode()
+              (o1,o2) -> o1.getProductCode()
                 .compareTo(o2.getProductCode()))
               .thenComparing(StockCardDto::getOrderable,
                 (o1,o2) -> o1.getFullProductName()
