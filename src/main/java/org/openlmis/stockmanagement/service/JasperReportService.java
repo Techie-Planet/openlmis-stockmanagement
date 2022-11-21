@@ -28,7 +28,9 @@ import java.io.ObjectInputStream;
 import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Comparator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.sql.DataSource;
@@ -287,15 +289,15 @@ public class JasperReportService {
     return decimalFormat;
   }
 
-  private List<StockCardDto> sortStockCards(List<StockCardDto> cards){
+  private List<StockCardDto> sortStockCards(List<StockCardDto> cards) {
     return cards
             .stream()
             .sorted(Comparator.comparing(StockCardDto::getOrderable,
-                            (o1,o2)-> o1.getProductCode()
-                                    .compareTo(o2.getProductCode()))
-                    .thenComparing(StockCardDto::getOrderable,
-                            (o1,o2)-> o1.getFullProductName()
-                                    .compareTo(o2.getFullProductName())))
+              (o1,o2)-> o1.getProductCode()
+                .compareTo(o2.getProductCode()))
+              .thenComparing(StockCardDto::getOrderable,
+                (o1,o2) -> o1.getFullProductName()
+                  .compareTo(o2.getFullProductName())))
             .collect(Collectors.toList());
   }
 }
