@@ -156,7 +156,7 @@ forecast.facilitytypeid,
         <band height="387" splitType="Stretch">
             <image>
                 <reportElement x="260" y="80" width="331" height="307" uuid="ee07bebe-35aa-4bfa-bafd-d43009f44dd1"/>
-                <imageExpression><![CDATA["src/main/resources/images/Background.png"]]></imageExpression>
+                <imageExpression><![CDATA["images/Background.png"]]></imageExpression>
             </image>
         </band>
     </background>
@@ -165,11 +165,11 @@ forecast.facilitytypeid,
             <property name="com.jaspersoft.studio.unit.height" value="px"/>
             <image onErrorType="Blank">
                 <reportElement x="0" y="2" width="55" height="55" uuid="652148fb-5d09-4b36-81d8-11beb8e62be8"/>
-                <imageExpression><![CDATA["src/main/resources/images/npdch.png"]]></imageExpression>
+                <imageExpression><![CDATA["images/npdch.png"]]></imageExpression>
             </image>
             <image onErrorType="Blank">
                 <reportElement x="750" y="2" width="55" height="55" uuid="1a26fbda-bcb5-46c7-a212-109a0e134a3b"/>
-                <imageExpression><![CDATA["src/main/resources/images/nigeria.png"]]></imageExpression>
+                <imageExpression><![CDATA["images/nigeria.png"]]></imageExpression>
             </image>
             <staticText>
                 <reportElement x="74" y="7" width="655" height="31" uuid="1f4f6580-e7d0-48fb-946e-b2e2b840fc1a">
