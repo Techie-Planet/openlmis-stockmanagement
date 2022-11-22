@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="StockCardSummary" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="830" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" whenResourceMissingType="Empty" uuid="d0829c7a-bf73-4e6e-9b5a-1735ab6c4d7d">
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.4.3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="StockCardSummary" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="d0829c7a-bf73-4e6e-9b5a-1735ab6c4d7d">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -115,7 +115,7 @@
 		</band>
 	</background>
 	<title>
-		<band height="67" splitType="Stretch">
+		<band height="57" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<image onErrorType="Blank">
 				<reportElement x="15" y="7" width="55" height="55" uuid="652148fb-5d09-4b36-81d8-11beb8e62be8"/>
@@ -126,7 +126,7 @@
 				<imageExpression><![CDATA["images/nigeria.png"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="89" y="12" width="655" height="31" uuid="1f4f6580-e7d0-48fb-946e-b2e2b840fc1a">
+				<reportElement x="74" y="7" width="655" height="31" uuid="1f4f6580-e7d0-48fb-946e-b2e2b840fc1a">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -135,7 +135,7 @@
 				<text><![CDATA[NATIONAL PRIMARY HEALTH CARE DEVELOPMENT AGENCY]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="15" y="30" width="804" height="23" uuid="ecab56ef-a62f-486f-bc7d-c1431467efc4"/>
+				<reportElement x="0" y="25" width="804" height="23" uuid="ecab56ef-a62f-486f-bc7d-c1431467efc4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="16" isBold="true"/>
 				</textElement>
@@ -144,17 +144,17 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="30" splitType="Stretch">
+		<band height="47" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<printWhenExpression><![CDATA[new Boolean($V{PAGE_NUMBER}.intValue() == 1)]]></printWhenExpression>
 			<staticText>
-				<reportElement x="0" y="0" width="77" height="30" uuid="d88076e4-ce9f-4886-a172-855275a4a5e7">
+				<reportElement style="Table_TH" x="8" y="-1" width="36" height="18" uuid="d88076e4-ce9f-4886-a172-855275a4a5e7">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="false"/>
+				<textElement textAlignment="Left">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Facility:]]></text>
 			</staticText>
@@ -170,12 +170,12 @@
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Right">
-					<font size="8" isBold="false"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Facility code:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement x="230" y="0" width="74" height="30" uuid="e28722c1-aff1-4167-af88-1d9b88dc2c81"/>
+				<reportElement x="78" y="19" width="90" height="18" uuid="e28722c1-aff1-4167-af88-1d9b88dc2c81"/>
 				<textElement>
 					<font size="8" isBold="false"/>
 				</textElement>
@@ -188,12 +188,12 @@
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Right">
-					<font size="8" isBold="false"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Program:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="350" y="0" width="74" height="30" uuid="090f268a-9013-48d7-bf4c-2d082ce82426">
+				<reportElement x="340" y="1" width="99" height="19" uuid="090f268a-9013-48d7-bf4c-2d082ce82426">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
@@ -208,8 +208,8 @@
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="false"/>
+				<textElement textAlignment="Left">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Program Code:]]></text>
 			</staticText>
@@ -259,7 +259,7 @@
 		<band height="64" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout"/>
 			<componentElement>
-				<reportElement style="Table 1_TD" x="0" y="0" width="830" height="64" uuid="0a547141-8154-45c5-9011-aca83001f1c9">
+				<reportElement style="Table 1_TD" x="0" y="0" width="802" height="64" uuid="0a547141-8154-45c5-9011-aca83001f1c9">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.grid.JSSGridBagLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 1_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 1_CH"/>

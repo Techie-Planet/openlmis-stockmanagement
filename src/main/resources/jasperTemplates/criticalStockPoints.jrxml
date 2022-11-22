@@ -165,7 +165,7 @@ forecast.facilitytypeid,
             <property name="com.jaspersoft.studio.unit.height" value="px"/>
             <image onErrorType="Blank">
                 <reportElement x="0" y="2" width="55" height="55" uuid="652148fb-5d09-4b36-81d8-11beb8e62be8"/>
-                <imageExpression><![CDATA["images/npdch.png"]]></imageExpression>
+                <imageExpression><![CDATA["images/nphcda.png"]]></imageExpression>
             </image>
             <image onErrorType="Blank">
                 <reportElement x="750" y="2" width="55" height="55" uuid="1a26fbda-bcb5-46c7-a212-109a0e134a3b"/>
