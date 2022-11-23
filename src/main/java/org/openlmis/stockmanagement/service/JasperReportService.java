@@ -231,17 +231,13 @@ public class JasperReportService {
         jasperPrint = JasperFillManager.fillReport(compiledReport, params,
                 new JREmptyDataSource());
       } else {
-        System.out.println("ACCESSED RIGHT CONNECTION");
         try (Connection connection = replicationDataSource.getConnection()) {
           jasperPrint = JasperFillManager.fillReport(compiledReport, params,
                   connection);
         }
       }
-      System.out.println("final point");
       bytes = JasperExportManager.exportReportToPdf(jasperPrint);
     } catch (Exception e) {
-      System.out.println("compilation error final");
-      System.out.println(e.getMessage());
       e.printStackTrace();
       throw new JasperReportViewException(ERROR_GENERATE_REPORT_FAILED, e);
     }
@@ -254,13 +250,9 @@ public class JasperReportService {
 
       return JasperCompileManager.compileReport(inputStream);
     } catch (IOException ex) {
-      System.out.println("compilation error 1");
-      System.out.println(ex.getMessage());
       ex.printStackTrace();
       throw new JasperReportViewException(new Message((ERROR_IO), ex.getMessage()), ex);
     } catch (JRException ex) {
-      System.out.println("compilation error 2");
-      System.out.println(ex.getMessage());
       ex.printStackTrace();
       throw new JasperReportViewException(new Message(ERROR_GENERATE_REPORT_FAILED), ex);
     }

@@ -102,7 +102,6 @@ public class ReportsController {
     LOGGER.info("Try to generate stock issue summary report by stockeventId %s.",
             stockEventId.toString());
     permissionService.canViewStockCard(program, facility);
-    System.out.println("PRINTING");
     byte[] report = reportService.generateIssueSummaryReport(stockEventId, stockEventType);
 
     return ResponseEntity
