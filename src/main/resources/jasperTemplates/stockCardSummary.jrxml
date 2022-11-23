@@ -144,86 +144,90 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="30" splitType="Stretch">
+		<band height="47" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<printWhenExpression><![CDATA[new Boolean($V{PAGE_NUMBER}.intValue() == 1)]]></printWhenExpression>
-			<staticText>
-				<reportElement x="0" y="0" width="77" height="30" uuid="d88076e4-ce9f-4886-a172-855275a4a5e7">
-					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Facility:]]></text>
-			</staticText>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement x="90" y="0" width="74" height="30" uuid="68d8d341-d519-4cd5-adaf-845085a2b343"/>
-				<textElement>
+				<reportElement x="86" y="4" width="183" height="19" uuid="68d8d341-d519-4cd5-adaf-845085a2b343">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{facility}.getName()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="151" y="0" width="74" height="30" uuid="e70d1a9b-4bcc-460c-8ffe-c238d8d4e9af">
+				<reportElement x="9" y="25" width="70" height="19" uuid="e70d1a9b-4bcc-460c-8ffe-c238d8d4e9af">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="false"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Facility code:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement x="230" y="0" width="74" height="30" uuid="e28722c1-aff1-4167-af88-1d9b88dc2c81"/>
-				<textElement>
+				<reportElement x="85" y="25" width="135" height="18" uuid="e28722c1-aff1-4167-af88-1d9b88dc2c81"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{facility}.getCode()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="299" y="0" width="41" height="30" uuid="f932b782-290f-45d4-9fdf-f2cc21d3088c">
+				<reportElement x="295" y="4" width="41" height="18" uuid="f932b782-290f-45d4-9fdf-f2cc21d3088c">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="false"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Program:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="350" y="0" width="74" height="30" uuid="090f268a-9013-48d7-bf4c-2d082ce82426">
+				<reportElement x="365" y="4" width="99" height="19" uuid="090f268a-9013-48d7-bf4c-2d082ce82426">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{program}.getName()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="424" y="0" width="63" height="30" uuid="dbb8c60d-f18c-4662-82a9-1469ba5ee29b">
+				<reportElement x="296" y="26" width="63" height="19" uuid="dbb8c60d-f18c-4662-82a9-1469ba5ee29b">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textElement textAlignment="Right">
-					<font size="8" isBold="false"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Program Code:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="493" y="0" width="74" height="30" uuid="1155efb4-d80b-4867-bc2c-4708e21299cb">
+				<reportElement x="365" y="26" width="94" height="18" uuid="1155efb4-d80b-4867-bc2c-4708e21299cb">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{program}.getCode()]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="9" y="3" width="70" height="19" uuid="563206c6-ed9e-4606-9331-51515f0b868e">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Facility:]]></text>
+			</staticText>
 		</band>
+	</pageHeader>
 	</pageHeader>
 	<columnHeader>
 		<band height="50">
