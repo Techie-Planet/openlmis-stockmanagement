@@ -90,8 +90,26 @@
         </conditionalStyle>
     </style>
     <queryString>
-        <![CDATA[SELECT
+        <![CDATA[select
+CASE
+    WHEN geographiczone.name LIKE '%North Central%' THEN 1
+    WHEN geographiczone.name LIKE '%North East%' THEN 2
+    WHEN geographiczone.name LIKE '%North West%' THEN 3
+    WHEN geographiczone.name LIKE '%South East%' THEN 4
+    WHEN geographiczone.name LIKE '%South South%' THEN 5
+    WHEN geographiczone.name LIKE '%South West%' THEN 6
+END AS zonerank,
+ordered_forecast.*
+ from (
+     SELECT
 forecast.facilitytypeid,
+CASE
+    WHEN forecast.facilitytype = 'National Cold Store' THEN geographiczone.parentid
+    WHEN forecast.facilitytype LIKE '%Satellite Cold Store' THEN geographiczone.id
+    WHEN forecast.facilitytype LIKE '%Zonal Cold Store' THEN geographiczone.id
+    WHEN forecast.facilitytype LIKE '%State Cold Store' THEN geographiczone.parentid
+    WHEN forecast.facilitytype LIKE '%LGA Cold Store' THEN (select parent.parentid from referencedata.geographic_zones parent where parent.id = geographiczone.parentid)
+END AS zoneid,
     forecast.facilitytype,
     forecast.facilityid,
     forecast.facility,
@@ -100,7 +118,22 @@ forecast.facilitytypeid,
     forecast.min,
     forecast.reorder,
     forecast.max,
-    forecast.status FROM stockmanagement.critical_stock_points forecast]]>
+    forecast.status,
+    CASE
+    WHEN forecast.facilitytype = 'National Cold Store' THEN 1
+    WHEN forecast.facilitytype LIKE '%Satellite Cold Store' THEN 2
+    WHEN forecast.facilitytype LIKE '%Zonal Cold Store' THEN 3
+    WHEN forecast.facilitytype LIKE '%State Cold Store' THEN 4
+    WHEN forecast.facilitytype LIKE '%LGA Cold Store' THEN 5
+END AS facilitytyperank
+    FROM stockmanagement.critical_stock_points forecast
+    join referencedata.facilities facilities on forecast.facilityid = facilities.id
+    join referencedata.geographic_zones geographiczone on facilities.geographiczoneid = geographiczone.id
+    join referencedata.geographic_levels geograhiclevel on geographiczone.levelid = geograhiclevel.id
+    ORDER BY zoneid asc, facilitytyperank asc
+    ) ordered_forecast
+    join referencedata.geographic_zones geographiczone on ordered_forecast.zoneid = geographiczone.id
+    order by zonerank asc, ordered_forecast.facilitytyperank asc]]>
     </queryString>
     <field name="facilitytypeid" class="java.util.UUID">
         <property name="com.jaspersoft.studio.field.name" value="facilitytypeid"/>
