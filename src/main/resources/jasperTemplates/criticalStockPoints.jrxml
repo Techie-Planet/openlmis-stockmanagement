@@ -282,7 +282,7 @@ END AS facilitytyperank
                     <dataset resetType="Report"/>
                 </crosstabDataset>
                 <rowGroup name="facility" width="100" totalPosition="End">
-                    <bucket class="java.lang.String">
+                    <bucket order="None" class="java.lang.String">
                         <bucketExpression><![CDATA[$F{facility}]]></bucketExpression>
                     </bucket>
                     <crosstabRowHeader>
