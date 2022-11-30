@@ -130,10 +130,11 @@ END AS facilitytyperank
     join referencedata.facilities facilities on forecast.facilityid = facilities.id
     join referencedata.geographic_zones geographiczone on facilities.geographiczoneid = geographiczone.id
     join referencedata.geographic_levels geograhiclevel on geographiczone.levelid = geograhiclevel.id
+    where forecast.facilitytype not like '%LGA Cold Store' and forecast.facilitytype not like '%Satellite Cold Store'
     ORDER BY zoneid asc, facilitytyperank asc
     ) ordered_forecast
     join referencedata.geographic_zones geographiczone on ordered_forecast.zoneid = geographiczone.id
-    order by zonerank asc, ordered_forecast.facilitytyperank asc]]>
+    order by zonerank asc, ordered_forecast.facilitytyperank asc, facility asc]]>
     </queryString>
     <field name="facilitytypeid" class="java.util.UUID">
         <property name="com.jaspersoft.studio.field.name" value="facilitytypeid"/>
