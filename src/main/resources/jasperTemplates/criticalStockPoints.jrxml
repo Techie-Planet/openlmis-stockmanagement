@@ -233,35 +233,35 @@ END AS facilitytyperank
     <pageHeader>
         <band height="47">
             <staticText>
-                <reportElement x="36" y="9" width="80" height="21" uuid="62dce70b-71b2-4d16-8369-87957de2646c"/>
+                <reportElement x="36" y="9" width="80" height="25" uuid="62dce70b-71b2-4d16-8369-87957de2646c"/>
                 <textElement verticalAlignment="Middle">
                     <font size="10" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Key:]]></text>
             </staticText>
             <staticText>
-                <reportElement mode="Opaque" x="144" y="9" width="110" height="21" backcolor="#F95F4A" uuid="f23a0a4a-60c3-4511-a930-10f2689bd9ed"/>
+                <reportElement mode="Opaque" x="144" y="9" width="110" height="25" backcolor="#F95F4A" uuid="f23a0a4a-60c3-4511-a930-10f2689bd9ed"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
                     <font size="10" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Understocked (Below Buffer)]]></text>
             </staticText>
             <staticText>
-                <reportElement mode="Opaque" x="297" y="9" width="110" height="21" backcolor="#FAFD9F" uuid="954d6a49-8f98-46e4-93cd-ca5b585b8ba5"/>
+                <reportElement mode="Opaque" x="297" y="9" width="110" height="25" backcolor="#FAFD9F" uuid="954d6a49-8f98-46e4-93cd-ca5b585b8ba5"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
                     <font size="10" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Re-order (Below Sufficient)]]></text>
             </staticText>
             <staticText>
-                <reportElement mode="Opaque" x="459" y="9" width="150" height="21" backcolor="#4FDA54" uuid="67483184-c400-494f-8659-ff64b00d92cb"/>
+                <reportElement mode="Opaque" x="459" y="9" width="150" height="25" backcolor="#4FDA54" uuid="67483184-c400-494f-8659-ff64b00d92cb"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
                     <font size="10" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Sufficient (Above Reorder Point)]]></text>
             </staticText>
             <staticText>
-                <reportElement mode="Opaque" x="657" y="9" width="110" height="21" backcolor="#86F0FA" uuid="0910cf09-6f4a-4db1-9a25-068caac95fba"/>
+                <reportElement mode="Opaque" x="657" y="9" width="110" height="25" backcolor="#86F0FA" uuid="0910cf09-6f4a-4db1-9a25-068caac95fba"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
                     <font size="10" isBold="true"/>
                 </textElement>
