@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import main.java.org.openlmis.stockmanagement.service.notifier.IssueNotifier;
+import org.openlmis.stockmanagement.service.notifier.IssueNotifier;
 import org.openlmis.stockmanagement.domain.card.StockCard;
 import org.openlmis.stockmanagement.domain.identity.OrderableLotIdentity;
 import org.openlmis.stockmanagement.dto.StockEventDto;
