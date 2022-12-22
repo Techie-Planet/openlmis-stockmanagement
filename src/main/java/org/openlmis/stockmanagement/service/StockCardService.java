@@ -45,11 +45,11 @@ import org.openlmis.stockmanagement.domain.reason.StockCardLineItemReason;
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.Organization;
 import org.openlmis.stockmanagement.dto.referencedata.FacilityDto;
-import org.openlmis.stockmanagement.dto.referencedata.UserDto;
 import org.openlmis.stockmanagement.dto.StockCardDto;
 import org.openlmis.stockmanagement.dto.StockCardLineItemDto;
 import org.openlmis.stockmanagement.dto.StockEventDto;
 import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
+import org.openlmis.stockmanagement.dto.referencedata.UserDto;
 import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
 import org.openlmis.stockmanagement.i18n.MessageService;
 import org.openlmis.stockmanagement.repository.OrganizationRepository;
@@ -58,8 +58,8 @@ import org.openlmis.stockmanagement.service.referencedata.FacilityReferenceDataS
 import org.openlmis.stockmanagement.service.referencedata.LotReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.OrderableReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.PermissionStringDto;
-import org.openlmis.stockmanagement.service.referencedata.PermissionStrings;
 import org.openlmis.stockmanagement.service.StockEventNotificationProcessor;
+import org.openlmis.stockmanagement.service.referencedata.PermissionStrings;
 import org.openlmis.stockmanagement.util.AuthenticationHelper;
 import org.openlmis.stockmanagement.util.Message;
 import org.openlmis.stockmanagement.web.Pagination;
@@ -144,8 +144,8 @@ public class StockCardService extends StockCardBaseService {
       // confirm reasons
       StockCardLineItemReason reason = stockEventDto.getContext()
               .findEventReason(eventLineItem.getReasonId());
-      if(reason.isDebitReasonType() && reason.getReasonCategory()
-              == ReasonCategory.TRANSFER){
+      if (reason.isDebitReasonType() && reason.getReasonCategory()
+              == ReasonCategory.TRANSFER) {
         StockCardLineItemDto stockCardLineItemDto = createFrom(stockCardLineItem);
         allIssues.put(eventLineItem, stockCardLineItemDto.getDestination());
       }

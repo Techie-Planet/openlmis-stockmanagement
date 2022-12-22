@@ -114,6 +114,7 @@ public class NearExpiryNotifier {
     valuesMap.put("urlToViewBinCard", stockCardNotifier.getUrlToViewBinCard(stockCard.getId()));
     return valuesMap;
   }
+
   private String getOrderableNameLotInformation(String orderableName, UUID lotId) {
     if (lotId != null) {
       LotDto lot = lotReferenceDataService.findOne(lotId);
@@ -121,6 +122,7 @@ public class NearExpiryNotifier {
     }
     return orderableName;
   }
+
   private String getMessage(String key) {
     return messageService
         .localize(new Message(key))
