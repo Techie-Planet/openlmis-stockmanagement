@@ -33,6 +33,7 @@ import org.openlmis.stockmanagement.service.notifier.StockCardNotifier;
 //import org.openlmis.stockmanagement.service.notifier.NotificationMessageParams;
 
 import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_MULTIPLE_STOCK_ISSUE_CONTENT;
+import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_STOCK_ISSUE_CONTENT;
 import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_STOCK_ISSUE_SUBJECT;
 
 @Component
