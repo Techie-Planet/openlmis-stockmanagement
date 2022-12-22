@@ -87,11 +87,11 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
     return tryFindAll(user + "/permissionStrings", String[].class, etag);
   }
 
-  public ResultDto<UserDto[]> getEditors(UUID programId, UUID rightId){
-    RequestParameters parameters = RequestParameters
-        .init()
-        .set("rightId", rightId)
-        .set("programId", programId);
-    return getResult("", parameters, UserDto.class);
-  }
+  //  public UserDto[] getEditors(UUID programId, UUID rightId){
+  //    RequestParameters parameters = RequestParameters
+  //        .init()
+  //        .set("rightId", rightId)
+  //        .set("programId", programId);
+  //    return getResult("", parameters, UserDto[].class);
+  //  }
 }
