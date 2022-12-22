@@ -1,4 +1,4 @@
-package main.java.org.openlmis.stockmanagement.service.notifier;
+package org.openlmis.stockmanagement.service.notifier;
 
 /*
  * This program is part of the OpenLMIS logistics management information system platform software.
