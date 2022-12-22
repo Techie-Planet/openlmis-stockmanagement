@@ -44,12 +44,12 @@ import org.openlmis.stockmanagement.domain.reason.ReasonCategory;
 import org.openlmis.stockmanagement.domain.reason.StockCardLineItemReason;
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.Organization;
-import org.openlmis.stockmanagement.dto.StockCardDto;
-import org.openlmis.stockmanagement.dto.StockEventDto;
-import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
 import org.openlmis.stockmanagement.dto.referencedata.FacilityDto;
 import org.openlmis.stockmanagement.dto.referencedata.UserDto;
+import org.openlmis.stockmanagement.dto.StockCardDto;
 import org.openlmis.stockmanagement.dto.StockCardLineItemDto;
+import org.openlmis.stockmanagement.dto.StockEventDto;
+import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
 import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
 import org.openlmis.stockmanagement.i18n.MessageService;
 import org.openlmis.stockmanagement.repository.OrganizationRepository;
@@ -136,12 +136,16 @@ public class StockCardService extends StockCardBaseService {
               stockEventDto, eventLineItem, savedEventId, cardsToUpdate);
       existingLineItems.addAll(stockCard.getLineItems());
       //  createLineItemFrom(stockEventDto, eventLineItem, stockCard, savedEventId, processedDate);
-      StockCardLineItem stockCardLineItem = createLineItemFrom(stockEventDto, eventLineItem, stockCard, savedEventId, processedDate);
+      StockCardLineItem stockCardLineItem = createLineItemFrom(stockEventDto,
+              eventLineItem, stockCard, savedEventId, processedDate);
 
-      // this section checks if the event line item is an issue then adds it to a list to be used for notifications
+      // this section checks if the event line item is an issue then
+      // adds it to a list to be used for notifications
       // confirm reasons
-      StockCardLineItemReason reason = stockEventDto.getContext().findEventReason(eventLineItem.getReasonId());
-      if(reason.isDebitReasonType() && reason.getReasonCategory() == ReasonCategory.TRANSFER){
+      StockCardLineItemReason reason = stockEventDto.getContext()
+              .findEventReason(eventLineItem.getReasonId());
+      if(reason.isDebitReasonType() && reason.getReasonCategory()
+              == ReasonCategory.TRANSFER){
         StockCardLineItemDto stockCardLineItemDto = createFrom(stockCardLineItem);
         allIssues.put(eventLineItem, stockCardLineItemDto.getDestination());
       }

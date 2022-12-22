@@ -1,5 +1,3 @@
-package org.openlmis.stockmanagement.service.notifier;
-
 /*
  * This program is part of the OpenLMIS logistics management information system platform software.
  * Copyright © 2017 VillageReach
@@ -14,6 +12,11 @@ package org.openlmis.stockmanagement.service.notifier;
  * the GNU Affero General Public License along with this program. If not, see
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
+package org.openlmis.stockmanagement.service.notifier;
+
+import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_MULTIPLE_STOCK_ISSUE_CONTENT;
+import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_STOCK_ISSUE_CONTENT;
+import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_STOCK_ISSUE_SUBJECT;
 
 import java.text.MessageFormat;
 import java.time.LocalDate;
@@ -24,17 +27,12 @@ import java.util.UUID;
 import org.openlmis.stockmanagement.domain.card.StockCard;
 import org.openlmis.stockmanagement.dto.referencedata.LotDto;
 import org.openlmis.stockmanagement.i18n.MessageService;
+import org.openlmis.stockmanagement.service.notifier.StockCardNotifier;
 import org.openlmis.stockmanagement.service.referencedata.LotReferenceDataService;
 import org.openlmis.stockmanagement.util.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.openlmis.stockmanagement.service.notifier.StockCardNotifier;
-//import org.openlmis.stockmanagement.service.notifier.NotificationMessageParams;
-
-import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_MULTIPLE_STOCK_ISSUE_CONTENT;
-import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_STOCK_ISSUE_CONTENT;
-import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_STOCK_ISSUE_SUBJECT;
 
 @Component
 public class IssueNotifier {
@@ -56,7 +54,8 @@ public class IssueNotifier {
    * @param stockCard StockCard for a product
    * @param rightId right UUID
    */
-  public void notifyStockEditors(StockCard stockCard, UUID rightId, Integer numberOfEventItems, UUID issuingFacilityId) {
+  public void notifyStockEditors(StockCard stockCard, UUID rightId,
+                                 Integer numberOfEventItems, UUID issuingFacilityId) {
     // if numberOfItems is 1, send the email with the product name and all,
     // if more than 1, send as number of products currently issued by the facility
     String content = numberOfEventItems > 1 ? NOTIFICATION_MULTIPLE_STOCK_ISSUE_CONTENT
@@ -97,7 +96,7 @@ public class IssueNotifier {
     return ChronoUnit.DAYS.between(stockoutDate, LocalDate.now());
   }
 
-  private String getUrlToInitiateRequisition(org.openlmis.stockmanagement.domain.card.StockCard stockCard) {
+  private String getUrlToInitiateRequisition(StockCard stockCard) {
     return MessageFormat.format(urlToInitiateRequisition,
             stockCard.getFacilityId(), stockCard.getProgramId(), "true", "false");
   }
