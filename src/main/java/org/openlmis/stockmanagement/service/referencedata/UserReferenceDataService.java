@@ -87,7 +87,7 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
     return tryFindAll(user + "/permissionStrings", String[].class, etag);
   }
 
-  public UserDto[] getEditors(UUID programId, UUID rightId){
+  public ResultDto<UserDto[]> getEditors(UUID programId, UUID rightId){
     RequestParameters parameters = RequestParameters
         .init()
         .set("rightId", rightId)
