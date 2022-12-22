@@ -18,6 +18,7 @@ package org.openlmis.stockmanagement.service;
 import static org.openlmis.stockmanagement.service.PermissionService.STOCK_ADJUST;
 import static org.openlmis.stockmanagement.service.PermissionService.STOCK_INVENTORIES_EDIT;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
