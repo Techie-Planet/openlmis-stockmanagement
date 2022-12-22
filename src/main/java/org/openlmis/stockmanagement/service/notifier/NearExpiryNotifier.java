@@ -103,16 +103,24 @@ public class NearExpiryNotifier {
 
   Map<String, String> constructSubstitutionMap(StockCard stockCard) {
     Map<String, String> valuesMap = new HashMap<>();
-    valuesMap.put("facilityName", stockCardNotifier.getFacilityName(stockCard.getFacilityId()));
+    //  valuesMap.put("facilityName", stockCardNotifier.getFacilityName(stockCard.getFacilityId()));
     valuesMap.put("programName", stockCardNotifier.getProgramName(stockCard.getProgramId()));
     valuesMap.put("orderableName", stockCardNotifier.getOrderableName(stockCard.getOrderableId()));
-    LotDto lot = expiringLotMap.get(stockCard.getLotId());
-    valuesMap.put("lotCode", null != lot ? lot.getLotCode() : "");
+    valuesMap.put("orderableNameLotInformation",
+            getOrderableNameLotInformation(valuesMap.get("orderableName"), stockCard.getLotId()));
+    //  LotDto lot = expiringLotMap.get(stockCard.getLotId());
+    //  valuesMap.put("lotCode", null != lot ? lot.getLotCode() : "");
     valuesMap.put("expirationDate", stockCardNotifier.getDateFormatter().format(expirationDate));
     valuesMap.put("urlToViewBinCard", stockCardNotifier.getUrlToViewBinCard(stockCard.getId()));
     return valuesMap;
   }
-
+  private String getOrderableNameLotInformation(String orderableName, UUID lotId) {
+    if (lotId != null) {
+      LotDto lot = lotReferenceDataService.findOne(lotId);
+      return orderableName + " " + lot.getLotCode();
+    }
+    return orderableName;
+  }
   private String getMessage(String key) {
     return messageService
         .localize(new Message(key))

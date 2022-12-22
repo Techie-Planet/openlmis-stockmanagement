@@ -1,3 +1,5 @@
+package main.java.org.openlmis.stockmanagement.service.notifier;
+
 /*
  * This program is part of the OpenLMIS logistics management information system platform software.
  * Copyright © 2017 VillageReach
@@ -13,20 +15,13 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
 
-package org.openlmis.stockmanagement.service.notifier;
-
-import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_STOCKOUT_CONTENT;
-import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_STOCKOUT_SUBJECT;
-
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.card.StockCard;
-import org.openlmis.stockmanagement.domain.card.StockCardLineItem;
 import org.openlmis.stockmanagement.dto.referencedata.LotDto;
 import org.openlmis.stockmanagement.i18n.MessageService;
 import org.openlmis.stockmanagement.service.referencedata.LotReferenceDataService;
@@ -34,16 +29,20 @@ import org.openlmis.stockmanagement.util.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.openlmis.stockmanagement.service.notifier.StockCardNotifier;
+import org.openlmis.stockmanagement.service.notifier.NotificationMessageParams;
+
+import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_MULTIPLE_STOCK_ISSUE_CONTENT;
+import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_STOCK_ISSUE_SUBJECT;
 
 @Component
-public class StockoutNotifier {
-
+public class IssueNotifier {
   @Autowired
   private LotReferenceDataService lotReferenceDataService;
 
   @Autowired
   private MessageService messageService;
-  
+
   @Autowired
   private StockCardNotifier stockCardNotifier;
 
@@ -51,37 +50,37 @@ public class StockoutNotifier {
   private String urlToInitiateRequisition;
 
   /**
-   * Notify users with a certain right for the facility/program that facility has stocked out of a
-   * product.
+   * Notify users with a certain right that line items have been issued to their facility.
    *
    * @param stockCard StockCard for a product
    * @param rightId right UUID
    */
-  public void notifyStockEditors(StockCard stockCard, UUID rightId) {
+  public void notifyStockEditors(StockCard stockCard, UUID rightId, Integer numberOfEventItems, UUID issuingFacilityId) {
+    // if numberOfItems is 1, send the email with the product name and all,
+    // if more than 1, send as number of products currently issued by the facility
+    String content = numberOfEventItems > 1 ? NOTIFICATION_MULTIPLE_STOCK_ISSUE_CONTENT
+            : NOTIFICATION_STOCK_ISSUE_CONTENT;
+
     NotificationMessageParams params = new NotificationMessageParams(
-        getMessage(NOTIFICATION_STOCKOUT_SUBJECT),
-        getMessage(NOTIFICATION_STOCKOUT_CONTENT),
-        constructSubstitutionMap(stockCard));
+            getMessage(NOTIFICATION_STOCK_ISSUE_SUBJECT),
+            getMessage(content),
+            constructSubstitutionMap(stockCard, numberOfEventItems, issuingFacilityId));
     stockCardNotifier.notifyStockEditors(stockCard, rightId, params);
   }
 
-  Map<String, String> constructSubstitutionMap(StockCard stockCard) {
+  Map<String, String> constructSubstitutionMap(StockCard stockCard, Integer numberOfEventItems,
+                                               UUID issuingFacilityId) {
     Map<String, String> valuesMap = new HashMap<>();
-    valuesMap.put("facilityName", stockCardNotifier.getFacilityName(stockCard.getFacilityId()));
+    //  valuesMap.put("facilityName", stockCardNotifier.getFacilityName(stockCard.getFacilityId()));
+    valuesMap.put("facilityName", stockCardNotifier.getFacilityName(issuingFacilityId));
     valuesMap.put("orderableName", stockCardNotifier.getOrderableName(stockCard.getOrderableId()));
     valuesMap.put("orderableNameLotInformation",
-        getOrderableNameLotInformation(valuesMap.get("orderableName"), stockCard.getLotId()));
+            getOrderableNameLotInformation(valuesMap.get("orderableName"), stockCard.getLotId()));
     valuesMap.put("programName", stockCardNotifier.getProgramName(stockCard.getProgramId()));
-    valuesMap.put("SOH", stockCard.getStockOnHand());
-
-    List<StockCardLineItem> lineItems = stockCard.getLineItems();
-    LocalDate stockoutDate = lineItems.get(lineItems.size() - 1).getOccurredDate();
-    valuesMap.put("stockoutDate", stockCardNotifier.getDateFormatter().format(stockoutDate));
-    //  long numberOfDaysOfStockout = getNumberOfDaysOfStockout(stockoutDate);
-    //  valuesMap.put("numberOfDaysOfStockout", numberOfDaysOfStockout
-    //      + (numberOfDaysOfStockout == 1 ? " day" : " days"));
+    valuesMap.put("number", String.valueOf(numberOfEventItems));
     valuesMap.put("urlToViewBinCard", stockCardNotifier.getUrlToViewBinCard(stockCard.getId()));
     valuesMap.put("urlToInitiateRequisition", getUrlToInitiateRequisition(stockCard));
+    valuesMap.put("issueId", "issueId");
     return valuesMap;
   }
 
@@ -97,14 +96,14 @@ public class StockoutNotifier {
     return ChronoUnit.DAYS.between(stockoutDate, LocalDate.now());
   }
 
-  private String getUrlToInitiateRequisition(StockCard stockCard) {
+  private String getUrlToInitiateRequisition(org.openlmis.stockmanagement.domain.card.StockCard stockCard) {
     return MessageFormat.format(urlToInitiateRequisition,
-        stockCard.getFacilityId(), stockCard.getProgramId(), "true", "false");
+            stockCard.getFacilityId(), stockCard.getProgramId(), "true", "false");
   }
 
   private String getMessage(String key) {
     return messageService
-        .localize(new Message(key))
-        .getMessage();
+            .localize(new org.openlmis.stockmanagement.util.Message(key))
+            .getMessage();
   }
 }

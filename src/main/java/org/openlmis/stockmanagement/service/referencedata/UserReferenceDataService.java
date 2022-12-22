@@ -86,4 +86,12 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
   public ServiceResponse<List<String>> getPermissionStrings(UUID user, String etag) {
     return tryFindAll(user + "/permissionStrings", String[].class, etag);
   }
+
+  public UserDto[] getEditors(UUID programId, UUID rightId){
+    RequestParameters parameters = RequestParameters
+        .init()
+        .set("rightId", rightId)
+        .set("programId", programId);
+    return getResult("", parameters, UserDto[].class);
+  }
 }

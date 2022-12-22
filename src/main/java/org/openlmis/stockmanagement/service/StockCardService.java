@@ -22,14 +22,13 @@ import static org.openlmis.stockmanagement.domain.card.StockCard.createStockCard
 import static org.openlmis.stockmanagement.domain.card.StockCardLineItem.createLineItemFrom;
 import static org.openlmis.stockmanagement.domain.identity.OrderableLotIdentity.identityOf;
 import static org.openlmis.stockmanagement.domain.reason.ReasonCategory.PHYSICAL_INVENTORY;
+import static org.openlmis.stockmanagement.dto.StockCardLineItemDto.createFrom;
 import static org.openlmis.stockmanagement.service.PermissionService.STOCK_CARDS_VIEW;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
@@ -37,6 +36,8 @@ import javax.validation.constraints.NotNull;
 import org.openlmis.stockmanagement.domain.card.StockCard;
 import org.openlmis.stockmanagement.domain.card.StockCardLineItem;
 import org.openlmis.stockmanagement.domain.identity.OrderableLotIdentity;
+import org.openlmis.stockmanagement.domain.reason.ReasonCategory;
+import org.openlmis.stockmanagement.domain.reason.StockCardLineItemReason;
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.Organization;
 import org.openlmis.stockmanagement.dto.StockCardDto;
@@ -44,6 +45,7 @@ import org.openlmis.stockmanagement.dto.StockEventDto;
 import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
 import org.openlmis.stockmanagement.dto.referencedata.FacilityDto;
 import org.openlmis.stockmanagement.dto.referencedata.UserDto;
+import org.openlmis.stockmanagement.dto.StockCardLineItemDto;
 import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
 import org.openlmis.stockmanagement.i18n.MessageService;
 import org.openlmis.stockmanagement.repository.OrganizationRepository;
@@ -53,6 +55,7 @@ import org.openlmis.stockmanagement.service.referencedata.LotReferenceDataServic
 import org.openlmis.stockmanagement.service.referencedata.OrderableReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.PermissionStringDto;
 import org.openlmis.stockmanagement.service.referencedata.PermissionStrings;
+import org.openlmis.stockmanagement.service.StockEventNotificationProcessor;
 import org.openlmis.stockmanagement.util.AuthenticationHelper;
 import org.openlmis.stockmanagement.util.Message;
 import org.openlmis.stockmanagement.web.Pagination;
@@ -104,6 +107,8 @@ public class StockCardService extends StockCardBaseService {
 
   @Autowired
   private StockOnHandCalculationService calculationSoHService;
+  @Autowired
+  private StockEventNotificationProcessor stockEventNotificationProcessor;
 
   /**
    * Generate stock card line items and stock cards based on event, and persist them.
@@ -118,19 +123,33 @@ public class StockCardService extends StockCardBaseService {
     List<StockCardLineItem> existingLineItems = new ArrayList<>();
     ZonedDateTime processedDate = now();
 
+    // this section creates stock card line items from a stock event DTO
+    // It also collects all the issue stock event line items and to which facility they are issued
+    Map<StockEventLineItemDto, FacilityDto> allIssues = new HashMap<>();
+
     for (StockEventLineItemDto eventLineItem : stockEventDto.getLineItems()) {
       StockCard stockCard = findOrCreateCard(
-          stockEventDto, eventLineItem, savedEventId, cardsToUpdate);
+              stockEventDto, eventLineItem, savedEventId, cardsToUpdate);
       existingLineItems.addAll(stockCard.getLineItems());
+      //  createLineItemFrom(stockEventDto, eventLineItem, stockCard, savedEventId, processedDate);
+      StockCardLineItem stockCardLineItem = createLineItemFrom(stockEventDto, eventLineItem, stockCard, savedEventId, processedDate);
 
-      createLineItemFrom(stockEventDto, eventLineItem, stockCard, savedEventId, processedDate);
+      // this section checks if the event line item is an issue then adds it to a list to be used for notifications
+      // confirm reasons
+      StockCardLineItemReason reason = stockEventDto.getContext().findEventReason(eventLineItem.getReasonId());
+      if(reason.isDebitReasonType() && reason.getReasonCategory() == ReasonCategory.TRANSFER){
+        StockCardLineItemDto stockCardLineItemDto = createFrom(stockCardLineItem);
+        allIssues.put(eventLineItem, stockCardLineItemDto.getDestination());
+      }
     }
+    // send emails
+    stockEventNotificationProcessor.notifyIssue(stockEventDto, allIssues);
 
     cardRepository.saveAll(cardsToUpdate);
     cardRepository.flush();
 
     calculatedStockOnHandService.recalculateStockOnHand(
-        getSavedButNewLineItems(cardsToUpdate, existingLineItems));
+            getSavedButNewLineItems(cardsToUpdate, existingLineItems));
 
     stockEventDto.getContext().refreshCards();
 

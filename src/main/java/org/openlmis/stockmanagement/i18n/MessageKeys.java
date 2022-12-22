@@ -25,6 +25,12 @@ public abstract class MessageKeys {
       SERVICE_PREFIX + ".email.stockout.content";
   public static final String NOTIFICATION_NEAR_EXPIRY_SUBJECT =
       SERVICE_PREFIX + ".email.nearExpiry.subject";
+  public static final String NOTIFICATION_STOCK_ISSUE_SUBJECT =
+          SERVICE_PREFIX + ".email.stockIssue.subject";
+  public static final String NOTIFICATION_STOCK_ISSUE_CONTENT =
+          SERVICE_PREFIX + ".email.stockIssue.content";
+  public static final String NOTIFICATION_MULTIPLE_STOCK_ISSUE_CONTENT =
+          SERVICE_PREFIX + ".email.multipleStockIssue.content";
   public static final String NOTIFICATION_NEAR_EXPIRY_CONTENT =
       SERVICE_PREFIX + ".email.nearExpiry.content";
   //server errors
