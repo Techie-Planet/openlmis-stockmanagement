@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.4.0  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="critical_stock_points" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="04d31b5a-0090-4036-a019-68930524a7ec">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<import value="net.sf.jasperreports.engine.data.*"/>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.4.3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="critical_stock_points" pageWidth="1200" pageHeight="842" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="04d31b5a-0090-4036-a019-68930524a7ec">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+    <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
     <style name="Crosstab_CH" mode="Opaque" backcolor="#F0F8FF">
         <box>
             <pen lineWidth="0.5" lineColor="#000000"/>
@@ -89,6 +88,30 @@
             <style backcolor="#86F0FA"/>
         </conditionalStyle>
     </style>
+    <parameter name="facilityTypeId" class="java.lang.String">
+        <property name="displayName" value="Facility Type"/>
+        <property name="name" value="facilityTypeId"/>
+        <property name="selectExpression" value="api/facilityTypes"/>
+        <property name="selectProperty" value="id"/>
+        <property name="displayProperty" value="name"/>
+    </parameter>
+    <parameter name="facilityTypeWhereClause" class="java.lang.String" isForPrompting="false">
+        <property name="displayName" value="Facility Type Where Clause"/>
+        <property name="name" value="facilityTypeWhereClause"/>
+        <defaultValueExpression><![CDATA[(((java.lang.String)parameter_facilityTypeId.getValue()) == null || ((java.lang.String)parameter_facilityTypeId.getValue()).isEmpty()) ? "TRUE" : "facilitytypeid::TEXT ='" + ((java.lang.String)parameter_facilityTypeId.getValue()) + "'"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="productType" class="java.lang.String">
+        <property name="displayName" value="Product Type"/>
+        <property name="name" value="productType"/>
+        <property name="selectExpression" value="api/orderables/productTypes"/>
+        <property name="selectProperty" value="id"/>
+        <property name="displayProperty" value="name"/>
+    </parameter>
+    <parameter name="productTypeWhereClause" class="java.lang.String" isForPrompting="false">
+        <property name="displayName" value="Product Type Where Clause"/>
+        <property name="name" value="productTypeWhereClause"/>
+        <defaultValueExpression><![CDATA[(((java.lang.String)parameter_productType.getValue()) == null || ((java.lang.String)parameter_productType.getValue()).isEmpty()) ? "TRUE" : "producttype ='" + ((java.lang.String)parameter_productType.getValue()) + "'"]]></defaultValueExpression>
+    </parameter>
     <queryString>
         <![CDATA[select
 CASE
@@ -134,6 +157,7 @@ END AS facilitytyperank
     ORDER BY zoneid asc, facilitytyperank asc
     ) ordered_forecast
     join referencedata.geographic_zones geographiczone on ordered_forecast.zoneid = geographiczone.id
+    WHERE ordered_forecast.producttype IS NOT NULL AND $P!{facilityTypeWhereClause} AND $P!{productTypeWhereClause}
     order by zonerank asc, ordered_forecast.facilitytyperank asc, facility asc]]>
     </queryString>
     <field name="facilitytypeid" class="java.util.UUID">
@@ -189,7 +213,7 @@ END AS facilitytyperank
     <background>
         <band height="387" splitType="Stretch">
             <image>
-                <reportElement x="260" y="80" width="331" height="307" uuid="ee07bebe-35aa-4bfa-bafd-d43009f44dd1"/>
+                <reportElement x="420" y="80" width="331" height="307" uuid="ee07bebe-35aa-4bfa-bafd-d43009f44dd1"/>
                 <imageExpression><![CDATA["images/Background.png"]]></imageExpression>
             </image>
         </band>
@@ -202,11 +226,11 @@ END AS facilitytyperank
                 <imageExpression><![CDATA["images/nphcda.png"]]></imageExpression>
             </image>
             <image onErrorType="Blank">
-                <reportElement x="750" y="2" width="55" height="55" uuid="1a26fbda-bcb5-46c7-a212-109a0e134a3b"/>
+                <reportElement x="1100" y="2" width="55" height="55" uuid="1a26fbda-bcb5-46c7-a212-109a0e134a3b"/>
                 <imageExpression><![CDATA["images/nigeria.png"]]></imageExpression>
             </image>
             <staticText>
-                <reportElement x="74" y="7" width="655" height="31" uuid="1f4f6580-e7d0-48fb-946e-b2e2b840fc1a">
+                <reportElement x="74" y="7" width="1006" height="31" uuid="1f4f6580-e7d0-48fb-946e-b2e2b840fc1a">
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
                 <textElement textAlignment="Center">
@@ -215,14 +239,14 @@ END AS facilitytyperank
                 <text><![CDATA[NATIONAL PRIMARY HEALTH CARE DEVELOPMENT AGENCY]]></text>
             </staticText>
             <staticText>
-                <reportElement x="128" y="29" width="289" height="23" uuid="ecab56ef-a62f-486f-bc7d-c1431467efc4"/>
+                <reportElement x="90" y="29" width="458" height="23" uuid="ecab56ef-a62f-486f-bc7d-c1431467efc4"/>
                 <textElement textAlignment="Right" verticalAlignment="Middle">
                     <font fontName="SansSerif" size="16" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Vaccine Stock Report For:  ]]></text>
             </staticText>
             <textField pattern="MMMMM dd, yyyy">
-                <reportElement x="421" y="27" width="251" height="26" uuid="91672e4a-0d73-460a-aa2b-59e36dc5bcc2"/>
+                <reportElement x="553" y="27" width="418" height="26" uuid="91672e4a-0d73-460a-aa2b-59e36dc5bcc2"/>
                 <textElement textAlignment="Left" verticalAlignment="Middle">
                     <font size="16" isBold="true"/>
                 </textElement>
@@ -233,37 +257,37 @@ END AS facilitytyperank
     <pageHeader>
         <band height="47">
             <staticText>
-                <reportElement x="36" y="9" width="80" height="25" uuid="62dce70b-71b2-4d16-8369-87957de2646c"/>
+                <reportElement x="197" y="0" width="63" height="40" uuid="62dce70b-71b2-4d16-8369-87957de2646c"/>
                 <textElement verticalAlignment="Middle">
-                    <font size="10" isBold="true"/>
+                    <font size="12" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Key:]]></text>
             </staticText>
             <staticText>
-                <reportElement mode="Opaque" x="144" y="9" width="110" height="25" backcolor="#F95F4A" uuid="f23a0a4a-60c3-4511-a930-10f2689bd9ed"/>
+                <reportElement mode="Opaque" x="260" y="0" width="137" height="40" backcolor="#F95F4A" uuid="f23a0a4a-60c3-4511-a930-10f2689bd9ed"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font size="10" isBold="true"/>
+                    <font size="12" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Understocked (Below Buffer)]]></text>
             </staticText>
             <staticText>
-                <reportElement mode="Opaque" x="297" y="9" width="110" height="25" backcolor="#FAFD9F" uuid="954d6a49-8f98-46e4-93cd-ca5b585b8ba5"/>
+                <reportElement mode="Opaque" x="424" y="0" width="140" height="40" backcolor="#FAFD9F" uuid="954d6a49-8f98-46e4-93cd-ca5b585b8ba5"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font size="10" isBold="true"/>
+                    <font size="12" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Re-order (Below Sufficient)]]></text>
             </staticText>
             <staticText>
-                <reportElement mode="Opaque" x="459" y="9" width="130" height="25" backcolor="#4FDA54" uuid="67483184-c400-494f-8659-ff64b00d92cb"/>
+                <reportElement mode="Opaque" x="600" y="0" width="183" height="40" backcolor="#4FDA54" uuid="67483184-c400-494f-8659-ff64b00d92cb"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font size="10" isBold="true"/>
+                    <font size="12" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Sufficient (Above Reorder Point)]]></text>
             </staticText>
             <staticText>
-                <reportElement mode="Opaque" x="657" y="9" width="140" height="25" backcolor="#86F0FA" uuid="0910cf09-6f4a-4db1-9a25-068caac95fba"/>
+                <reportElement mode="Opaque" x="813" y="0" width="157" height="40" backcolor="#86F0FA" uuid="0910cf09-6f4a-4db1-9a25-068caac95fba"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                    <font size="10" isBold="true"/>
+                    <font size="12" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Overstocked (Above Maximum Need)]]></text>
             </staticText>
@@ -272,16 +296,30 @@ END AS facilitytyperank
     <summary>
         <band height="284" splitType="Stretch">
             <crosstab>
-                <reportElement x="0" y="8" width="804" height="180" uuid="13b9cf3a-e6c9-41c8-8fc3-6c516cd73814">
-                    <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+                <reportElement x="0" y="8" width="1160" height="180" uuid="13b9cf3a-e6c9-41c8-8fc3-6c516cd73814">
+                    <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
                     <property name="com.jaspersoft.studio.crosstab.style.header" value="Crosstab 1_CH"/>
                     <property name="com.jaspersoft.studio.crosstab.style.group" value="Crosstab 1_CG"/>
                     <property name="com.jaspersoft.studio.crosstab.style.total" value="Crosstab 1_CT"/>
                     <property name="com.jaspersoft.studio.crosstab.style.detail" value="Crosstab 1_CD"/>
                 </reportElement>
+                <box>
+                    <pen lineWidth="1.0"/>
+                </box>
                 <crosstabDataset>
                     <dataset resetType="Report"/>
                 </crosstabDataset>
+                <crosstabHeaderCell>
+                    <cellContents mode="Opaque" style="Crosstab 1_CH">
+                        <staticText>
+                            <reportElement x="0" y="0" width="100" height="20" uuid="f73e49da-53c7-40e9-ae51-7bb973d87b70"/>
+                            <textElement verticalAlignment="Middle">
+                                <font isBold="true"/>
+                            </textElement>
+                            <text><![CDATA[Stores]]></text>
+                        </staticText>
+                    </cellContents>
+                </crosstabHeaderCell>
                 <rowGroup name="facility" width="100" totalPosition="End">
                     <bucket order="None" class="java.lang.String">
                         <bucketExpression><![CDATA[$F{facility}]]></bucketExpression>
@@ -311,7 +349,7 @@ END AS facilitytyperank
                         <cellContents mode="Opaque" style="Crosstab 1_CH">
                             <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
                             <textField>
-                                <reportElement x="0" y="0" width="50" height="20" uuid="c4c3587d-190b-4ce6-8bb7-93384b4ea0a2"/>
+                                <reportElement x="0" y="0" width="60" height="20" uuid="c4c3587d-190b-4ce6-8bb7-93384b4ea0a2"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font size="8"/>
                                 </textElement>
@@ -331,11 +369,11 @@ END AS facilitytyperank
                 <measure name="status_MEASURE" class="java.lang.String">
                     <measureExpression><![CDATA[$F{status}]]></measureExpression>
                 </measure>
-                <crosstabCell width="50" height="20">
+                <crosstabCell width="60" height="20">
                     <cellContents mode="Opaque" style="Crosstab 1_CD">
                         <property name="com.jaspersoft.studio.unit.width" value="px"/>
                         <textField>
-                            <reportElement style="Crosstab 1_CD" mode="Opaque" x="0" y="0" width="50" height="20" uuid="5ee76854-b0a5-45ea-853a-1dfd51c6deea"/>
+                            <reportElement style="Crosstab 1_CD" mode="Opaque" x="0" y="0" width="60" height="20" uuid="5ee76854-b0a5-45ea-853a-1dfd51c6deea"/>
                             <textElement textAlignment="Center" verticalAlignment="Middle">
                                 <font size="8"/>
                             </textElement>
@@ -346,19 +384,13 @@ END AS facilitytyperank
                 <crosstabCell width="0" height="20" columnTotalGroup="producttype">
                     <cellContents mode="Opaque" style="Crosstab 1_CT"/>
                 </crosstabCell>
-                <crosstabCell width="50" height="0" rowTotalGroup="facility">
+                <crosstabCell width="60" height="0" rowTotalGroup="facility">
                     <cellContents mode="Opaque" style="Crosstab 1_CT"/>
                 </crosstabCell>
                 <crosstabCell width="0" height="0" rowTotalGroup="facility" columnTotalGroup="producttype">
                     <cellContents mode="Opaque" style="Crosstab 1_CT"/>
                 </crosstabCell>
             </crosstab>
-            <rectangle>
-                <reportElement mode="Opaque" x="0" y="8" width="100" height="20" uuid="7ac6a49e-c9d7-434b-8eba-04d8f6028d91"/>
-                <graphicElement>
-                    <pen lineWidth="0.5" lineStyle="Solid"/>
-                </graphicElement>
-            </rectangle>
         </band>
     </summary>
 </jasperReport>
