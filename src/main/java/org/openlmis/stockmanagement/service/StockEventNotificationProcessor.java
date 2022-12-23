@@ -82,6 +82,7 @@ public class StockEventNotificationProcessor {
     if (stockCard.getStockOnHand() >= 0) { //testing
       stockoutNotifier.notifyStockEditors(stockCard, rightId);
     }
+    // add issue notification here
 
     profiler.stop().log();
     XLOGGER.exit();
