@@ -142,13 +142,13 @@ public class StockCardService extends StockCardBaseService {
       // this section checks if the event line item is an issue then
       // adds it to a list to be used for notifications
       // confirm reasons
-      StockCardLineItemReason reason = stockEventDto.getContext()
-              .findEventReason(eventLineItem.getReasonId());
-      if (reason.isDebitReasonType() && reason.getReasonCategory()
-              == ReasonCategory.TRANSFER) {
-        StockCardLineItemDto stockCardLineItemDto = createFrom(stockCardLineItem);
-        allIssues.put(eventLineItem, stockCardLineItemDto.getDestination());
-      }
+      //      StockCardLineItemReason reason = stockEventDto.getContext()
+      //              .findEventReason(eventLineItem.getReasonId());
+      //      if (reason.isDebitReasonType() && reason.getReasonCategory()
+      //              == ReasonCategory.TRANSFER) {
+      //        StockCardLineItemDto stockCardLineItemDto = createFrom(stockCardLineItem);
+      //        allIssues.put(eventLineItem, stockCardLineItemDto.getDestination());
+      //      }
     }
     // send emails if we have issue events
     // stockEventNotificationProcessor.notifyIssue(stockEventDto, allIssues);
