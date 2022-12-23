@@ -70,7 +70,7 @@ public class StockCardNotifier extends BaseNotifier {
     profiler.start("NOTIFY_RECIPIENTS");
     for (UserDto recipient : recipients) {
       System.out.println("Sending to recipient");
-      if (stockCard.getFacilityId().equals(recipient.getHomeFacilityId())) {
+      if (!stockCard.getFacilityId().equals(recipient.getHomeFacilityId())) {
         System.out.println("Is home facility, will send");
         System.out.println(recipient.getUsername());
         valuesMap.put("username", recipient.getUsername());
