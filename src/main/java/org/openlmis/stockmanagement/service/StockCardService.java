@@ -150,8 +150,8 @@ public class StockCardService extends StockCardBaseService {
         allIssues.put(eventLineItem, stockCardLineItemDto.getDestination());
       }
     }
-    // send emails
-    stockEventNotificationProcessor.notifyIssue(stockEventDto, allIssues);
+    // send emails if we have issue events
+    // stockEventNotificationProcessor.notifyIssue(stockEventDto, allIssues);
 
     cardRepository.saveAll(cardsToUpdate);
     cardRepository.flush();
