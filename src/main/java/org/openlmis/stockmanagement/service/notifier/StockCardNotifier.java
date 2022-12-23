@@ -57,6 +57,7 @@ public class StockCardNotifier extends BaseNotifier {
   @Async
   public void notifyStockEditors(StockCard stockCard, UUID rightId,
       NotificationMessageParams params) {
+    System.out.println("In stock card notifier");
     Profiler profiler = new Profiler("NOTIFY_STOCK_EDITORS");
     profiler.setLogger(XLOGGER);
 
@@ -68,6 +69,7 @@ public class StockCardNotifier extends BaseNotifier {
 
     profiler.start("NOTIFY_RECIPIENTS");
     for (UserDto recipient : recipients) {
+      System.out.println("Sending to recipient");
       if (stockCard.getFacilityId().equals(recipient.getHomeFacilityId())) {
         valuesMap.put("username", recipient.getUsername());
         XLOGGER.debug("Recipient username = {}", recipient.getUsername());

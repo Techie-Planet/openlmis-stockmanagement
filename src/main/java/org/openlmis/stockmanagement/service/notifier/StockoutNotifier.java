@@ -58,6 +58,7 @@ public class StockoutNotifier {
    * @param rightId right UUID
    */
   public void notifyStockEditors(StockCard stockCard, UUID rightId) {
+    System.out.println("Try Notify stock editors");
     NotificationMessageParams params = new NotificationMessageParams(
         getMessage(NOTIFICATION_STOCKOUT_SUBJECT),
         getMessage(NOTIFICATION_STOCKOUT_CONTENT),

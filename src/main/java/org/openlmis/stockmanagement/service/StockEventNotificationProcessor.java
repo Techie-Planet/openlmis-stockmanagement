@@ -78,8 +78,10 @@ public class StockEventNotificationProcessor {
     OrderableLotIdentity identity = OrderableLotIdentity.identityOf(eventLine);
     StockCard stockCard = event.getContext().findCard(identity);
 
+    System.out.println("Try emails");
     //if (stockCard.getStockOnHand() == 0) {
     if (stockCard.getStockOnHand() >= 0) { //testing
+      System.out.println("Attempting to send emails");
       stockoutNotifier.notifyStockEditors(stockCard, rightId);
     }
     // add issue notification here
