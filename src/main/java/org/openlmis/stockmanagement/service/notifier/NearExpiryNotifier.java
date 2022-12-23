@@ -77,8 +77,7 @@ public class NearExpiryNotifier {
   @Scheduled(cron = "${stockmanagement.nearExpiry.cron}", zone = "${time.zoneId}")
   public void checkNearExpiryAndNotify() {
     // Expiration of six months from today, OLMIS-3186
-    //expirationDate    expirationDate = LocalDate.now(ZoneId.of(timeZoneId)).plusMonths(6);
-    expirationDate = LocalDate.parse("2021-12-31");
+    expirationDate = LocalDate.now(ZoneId.of(timeZoneId)).plusMonths(6);
     XLOGGER.debug("Expiration date = {}", expirationDate);
     expiringLotMap = lotReferenceDataService.getAllLotsExpiringOn(expirationDate)
         .stream()
