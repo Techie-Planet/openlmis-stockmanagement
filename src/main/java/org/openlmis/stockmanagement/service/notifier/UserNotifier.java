@@ -29,39 +29,39 @@ import org.slf4j.ext.XLogger;
 import org.slf4j.ext.XLoggerFactory;
 import org.slf4j.profiler.Profiler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 
 @Component
 public class UserNotifier {
 
-    private static final XLogger XLOGGER = XLoggerFactory.getXLogger(UserNotifier.class);
+  private static final XLogger XLOGGER = XLoggerFactory.getXLogger(UserNotifier.class);
 
-    @Autowired
-    private NotificationService notificationService;
-    @Autowired
-    private UserReferenceDataService userReferenceDataService;
+  @Autowired
+  private NotificationService notificationService;
+  @Autowired
+  private UserReferenceDataService userReferenceDataService;
 
 
-    /**
-     * Notify users with a certain message.
-     *
-     * @param params message params to construct message
-     */
-    @Async
-    public void notifyUser(UserDto userDto, NotificationMessageParams params) {
-        Profiler profiler = new Profiler("NOTIFY_STOCK_EDITORS");
-        profiler.setLogger(XLOGGER);
+  /**
+   * Notify users with a certain message.
+   *
+   * @param params message params to construct message
+   */
+  @Async
+  public void notifyUser(UserDto userDto, NotificationMessageParams params) {
+    Profiler profiler = new Profiler("NOTIFY_STOCK_EDITORS");
+    profiler.setLogger(XLOGGER);
 
-        Map<String, String> valuesMap = params.getSubstitutionMap();
-        StrSubstitutor sub = new StrSubstitutor(valuesMap);
+    Map<String, String> valuesMap = params.getSubstitutionMap();
+    StrSubstitutor sub = new StrSubstitutor(valuesMap);
 
-        profiler.start("NOTIFY_RECIPIENTS");
-        XLOGGER.debug("Recipient username = {}", userDto.getUsername());
-        notificationService.notify(userDto,
-                sub.replace(params.getMessageSubject()), sub.replace(params.getMessageContent()));
+    profiler.start("NOTIFY_RECIPIENTS");
+    XLOGGER.debug("Recipient username = {}", userDto.getUsername());
+    notificationService.notify(userDto,
+            sub.replace(params.getMessageSubject()), sub.replace(params.getMessageContent()));
 
-        profiler.stop().log();
-        XLOGGER.exit();
-    }
+    profiler.stop().log();
+      XLOGGER.exit();
+  }
 }

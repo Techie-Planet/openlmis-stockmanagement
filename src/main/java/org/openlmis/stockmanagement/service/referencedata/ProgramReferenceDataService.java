@@ -15,11 +15,11 @@
 
 package org.openlmis.stockmanagement.service.referencedata;
 
+import java.util.Collection;
+import java.util.Map;
 import org.openlmis.stockmanagement.dto.referencedata.ProgramDto;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Map;
 
 @Service
 public class ProgramReferenceDataService extends BaseReferenceDataService<ProgramDto> {
