@@ -77,29 +77,33 @@ public class WeeklyReportNotifier {
   @Scheduled(cron = "${notifications.weeklyReport.cron}", zone = "${time.zoneId}")
   public void weeklyReportNotifier() {
     System.out.println("start weekly report");
-    Profiler profiler = new Profiler("SEND_WEEKLY_REPORT_NOTIFICATION");
-    profiler.setLogger(XLOGGER);
-    weeklyReportDate = LocalDate.now(ZoneId.of(timeZoneId));
-    XLOGGER.debug("Weekly report date = {}", weeklyReportDate);
-    System.out.println("get program ids");
+    try {
+      Profiler profiler = new Profiler("SEND_WEEKLY_REPORT_NOTIFICATION");
+      profiler.setLogger(XLOGGER);
+      weeklyReportDate = LocalDate.now(ZoneId.of(timeZoneId));
+      XLOGGER.debug("Weekly report date = {}", weeklyReportDate);
+      System.out.println("get program ids");
 
-    XLOGGER.debug("Getting all program Ids");
-    Collection<UUID> programIds = programReferenceDataService
-            .findPrograms(new HashMap<String, Object>()).stream()
-            .map(each -> each.getId()).collect(Collectors.toList());
-    XLOGGER.debug("Getting user rights");
-    RightDto right = rightReferenceDataService.findRight(stockAdjust);
-    UUID rightId = right.getId();
-    XLOGGER.debug("Getting all users");
-    Set<UserDto> allUsers = new HashSet<>();
-    for (UUID programId : programIds) {
-      Collection<UserDto> userDtos = new ArrayList<>();
-      userDtos = Arrays.asList(userReferenceDataService.getUsers(programId, rightId).getResult());
-      Set<UserDto> usersInProgram = new HashSet<>(userDtos);
-      allUsers.addAll(usersInProgram);
+      XLOGGER.debug("Getting all program Ids");
+      Collection<UUID> programIds = programReferenceDataService
+              .findPrograms(new HashMap<String, Object>()).stream()
+              .map(each -> each.getId()).collect(Collectors.toList());
+      XLOGGER.debug("Getting user rights");
+      RightDto right = rightReferenceDataService.findRight(stockAdjust);
+      UUID rightId = right.getId();
+      XLOGGER.debug("Getting all users");
+      Set<UserDto> allUsers = new HashSet<>();
+      for (UUID programId : programIds) {
+        Collection<UserDto> userDtos = new ArrayList<>();
+        userDtos = Arrays.asList(userReferenceDataService.getUsers(programId, rightId).getResult());
+        Set<UserDto> usersInProgram = new HashSet<>(userDtos);
+        allUsers.addAll(usersInProgram);
+      }
+
+      sendBulkNotifications(profiler, allUsers);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-
-    sendBulkNotifications(profiler, allUsers);
   }
 
   /**
