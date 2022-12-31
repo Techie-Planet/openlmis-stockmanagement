@@ -85,7 +85,7 @@ public class WeeklyReportNotifier {
 
     XLOGGER.debug("Getting all program Ids");
     Collection<UUID> programIds = programReferenceDataService
-            .findAll("", RequestParameters.of(new HashMap<String, Object>())).stream()
+            .findAll("", new HashMap<String, Object>()).stream()
             .map(each -> each.getId()).collect(Collectors.toList());
     XLOGGER.debug("Getting user rights");
     RightDto right = rightReferenceDataService.findRight(stockAdjust);
