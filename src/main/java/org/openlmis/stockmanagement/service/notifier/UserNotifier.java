@@ -21,7 +21,6 @@ import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_NEAR_EX
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
-import lombok.Data;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.openlmis.stockmanagement.dto.referencedata.UserDto;
 import org.openlmis.stockmanagement.service.notification.NotificationService;
@@ -31,8 +30,8 @@ import org.slf4j.ext.XLoggerFactory;
 import org.slf4j.profiler.Profiler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.scheduling.annotation.Async;
 
-@Data
 @Component
 public class UserNotifier {
 

@@ -29,9 +29,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import lombok.Data;
 import org.openlmis.stockmanagement.dto.referencedata.UserDto;
+import org.openlmis.stockmanagement.i18n.MessageService;
 import org.openlmis.stockmanagement.service.notifier.UserNotifier;
+import org.openlmis.stockmanagement.service.referencedata.ProgramReferenceDataService;
+import org.openlmis.stockmanagement.service.referencedata.RightReferenceDataService;
+import org.openlmis.stockmanagement.service.referencedata.UserReferenceDataService;
 import org.slf4j.ext.XLogger;
 import org.slf4j.ext.XLoggerFactory;
 import org.slf4j.profiler.Profiler;
@@ -41,10 +44,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 
-
-
-
-@Data
 @Component
 public class WeeklyReportNotifier {
   @Autowired
@@ -55,7 +54,8 @@ public class WeeklyReportNotifier {
   private UserReferenceDataService userReferenceDataService;
   @Autowired
   private RightReferenceDataService rightReferenceDataService;
-  @Autowired UserNotifier userNotifier;
+  @Autowired
+  private UserNotifier userNotifier;
 
 
   @Value("${time.zoneId}")
