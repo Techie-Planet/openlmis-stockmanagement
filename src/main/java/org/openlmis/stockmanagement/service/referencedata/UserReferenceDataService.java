@@ -94,7 +94,7 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
    * @param programId  program to check (for supervision rights, can be {@code null})
    * @return {@link ResultDto} of true or false depending on if user has the right.
    */
-  public ResultDto<UserDto[]> getUsers(UUID programId, UUID rightId){
+  public ResultDto<UserDto[]> getUsers(UUID programId, UUID rightId) {
     RequestParameters parameters = RequestParameters
         .init()
         .set("rightId", rightId)

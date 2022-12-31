@@ -62,6 +62,6 @@ public class UserNotifier {
             sub.replace(params.getMessageSubject()), sub.replace(params.getMessageContent()));
 
     profiler.stop().log();
-      XLOGGER.exit();
+    XLOGGER.exit();
   }
 }
