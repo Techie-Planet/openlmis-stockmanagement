@@ -88,6 +88,7 @@ public class WeeklyReportNotifier {
       Collection<UUID> programIds = programReferenceDataService
               .findPrograms(new HashMap<String, Object>()).stream()
               .map(each -> each.getId()).collect(Collectors.toList());
+      System.out.println(programIds);
       XLOGGER.debug("Getting user rights");
       RightDto right = rightReferenceDataService.findRight(stockAdjust);
       UUID rightId = right.getId();
@@ -95,7 +96,8 @@ public class WeeklyReportNotifier {
       Set<UserDto> allUsers = new HashSet<>();
       for (UUID programId : programIds) {
         Collection<UserDto> userDtos = new ArrayList<>();
-        userDtos = Arrays.asList(userReferenceDataService.getUsers(programId, rightId).getResult());
+        //userDtos = Arrays.asList(userReferenceDataService.getUsers(programId, rightId).getResult());
+        userDtos = userReferenceDataService.getUsers(programId, rightId).getResult();
         Set<UserDto> usersInProgram = new HashSet<>(userDtos);
         allUsers.addAll(usersInProgram);
       }
