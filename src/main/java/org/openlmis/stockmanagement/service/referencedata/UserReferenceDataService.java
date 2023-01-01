@@ -99,6 +99,6 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
         .init()
         .set("rightId", rightId)
         .set("programId", programId);
-    return getResult("rightSearch", parameters, UserDto[].class);
+    return getResult("rightSearch", parameters, UserDto.class);
   }
 }
