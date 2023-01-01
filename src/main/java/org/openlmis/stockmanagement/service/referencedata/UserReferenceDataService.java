@@ -15,11 +15,8 @@
 
 package org.openlmis.stockmanagement.service.referencedata;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
 import org.openlmis.stockmanagement.dto.referencedata.ResultDto;
 import org.openlmis.stockmanagement.dto.referencedata.UserDto;
 import org.openlmis.stockmanagement.service.ServiceResponse;
@@ -95,10 +92,9 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
    * @return {@link ResultDto} of true or false depending on if user has the right.
    */
   public Collection<UserDto> getUsers(UUID programId, UUID rightId) {
-    RequestParameters parameters = RequestParameters
-        .init()
-        .set("rightId", rightId)
-        .set("programId", programId);
+    Map<String, Object> parameters = new HashMap<>();
+        parameters.put("rightId", rightId);
+        parameters.put("programId", programId);
     return findAll("rightSearch", parameters);
   }
 }
