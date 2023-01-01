@@ -98,8 +98,8 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
    */
   public Collection<UserDto> getUsers(UUID programId, UUID rightId) {
     Map<String, Object> parameters = new HashMap<>();
-      parameters.put("rightId", rightId);
-      parameters.put("programId", programId);
+    parameters.put("rightId", rightId);
+    parameters.put("programId", programId);
     return findAll("rightSearch", parameters);
   }
 }
