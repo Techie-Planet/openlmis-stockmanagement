@@ -15,7 +15,12 @@
 
 package org.openlmis.stockmanagement.service.referencedata;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.openlmis.stockmanagement.dto.referencedata.ResultDto;
 import org.openlmis.stockmanagement.dto.referencedata.UserDto;
@@ -93,8 +98,8 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
    */
   public Collection<UserDto> getUsers(UUID programId, UUID rightId) {
     Map<String, Object> parameters = new HashMap<>();
-        parameters.put("rightId", rightId);
-        parameters.put("programId", programId);
+      parameters.put("rightId", rightId);
+      parameters.put("programId", programId);
     return findAll("rightSearch", parameters);
   }
 }

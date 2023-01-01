@@ -96,7 +96,7 @@ public class WeeklyReportNotifier {
       Set<UserDto> allUsers = new HashSet<>();
       for (UUID programId : programIds) {
         Collection<UserDto> userDtos = userReferenceDataService.getUsers(programId, rightId);
-//        userDtos = Arrays.asList(users);
+        //userDtos = Arrays.asList(users);
         //userDtos = userReferenceDataService.getUsers(programId, rightId).getResult();
         Set<UserDto> usersInProgram = new HashSet<>(userDtos);
         allUsers.addAll(usersInProgram);
