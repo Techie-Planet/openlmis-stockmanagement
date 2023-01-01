@@ -95,9 +95,8 @@ public class WeeklyReportNotifier {
       XLOGGER.debug("Getting all users");
       Set<UserDto> allUsers = new HashSet<>();
       for (UUID programId : programIds) {
-        Collection<UserDto> userDtos = new ArrayList<>();
-        UserDto[] users = userReferenceDataService.getUsers(programId, rightId).getResult();
-        userDtos = Arrays.asList(users);
+        Collection<UserDto> userDtos = userReferenceDataService.getUsers(programId, rightId);
+//        userDtos = Arrays.asList(users);
         //userDtos = userReferenceDataService.getUsers(programId, rightId).getResult();
         Set<UserDto> usersInProgram = new HashSet<>(userDtos);
         allUsers.addAll(usersInProgram);
