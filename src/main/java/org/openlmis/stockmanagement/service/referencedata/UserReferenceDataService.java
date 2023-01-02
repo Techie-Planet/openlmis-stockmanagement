@@ -110,10 +110,9 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
    * @return an instance of {@link ResultDto} with results.
    */
   public Collection<UserDto> getUsersWithRightInFacilityType(UUID rightId, UUID facilityTypeId) {
-    RequestParameters parameters = RequestParameters
-            .init()
-            .set("rightId", rightId)
-            .set("facilityTypeId", facilityTypeId);
-    return findAll("/rightFacilitySearch", parameters);
+    Map<String, Object> parameters = new HashMap<>();
+    parameters.put("rightId", rightId);
+    parameters.put("facilityTypeId", facilityTypeId);
+    return findAll("rightFacilitySearch", parameters);
   }
 }
