@@ -20,6 +20,7 @@ import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_EMAIL_P
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -117,8 +118,8 @@ public class PhysicalInventoryNotifier {
 
     XLOGGER.debug("Getting facility type");
 
-    List<FacilityTypeDto> facilitytype = facilityTypeReferenceDataService
-            .getAllFacilityTypes().stream()
+    List<FacilityTypeDto> facilitytype = Arrays.stream(facilityTypeReferenceDataService
+            .getAllFacilityTypes().getResult())
             .filter(each -> each.getName().equals(facilityTypeName)).collect(Collectors.toList());
     UUID facilityTypeId = facilitytype.get(0).getId();
     XLOGGER.debug("Getting user rights");
