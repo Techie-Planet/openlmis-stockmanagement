@@ -113,6 +113,6 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
     Map<String, Object> parameters = new HashMap<>();
     parameters.put("rightId", rightId);
     parameters.put("facilityTypeId", facilityTypeId);
-    return findAll("rightFacilitySearch", parameters);
+    return findAll("rightFacilityTypeSearch", parameters);
   }
 }
