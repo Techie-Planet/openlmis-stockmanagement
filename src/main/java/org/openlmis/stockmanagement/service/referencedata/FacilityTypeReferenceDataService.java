@@ -17,6 +17,7 @@ package org.openlmis.stockmanagement.service.referencedata;
 
 import org.openlmis.stockmanagement.dto.referencedata.FacilityTypeDto;
 import org.openlmis.stockmanagement.dto.referencedata.ResultDto;
+import org.openlmis.stockmanagement.util.RequestParameters;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,7 +42,7 @@ public class FacilityTypeReferenceDataService extends BaseReferenceDataService<F
    * Method to get all facility types.
    */
   public ResultDto<FacilityTypeDto[]> getAllFacilityTypes() {
-    RequestParameters parameters = RequestParameters
+    RequestParameters parameters = org.openlmis.stockmanagement.util.RequestParameters
             .init();
     return getResult("", parameters, FacilityTypeDto[].class);
   }
