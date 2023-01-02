@@ -15,16 +15,27 @@
 
 package org.openlmis.stockmanagement.service.notifier;
 
+import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_EMAIL_PHYSICAL_INVENTORY_CONTENT;
+import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_EMAIL_PHYSICAL_INVENTORY_SUBJECT;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.Set;
+import java.util.Collection;
+import java.util.stream.Collectors;
 import lombok.Data;
-import org.openlmis.notification.domain.Notification;
-import org.openlmis.notification.domain.PendingNotification;
-import org.openlmis.notification.i18n.Message;
-import org.openlmis.notification.i18n.MessageService;
-import org.openlmis.notification.repository.NotificationRepository;
-import org.openlmis.notification.repository.PendingNotificationRepository;
-import org.openlmis.notification.service.referencedata.*;
-import org.openlmis.notification.web.notification.MessageDto;
-import org.openlmis.notification.web.notification.NotificationDto;
+import org.openlmis.stockmanagement.dto.referencedata.FacilityTypeDto;
+import org.openlmis.stockmanagement.dto.referencedata.RightDto;
+import org.openlmis.stockmanagement.dto.referencedata.UserDto;
+import org.openlmis.stockmanagement.i18n.MessageService;
+import org.openlmis.stockmanagement.service.referencedata.FacilityTypeReferenceDataService;
+import org.openlmis.stockmanagement.service.referencedata.RightReferenceDataService;
+import org.openlmis.stockmanagement.service.referencedata.UserReferenceDataService;
+import org.openlmis.stockmanagement.service.notifier.UserNotifier;
 import org.slf4j.ext.XLogger;
 import org.slf4j.ext.XLoggerFactory;
 import org.slf4j.profiler.Profiler;
@@ -32,20 +43,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.apache.commons.beanutils.PropertyUtils.getPropertyDescriptors;
-import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_EMAIL_PHYSICAL_INVENTORY_CONTENT;
-import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_EMAIL_PHYSICAL_INVENTORY_SUBJECT;
-import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_EMAIL_WEEKLY_REPORT_CONTENT;
-import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_EMAIL_WEEKLY_REPORT_SUBJECT;
-
 
 @Data
 @Component
@@ -55,17 +52,13 @@ public class PhysicalInventoryNotifier {
   @Autowired
   private MessageService messageService;
   @Autowired
-  private ProgramReferenceDataService programReferenceDataService;
-  @Autowired
   private UserReferenceDataService userReferenceDataService;
   @Autowired
   private RightReferenceDataService rightReferenceDataService;
   @Autowired
-  private NotificationRepository notificationRepository;
-  @Autowired
   private FacilityTypeReferenceDataService facilityTypeReferenceDataService;
   @Autowired
-  private PendingNotificationRepository pendingNotificationRepository;
+  private UserNotifier userNotifier;
 
   @Value("${time.zoneId}")
   private String timeZoneId;
@@ -73,8 +66,6 @@ public class PhysicalInventoryNotifier {
   private String publicUrl;
   private LocalDate currentDate;
   private final String physicalInventoryUrl = "stockmanagement/physicalInventory";
-
-
   private final String nationalColdStore = "National Cold Store";
   private final String zonalColdStore = "Zonal Cold Store";
   private final String satelliteColdStore = "Satellite Cold Store";
@@ -122,7 +113,7 @@ public class PhysicalInventoryNotifier {
 
   private void sendPhysicalInventoryNotification(Profiler profiler, String facilityTypeName) {
     currentDate = LocalDate.now(ZoneId.of(timeZoneId));
-    XLOGGER.debug("Weekly report date = {}", currentDate);
+    XLOGGER.debug("Physical inventory report date = {}", currentDate);
 
     XLOGGER.debug("Getting facility type");
 
@@ -160,7 +151,7 @@ public class PhysicalInventoryNotifier {
   Map<String, String> constructSubstitutionMap(UserDto user) {
     Map<String, String> messageParams = new HashMap<>();
     messageParams.put("username", user.getUsername());
-    messageParams.put("date", String.valueOf(weeklyReportDate));
+    messageParams.put("date", String.valueOf(currentDate));
     messageParams.put("urlToPhysicalInventory", publicUrl + physicalInventoryUrl);
 
     return messageParams;

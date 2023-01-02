@@ -20,8 +20,6 @@ import static org.openlmis.stockmanagement.i18n.MessageKeys.NOTIFICATION_EMAIL_W
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -96,8 +94,6 @@ public class WeeklyReportNotifier {
       Set<UserDto> allUsers = new HashSet<>();
       for (UUID programId : programIds) {
         Collection<UserDto> userDtos = userReferenceDataService.getUsers(programId, rightId);
-        //userDtos = Arrays.asList(users);
-        //userDtos = userReferenceDataService.getUsers(programId, rightId).getResult();
         Set<UserDto> usersInProgram = new HashSet<>(userDtos);
         allUsers.addAll(usersInProgram);
       }
