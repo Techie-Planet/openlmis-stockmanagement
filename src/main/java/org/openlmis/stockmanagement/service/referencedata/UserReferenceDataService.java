@@ -102,4 +102,18 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
     parameters.put("programId", programId);
     return findAll("rightSearch", parameters);
   }
+
+  /**
+   * Method to get all users with a right in facility type.
+   * @param facilityTypeId     id of facility type to check
+   * @param rightId    right to check
+   * @return an instance of {@link ResultDto} with results.
+   */
+  public Collection<UserDto> getUsersWithRightInFacilityType(UUID rightId, UUID facilityTypeId) {
+    RequestParameters parameters = RequestParameters
+            .init()
+            .set("rightId", rightId)
+            .set("facilityTypeId", facilityTypeId);
+    return findAll("/rightFacilitySearch", parameters);
+  }
 }
