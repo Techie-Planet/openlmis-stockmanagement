@@ -119,7 +119,7 @@ public class PhysicalInventoryNotifier {
     XLOGGER.debug("Getting facility type");
 
     List<FacilityTypeDto> facilitytype = Arrays.stream(facilityTypeReferenceDataService
-            .getAllFacilityTypes().getResult())
+            .getAllFacilityTypes().getContent())
             .filter(each -> each.getName().equals(facilityTypeName)).collect(Collectors.toList());
     UUID facilityTypeId = facilitytype.get(0).getId();
     XLOGGER.debug("Getting user rights");
