@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import org.apache.commons.lang.text.StrSubstitutor;
 import org.openlmis.stockmanagement.domain.card.StockCard;
 import org.openlmis.stockmanagement.dto.referencedata.LotDto;
 import org.openlmis.stockmanagement.dto.StockEventDto;
@@ -76,25 +77,25 @@ public class IssueNotifier extends BaseNotifier {
   @Value("${email.urlToStockReceive}")
   private String urlToStockReceive;
 
-  /**
-   * Notify users with a certain right that line items have been issued to their facility.
-   *
-   * @param stockCard StockCard for a product
-   * @param rightId right UUID
-   */
-  public void notifyStockEditors(StockCard stockCard, UUID rightId,
-                                 Integer numberOfEventItems, UUID issuingFacilityId) {
-    // if numberOfItems is 1, send the email with the product name and all,
-    // if more than 1, send as number of products currently issued by the facility
-    String content = numberOfEventItems > 1 ? NOTIFICATION_MULTIPLE_STOCK_ISSUE_CONTENT
-            : NOTIFICATION_STOCK_ISSUE_CONTENT;
-
-    NotificationMessageParams params = new NotificationMessageParams(
-            getMessage(NOTIFICATION_STOCK_ISSUE_SUBJECT),
-            getMessage(content),
-            constructSubstitutionMap(stockCard, numberOfEventItems, issuingFacilityId));
-    stockCardNotifier.notifyStockEditors(stockCard, rightId, params);
-  }
+  //  /**
+  //   * Notify users with a certain right that line items have been issued to their facility.
+  //   *
+  //   * @param stockCard StockCard for a product
+  //   * @param rightId right UUID
+  //   */
+  //  public void notifyStockEditors(StockCard stockCard, UUID rightId,
+  //                                 Integer numberOfEventItems, UUID issuingFacilityId) {
+  //    // if numberOfItems is 1, send the email with the product name and all,
+  //    // if more than 1, send as number of products currently issued by the facility
+  //    String content = numberOfEventItems > 1 ? NOTIFICATION_MULTIPLE_STOCK_ISSUE_CONTENT
+  //            : NOTIFICATION_STOCK_ISSUE_CONTENT;
+  //
+  //    NotificationMessageParams params = new NotificationMessageParams(
+  //            getMessage(NOTIFICATION_STOCK_ISSUE_SUBJECT),
+  //            getMessage(content),
+  //            constructSubstitutionMap(stockCard, numberOfEventItems, issuingFacilityId));
+  //    stockCardNotifier.notifyStockEditors(stockCard, rightId, params);
+  //  }
 
   /**
    * Notify users with a certain right that line items have been issued to their facility.
