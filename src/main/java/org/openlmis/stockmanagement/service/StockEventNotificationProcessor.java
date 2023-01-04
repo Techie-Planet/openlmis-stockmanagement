@@ -60,7 +60,6 @@ public class StockEventNotificationProcessor {
   /**
    * From the stock event, check each line item's stock card and see
    * if stock on hand has gone to zero.
-   *
    * If so, send a notification to all of that stock card's editors.
    * 
    * @param eventDto the stock event to process
