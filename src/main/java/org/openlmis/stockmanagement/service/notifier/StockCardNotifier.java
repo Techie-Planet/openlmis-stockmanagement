@@ -57,7 +57,6 @@ public class StockCardNotifier extends BaseNotifier {
   @Async
   public void notifyStockEditors(StockCard stockCard, UUID rightId,
       NotificationMessageParams params) {
-    System.out.println("In stock card notifier");
     Profiler profiler = new Profiler("NOTIFY_STOCK_EDITORS");
     profiler.setLogger(XLOGGER);
 

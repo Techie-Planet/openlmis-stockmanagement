@@ -32,6 +32,8 @@ import org.openlmis.stockmanagement.dto.referencedata.RightDto;
 import org.openlmis.stockmanagement.service.notifier.IssueNotifier;
 import org.openlmis.stockmanagement.service.notifier.StockoutNotifier;
 import org.openlmis.stockmanagement.service.referencedata.RightReferenceDataService;
+import org.openlmis.stockmanagement.domain.reason.StockCardLineItemReason;
+import org.openlmis.stockmanagement.domain.reason.ReasonCategory;
 import org.slf4j.ext.XLogger;
 import org.slf4j.ext.XLoggerFactory;
 import org.slf4j.profiler.Profiler;
@@ -84,6 +86,14 @@ public class StockEventNotificationProcessor {
       stockoutNotifier.notifyStockEditors(stockCard, rightId);
     }
     // add issue notification here
+    StockCardLineItemReason reason = event.getContext()
+            .findEventReason(eventLine.getReasonId());
+    if (reason.isDebitReasonType() && reason.getReasonCategory()
+            == ReasonCategory.TRANSFER) {
+      System.out.println("Attempting to send issue notification");
+      // send issue notification
+      issueNotifier.notifyStockEditors(stockCard, event, eventLine, rightId);
+    }
 
     profiler.stop().log();
     XLOGGER.exit();

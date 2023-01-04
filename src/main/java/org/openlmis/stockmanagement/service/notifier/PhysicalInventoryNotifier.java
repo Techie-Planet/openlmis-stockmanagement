@@ -66,7 +66,7 @@ public class PhysicalInventoryNotifier {
   @Value("${publicUrl}")
   private String publicUrl;
   private LocalDate currentDate;
-  private final String physicalInventoryUrl = "stockmanagement/physicalInventory";
+  private final String physicalInventoryUrl = "/stockmanagement/physicalInventory";
   private final String nationalColdStore = "National Cold Store";
   private final String zonalColdStore = "Zonal Cold Store";
   private final String satelliteColdStore = "Satellite Cold Store";
