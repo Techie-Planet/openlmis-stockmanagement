@@ -28,9 +28,18 @@ import java.util.Map;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.card.StockCard;
 import org.openlmis.stockmanagement.dto.referencedata.LotDto;
+import org.openlmis.stockmanagement.dto.StockEventDto;
+import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
+import org.openlmis.stockmanagement.dto.referencedata.SupervisoryNodeDto;
+import org.openlmis.stockmanagement.dto.referencedata.UserDto;
 import org.openlmis.stockmanagement.i18n.MessageService;
+import org.openlmis.stockmanagement.repository.NodeRepository;
+import org.openlmis.stockmanagement.service.notification.NotificationService;
+import org.openlmis.stockmanagement.service.notifier.BaseNotifier;
 import org.openlmis.stockmanagement.service.notifier.StockCardNotifier;
 import org.openlmis.stockmanagement.service.referencedata.LotReferenceDataService;
+import org.openlmis.stockmanagement.service.referencedata.SupervisingUsersReferenceDataService;
+import org.openlmis.stockmanagement.service.referencedata.SupervisoryNodeReferenceDataService;
 import org.openlmis.stockmanagement.util.Message;
 import org.slf4j.ext.XLogger;
 import org.slf4j.ext.XLoggerFactory;
@@ -39,15 +48,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
-import org.openlmis.stockmanagement.dto.StockEventDto;
-import org.openlmis.stockmanagement.service.notifier.BaseNotifier;
-import org.openlmis.stockmanagement.dto.referencedata.UserDto;
-import org.openlmis.stockmanagement.dto.referencedata.SupervisoryNodeDto;
-import org.openlmis.stockmanagement.service.referencedata.SupervisingUsersReferenceDataService;
-import org.openlmis.stockmanagement.service.referencedata.SupervisoryNodeReferenceDataService;
-import org.openlmis.stockmanagement.service.notification.NotificationService;
-import org.openlmis.stockmanagement.repository.NodeRepository;
 
 @Component
 public class IssueNotifier extends BaseNotifier {
