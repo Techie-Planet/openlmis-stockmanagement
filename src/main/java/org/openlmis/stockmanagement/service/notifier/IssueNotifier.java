@@ -28,9 +28,9 @@ import java.util.Map;
 import java.util.UUID;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.openlmis.stockmanagement.domain.card.StockCard;
-import org.openlmis.stockmanagement.dto.referencedata.LotDto;
 import org.openlmis.stockmanagement.dto.StockEventDto;
 import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
+import org.openlmis.stockmanagement.dto.referencedata.LotDto;
 import org.openlmis.stockmanagement.dto.referencedata.SupervisoryNodeDto;
 import org.openlmis.stockmanagement.dto.referencedata.UserDto;
 import org.openlmis.stockmanagement.i18n.MessageService;
@@ -103,12 +103,15 @@ public class IssueNotifier extends BaseNotifier {
    * @param stockCard StockCard for a product
    * @param rightId right UUID
    */
-  public void notifyStockEditors(StockCard stockCard, StockEventDto event, StockEventLineItemDto eventLine, UUID rightId) {
+  public void notifyStockEditors(StockCard stockCard,
+                                 StockEventDto event,
+                                 StockEventLineItemDto eventLine,
+                                 UUID rightId) {
     NotificationMessageParams params = new NotificationMessageParams(
             getMessage(NOTIFICATION_STOCK_ISSUE_SUBJECT),
             getMessage(NOTIFICATION_STOCK_ISSUE_CONTENT),
             constructSubstitutionMap(stockCard, event));
-    notifyStockEditors(stockCard, eventLine, rightId, params);
+    notifyStockRecipients(stockCard, eventLine, rightId, params);
   }
 
   Map<String, String> constructSubstitutionMap(StockCard stockCard, StockEventDto event) {
@@ -132,15 +135,18 @@ public class IssueNotifier extends BaseNotifier {
    * @param params message params to construct message
    */
   @Async
-  private void notifyStockEditors(StockCard stockCard, StockEventLineItemDto eventLine, UUID rightId,
-                                 NotificationMessageParams params) {
-    Profiler profiler = new Profiler("NOTIFY_STOCK_RECEIVERS");
+  private void notifyStockRecipients(StockCard stockCard,
+                                     StockEventLineItemDto eventLine, UUID rightId,
+                                     NotificationMessageParams params) {
+    Profiler profiler = new Profiler("NOTIFY_STOCK_RECIPIENTS");
     profiler.setLogger(XLOGGER);
 
     profiler.start("GET_EDITORS");
 
-    UUID receivingFacilityId = nodeRepository.findById(eventLine.getDestinationId()).get().getReferenceId();
-    Collection<UserDto> recipients = getEditors(stockCard.getProgramId(), receivingFacilityId, rightId);
+    UUID receivingFacilityId = nodeRepository
+            .findById(eventLine.getDestinationId()).get().getReferenceId();
+    Collection<UserDto> recipients = getEditors(
+            stockCard.getProgramId(), receivingFacilityId, rightId);
 
     Map<String, String> valuesMap = params.getSubstitutionMap();
     StrSubstitutor sub = new StrSubstitutor(valuesMap);

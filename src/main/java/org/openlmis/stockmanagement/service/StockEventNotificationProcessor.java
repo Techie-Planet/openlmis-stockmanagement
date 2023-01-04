@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.card.StockCard;
 import org.openlmis.stockmanagement.domain.identity.OrderableLotIdentity;
+import org.openlmis.stockmanagement.domain.reason.ReasonCategory;
+import org.openlmis.stockmanagement.domain.reason.StockCardLineItemReason;
 import org.openlmis.stockmanagement.dto.StockEventDto;
 import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
 import org.openlmis.stockmanagement.dto.referencedata.FacilityDto;
@@ -32,8 +34,6 @@ import org.openlmis.stockmanagement.dto.referencedata.RightDto;
 import org.openlmis.stockmanagement.service.notifier.IssueNotifier;
 import org.openlmis.stockmanagement.service.notifier.StockoutNotifier;
 import org.openlmis.stockmanagement.service.referencedata.RightReferenceDataService;
-import org.openlmis.stockmanagement.domain.reason.StockCardLineItemReason;
-import org.openlmis.stockmanagement.domain.reason.ReasonCategory;
 import org.slf4j.ext.XLogger;
 import org.slf4j.ext.XLoggerFactory;
 import org.slf4j.profiler.Profiler;
@@ -58,8 +58,10 @@ public class StockEventNotificationProcessor {
   private RightReferenceDataService rightReferenceDataService;
 
   /**
-   * From the stock event, check each line item's stock card and see if stock on hand has gone to
-   * zero. If so, send a notification to all of that stock card's editors.
+   * From the stock event, check each line item's stock card and see
+   * if stock on hand has gone to zero.
+   *
+   * If so, send a notification to all of that stock card's editors.
    * 
    * @param eventDto the stock event to process
    */
@@ -106,7 +108,8 @@ public class StockEventNotificationProcessor {
   //    profiler.setLogger(XLOGGER);
   //
   //    profiler.start("COPY_STOCK_CARD");
-  //    OrderableLotIdentity identity = OrderableLotIdentity.identityOf(eventLine.getValue().get(0));
+  //    OrderableLotIdentity identity = OrderableLotIdentity
+  //    .identityOf(eventLine.getValue().get(0));
   //    StockCard stockCard = event.getContext().findCard(identity);
   //
   //    issueNotifier.notifyStockEditors(stockCard, rightId,
@@ -131,7 +134,8 @@ public class StockEventNotificationProcessor {
   //    Map<FacilityDto, List<StockEventLineItemDto>> numberInEachFacility = new HashMap<>();
   //    // this block checks if different stock event line items are going to the same facility
   //    // and collects them into a list
-  //    for (Map.Entry<StockEventLineItemDto, FacilityDto> eachEntry: stockEventLineItems.entrySet()) {
+  //    for (Map.Entry<StockEventLineItemDto, FacilityDto> eachEntry:
+  //    stockEventLineItems.entrySet()) {
   //      if (numberInEachFacility.get(eachEntry.getValue()) == null) {
   //        List<StockEventLineItemDto> list = new ArrayList<>();
   //        list.add(eachEntry.getKey());
