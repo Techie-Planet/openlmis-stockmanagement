@@ -189,17 +189,6 @@ public abstract class SourceDestinationBaseService {
     return node;
   }
 
-  /**
-   * Find a Reference Facility ID from a Node ID.
-   *
-   * @param nodeId the Node ID
-   * @return UUID.
-   */
-  protected List<UUID> getReferenceIdFromNodeId(UUID nodeId) {
-    List<UUID> listofIds = new ArrayList<>();
-    listofIds.add(nodeRepository.findById(nodeId).get().getReferenceId());
-    return listofIds;
-  }
 
 
   private boolean hasGeoAffinity(SourceDestinationAssignment assignment, FacilityDto facility,
