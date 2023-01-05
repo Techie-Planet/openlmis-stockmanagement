@@ -195,7 +195,7 @@ public abstract class SourceDestinationBaseService {
    * @param nodeId the Node ID
    * @return UUID.
    */
-  private List<UUID> getReferenceIdFromNodeId(UUID nodeId) {
+  protected List<UUID> getReferenceIdFromNodeId(UUID nodeId) {
     List<UUID> listofIds = new ArrayList<>();
     listofIds.add(nodeRepository.findById(nodeId).get().getReferenceId());
     return listofIds;

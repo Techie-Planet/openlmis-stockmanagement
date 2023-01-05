@@ -177,7 +177,8 @@ public class ValidSourceDestinationController {
   @RequestMapping(value = "/validDestinations/getSourceDestinationFacilityFromNode", method = GET)
   public ResponseEntity<List<UUID>> getSourceDestinationFacilityFromNode(
           @RequestParam(value = "nodeId") UUID nodeId) {
-    return new ResponseEntity<>(validDestinationService
+    return new ResponseEntity<>(
+            validDestinationService
             .getReferenceIdFromNodeId(nodeId), OK);
   }
 }
