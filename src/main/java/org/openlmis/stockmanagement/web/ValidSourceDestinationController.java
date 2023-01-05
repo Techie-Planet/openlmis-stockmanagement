@@ -20,6 +20,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
+import java.util.List;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourceAssignment;
@@ -163,5 +164,19 @@ public class ValidSourceDestinationController {
     LOGGER.debug(format("Try to remove destination assignment %s.", assignmentId));
     permissionService.canManageStockDestinations();
     validDestinationService.deleteDestinationAssignmentById(assignmentId);
+  }
+
+
+  /**
+   * Fetch a source or destination facility from a node.
+   *
+   * @param nodeId UUID of Program.
+   * @return UUID.
+   */
+  @RequestMapping(value = "/validDestinations/getSourceDestinationFacilityFromNode", method = GET)
+  public ResponseEntity<List<UUID>> getSourceDestinationFacilityFromNode(
+          @RequestParam(value = "nodeId") UUID nodeId) {
+    return new ResponseEntity<>(validDestinationService
+            .getReferenceIdFromNodeId(nodeId), OK);
   }
 }
