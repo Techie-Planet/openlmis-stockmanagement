@@ -118,7 +118,7 @@ public class ValidDestinationService extends SourceDestinationBaseService {
    *
    * @param nodeId the Node ID
    * @return UUID.
-   * @throws ResourceNotFoundException
+   * @throws ResourceNotFoundException when node not found.
    */
   public Node getReferenceIdFromNodeId(UUID nodeId) {
     Optional<Node> node = nodeRepository.findById(nodeId);
