@@ -125,6 +125,8 @@ public abstract class MessageKeys {
       + ".destination.assignment.noMatchGeoLevelAffinity";
   public static final String ERROR_DESTINATION_ASSIGNMENT_NOT_FOUND = ERROR_PREFIX
       + ".destination.assignment.notFound";
+  public static final String ERROR_NODE_NOT_FOUND = ERROR_PREFIX
+      + ".destination.node.notFound";
   public static final String ERROR_SOURCE_NOT_FOUND = ERROR_PREFIX
       + ".source.notFound";
   public static final String ERROR_DESTINATION_NOT_FOUND = ERROR_PREFIX

@@ -21,8 +21,8 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-import java.util.List;
 import java.util.UUID;
+import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourceAssignment;
 import org.openlmis.stockmanagement.dto.ValidSourceDestinationDto;
@@ -172,10 +172,10 @@ public class ValidSourceDestinationController {
    * Fetch a source or destination facility from a node.
    *
    * @param nodeId UUID of Program.
-   * @return UUID.
+   * @return Node.
    */
   @RequestMapping(value = "/validDestinations/getSourceDestinationFacilityFromNode", method = GET)
-  public ResponseEntity<List<UUID>> getSourceDestinationFacilityFromNode(
+  public ResponseEntity<Node> getSourceDestinationFacilityFromNode(
           @RequestParam(value = "nodeId") UUID nodeId) {
     return new ResponseEntity<>(
             validDestinationService

@@ -17,13 +17,16 @@ package org.openlmis.stockmanagement.service;
 
 import static org.openlmis.stockmanagement.i18n.MessageKeys.ERROR_DESTINATION_ASSIGNMENT_NOT_FOUND;
 import static org.openlmis.stockmanagement.i18n.MessageKeys.ERROR_DESTINATION_NOT_FOUND;
+import static org.openlmis.stockmanagement.i18n.MessageKeys.ERROR_NODE_NOT_FOUND;
 import static org.slf4j.ext.XLoggerFactory.getXLogger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
 import org.openlmis.stockmanagement.dto.ValidSourceDestinationDto;
+import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
 import org.openlmis.stockmanagement.exception.ValidationMessageException;
 import org.openlmis.stockmanagement.repository.NodeRepository;
 import org.openlmis.stockmanagement.repository.ValidDestinationAssignmentRepository;
@@ -115,11 +118,12 @@ public class ValidDestinationService extends SourceDestinationBaseService {
    *
    * @param nodeId the Node ID
    * @return UUID.
+   * @throws ResourceNotFoundException
    */
-  public List<UUID> getReferenceIdFromNodeId(UUID nodeId) {
-    List<UUID> listofIds = new ArrayList<>();
-    listofIds.add(nodeRepository.findById(nodeId).get().getReferenceId());
-    return listofIds;
+  public Node getReferenceIdFromNodeId(UUID nodeId) {
+
+    return nodeRepository.findById(nodeId).orElseThrow(
+            new ResourceNotFoundException(ERROR_NODE_NOT_FOUND));
   }
 
 }
