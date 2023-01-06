@@ -20,8 +20,7 @@ import static org.openlmis.stockmanagement.i18n.MessageKeys.ERROR_DESTINATION_NO
 import static org.openlmis.stockmanagement.i18n.MessageKeys.ERROR_NODE_NOT_FOUND;
 import static org.slf4j.ext.XLoggerFactory.getXLogger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
@@ -30,6 +29,7 @@ import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
 import org.openlmis.stockmanagement.exception.ValidationMessageException;
 import org.openlmis.stockmanagement.repository.NodeRepository;
 import org.openlmis.stockmanagement.repository.ValidDestinationAssignmentRepository;
+import org.openlmis.stockmanagement.util.Message;
 import org.slf4j.ext.XLogger;
 import org.slf4j.profiler.Profiler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,9 +121,11 @@ public class ValidDestinationService extends SourceDestinationBaseService {
    * @throws ResourceNotFoundException
    */
   public Node getReferenceIdFromNodeId(UUID nodeId) {
-
-    return nodeRepository.findById(nodeId).orElseThrow(
-            new ResourceNotFoundException(ERROR_NODE_NOT_FOUND));
+    Optional<Node> node = nodeRepository.findById(nodeId);
+    if (node.isPresent()) {
+      return node.get();
+    }
+    throw new ResourceNotFoundException(ERROR_NODE_NOT_FOUND);
   }
 
 }
