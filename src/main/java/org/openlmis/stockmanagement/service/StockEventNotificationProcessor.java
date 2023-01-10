@@ -87,13 +87,15 @@ public class StockEventNotificationProcessor {
       stockoutNotifier.notifyStockEditors(stockCard, rightId);
     }
     // add issue notification here
-    StockCardLineItemReason reason = event.getContext()
-            .findEventReason(eventLine.getReasonId());
-    if (reason.isDebitReasonType() && reason.getReasonCategory()
-            == ReasonCategory.TRANSFER) {
-      System.out.println("Attempting to send issue notification");
-      // send issue notification
-      issueNotifier.notifyStockEditors(stockCard, event, eventLine, rightId);
+    if (eventLine.getReasonId() != null){
+      StockCardLineItemReason reason = event.getContext()
+              .findEventReason(eventLine.getReasonId());
+      if (reason.isDebitReasonType() && reason.getReasonCategory()
+              == ReasonCategory.TRANSFER) {
+        System.out.println("Attempting to send issue notification");
+        // send issue notification
+        issueNotifier.notifyStockEditors(stockCard, event, eventLine, rightId);
+      }
     }
 
     profiler.stop().log();
