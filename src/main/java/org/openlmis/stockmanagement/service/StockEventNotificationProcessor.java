@@ -87,7 +87,7 @@ public class StockEventNotificationProcessor {
       stockoutNotifier.notifyStockEditors(stockCard, rightId);
     }
     // add issue notification here
-    if (eventLine.getReasonId() != null){
+    if (eventLine.getReasonId() != null) {
       StockCardLineItemReason reason = event.getContext()
               .findEventReason(eventLine.getReasonId());
       if (reason.isDebitReasonType() && reason.getReasonCategory()
