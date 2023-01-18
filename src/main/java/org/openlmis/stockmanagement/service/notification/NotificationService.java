@@ -52,12 +52,10 @@ public class NotificationService {
    * @return true if success, false if failed.
    */
   public boolean notify(UserDto user, String subject, String content) {
-    System.out.println("In Notifier");
     NotificationDto request = buildNotification(user, subject, content);
     String url = notificationUrl + "/api/notifications";
 
     try {
-      System.out.println("Post for object");
       restTemplate.postForObject(
           RequestHelper.createUri(url),
           RequestHelper.createEntity(request, authService.obtainAccessToken()),

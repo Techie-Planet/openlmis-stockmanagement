@@ -74,19 +74,16 @@ public class WeeklyReportNotifier {
    */
   @Scheduled(cron = "${notifications.weeklyReport.cron}", zone = "${time.zoneId}")
   public void weeklyReportNotifier() {
-    System.out.println("start weekly report");
     try {
       Profiler profiler = new Profiler("SEND_WEEKLY_REPORT_NOTIFICATION");
       profiler.setLogger(XLOGGER);
       weeklyReportDate = LocalDate.now(ZoneId.of(timeZoneId));
       XLOGGER.debug("Weekly report date = {}", weeklyReportDate);
-      System.out.println("get program ids");
 
       XLOGGER.debug("Getting all program Ids");
       Collection<UUID> programIds = programReferenceDataService
               .findPrograms(new HashMap<String, Object>()).stream()
               .map(each -> each.getId()).collect(Collectors.toList());
-      System.out.println(programIds);
       XLOGGER.debug("Getting user rights");
       RightDto right = rightReferenceDataService.findRight(stockAdjust);
       UUID rightId = right.getId();

@@ -153,7 +153,6 @@ public class IssueNotifier extends BaseNotifier {
 
     profiler.start("NOTIFY_RECIPIENTS");
     for (UserDto recipient : recipients) {
-      System.out.println("Sending to recipient");
       valuesMap.put("username", recipient.getUsername());
       XLOGGER.debug("Recipient username = {}", recipient.getUsername());
       notificationService.notify(recipient,
