@@ -128,9 +128,9 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
    */
   public Collection<UserDto> findByRight(UUID rightId, UUID programId, UUID supervisoryNodeId) {
     Map<String, Object> parameters = new HashMap<>();
-            parameters.put("rightId", rightId);
-            parameters.put("programId", programId);
-            parameters.put("supervisoryNodeId", supervisoryNodeId);
+    parameters.put("rightId", rightId);
+    parameters.put("programId", programId);
+    parameters.put("supervisoryNodeId", supervisoryNodeId);
 
     return findAll("rightSearch", parameters);
   }
