@@ -23,8 +23,13 @@ import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.openlmis.stockmanagement.domain.card.StockCard;
@@ -41,6 +46,7 @@ import org.openlmis.stockmanagement.service.notifier.StockCardNotifier;
 import org.openlmis.stockmanagement.service.referencedata.LotReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.SupervisingUsersReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.SupervisoryNodeReferenceDataService;
+import org.openlmis.stockmanagement.service.referencedata.UserReferenceDataService;
 import org.openlmis.stockmanagement.util.Message;
 import org.slf4j.ext.XLogger;
 import org.slf4j.ext.XLoggerFactory;
@@ -73,29 +79,11 @@ public class IssueNotifier extends BaseNotifier {
 
   @Autowired
   private NodeRepository nodeRepository;
+  @Autowired
+  private UserReferenceDataService userReferenceDataService;
 
   @Value("${email.urlToStockReceive}")
   private String urlToStockReceive;
-
-  //  /**
-  //   * Notify users with a certain right that line items have been issued to their facility.
-  //   *
-  //   * @param stockCard StockCard for a product
-  //   * @param rightId right UUID
-  //   */
-  //  public void notifyStockEditors(StockCard stockCard, UUID rightId,
-  //                                 Integer numberOfEventItems, UUID issuingFacilityId) {
-  //    // if numberOfItems is 1, send the email with the product name and all,
-  //    // if more than 1, send as number of products currently issued by the facility
-  //    String content = numberOfEventItems > 1 ? NOTIFICATION_MULTIPLE_STOCK_ISSUE_CONTENT
-  //            : NOTIFICATION_STOCK_ISSUE_CONTENT;
-  //
-  //    NotificationMessageParams params = new NotificationMessageParams(
-  //            getMessage(NOTIFICATION_STOCK_ISSUE_SUBJECT),
-  //            getMessage(content),
-  //            constructSubstitutionMap(stockCard, numberOfEventItems, issuingFacilityId));
-  //    stockCardNotifier.notifyStockEditors(stockCard, rightId, params);
-  //  }
 
   /**
    * Notify users with a certain right that line items have been issued to their facility.
@@ -177,8 +165,18 @@ public class IssueNotifier extends BaseNotifier {
 
     XLOGGER.debug("Supervisory node ID = {}", supervisoryNode.getId());
 
-    return supervisingUsersReferenceDataService
-            .findAll(supervisoryNode.getId(), rightId, programId);
+    List<UserDto> supervisingUsers = Optional
+            .ofNullable(supervisoryNode)
+            .map(node -> supervisingUsersReferenceDataService
+                    .findAll(node.getId(), rightId, programId))
+            .orElse(Collections.emptyList());
+
+    List<UserDto> homeUsers = userReferenceDataService
+            .findByRight(rightId, programId, null);
+    Set<UserDto> users = new HashSet<>(supervisingUsers);
+    users.addAll(homeUsers);
+
+    return users;
   }
 
   private String getOrderableNameLotInformation(String orderableName, UUID lotId) {
