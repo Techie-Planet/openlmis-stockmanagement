@@ -126,7 +126,7 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
    * @param supervisoryNodeId UUID of supervisory node. Can be null.
    * @return a list of users that match parameters.
    */
-  public List<UserDto> findByRight(UUID rightId, UUID programId, UUID supervisoryNodeId) {
+  public Collection<UserDto> findByRight(UUID rightId, UUID programId, UUID supervisoryNodeId) {
     RequestParameters parameters = RequestParameters
             .init()
             .set("rightId", rightId)

@@ -165,13 +165,13 @@ public class IssueNotifier extends BaseNotifier {
 
     XLOGGER.debug("Supervisory node ID = {}", supervisoryNode.getId());
 
-    List<UserDto> supervisingUsers = Optional
+    Collection<UserDto> supervisingUsers = Optional
             .ofNullable(supervisoryNode)
             .map(node -> supervisingUsersReferenceDataService
                     .findAll(node.getId(), rightId, programId))
             .orElse(Collections.emptyList());
 
-    List<UserDto> homeUsers = userReferenceDataService
+    Collection<UserDto> homeUsers = userReferenceDataService
             .findByRight(rightId, programId, null);
     Set<UserDto> users = new HashSet<>(supervisingUsers);
     users.addAll(homeUsers);
