@@ -127,11 +127,10 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
    * @return a list of users that match parameters.
    */
   public Collection<UserDto> findByRight(UUID rightId, UUID programId, UUID supervisoryNodeId) {
-    RequestParameters parameters = RequestParameters
-            .init()
-            .set("rightId", rightId)
-            .set("programId", programId)
-            .set("supervisoryNodeId", supervisoryNodeId);
+    Map<String, Object> parameters = new HashMap<>();
+            parameters.put("rightId", rightId);
+            parameters.put("programId", programId);
+            parameters.put("supervisoryNodeId", supervisoryNodeId);
 
     return findAll("rightSearch", parameters);
   }
