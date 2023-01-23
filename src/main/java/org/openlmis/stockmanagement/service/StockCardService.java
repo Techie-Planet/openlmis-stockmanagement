@@ -127,31 +127,12 @@ public class StockCardService extends StockCardBaseService {
     List<StockCardLineItem> existingLineItems = new ArrayList<>();
     ZonedDateTime processedDate = now();
 
-    // this section creates stock card line items from a stock event DTO
-    // It also collects all the issue stock event line items and to which facility they are issued
-    Map<StockEventLineItemDto, FacilityDto> allIssues = new HashMap<>();
-
     for (StockEventLineItemDto eventLineItem : stockEventDto.getLineItems()) {
       StockCard stockCard = findOrCreateCard(
               stockEventDto, eventLineItem, savedEventId, cardsToUpdate);
       existingLineItems.addAll(stockCard.getLineItems());
-      //  createLineItemFrom(stockEventDto, eventLineItem, stockCard, savedEventId, processedDate);
-      StockCardLineItem stockCardLineItem = createLineItemFrom(stockEventDto,
-              eventLineItem, stockCard, savedEventId, processedDate);
-
-      // this section checks if the event line item is an issue then
-      // adds it to a list to be used for notifications
-      // confirm reasons
-      //      StockCardLineItemReason reason = stockEventDto.getContext()
-      //              .findEventReason(eventLineItem.getReasonId());
-      //      if (reason.isDebitReasonType() && reason.getReasonCategory()
-      //              == ReasonCategory.TRANSFER) {
-      //        StockCardLineItemDto stockCardLineItemDto = createFrom(stockCardLineItem);
-      //        allIssues.put(eventLineItem, stockCardLineItemDto.getDestination());
-      //      }
+      createLineItemFrom(stockEventDto, eventLineItem, stockCard, savedEventId, processedDate);
     }
-    // send emails if we have issue events
-    // stockEventNotificationProcessor.notifyIssue(stockEventDto, allIssues);
 
     cardRepository.saveAll(cardsToUpdate);
     cardRepository.flush();
