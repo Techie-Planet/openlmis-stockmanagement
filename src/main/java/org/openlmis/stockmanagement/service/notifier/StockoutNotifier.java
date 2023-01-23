@@ -77,11 +77,8 @@ public class StockoutNotifier {
     List<StockCardLineItem> lineItems = stockCard.getLineItems();
     LocalDate stockoutDate = lineItems.get(lineItems.size() - 1).getOccurredDate();
     valuesMap.put("stockoutDate", stockCardNotifier.getDateFormatter().format(stockoutDate));
-    //  long numberOfDaysOfStockout = getNumberOfDaysOfStockout(stockoutDate);
-    //  valuesMap.put("numberOfDaysOfStockout", numberOfDaysOfStockout
-    //      + (numberOfDaysOfStockout == 1 ? " day" : " days"));
     valuesMap.put("urlToViewBinCard", stockCardNotifier.getUrlToViewBinCard(stockCard.getId()));
-    valuesMap.put("urlToInitiateRequisition", getUrlToInitiateRequisition(stockCard));
+    //valuesMap.put("urlToInitiateRequisition", getUrlToInitiateRequisition(stockCard));
     return valuesMap;
   }
 
