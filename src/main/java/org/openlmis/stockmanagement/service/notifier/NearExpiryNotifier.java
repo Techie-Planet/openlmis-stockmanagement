@@ -76,8 +76,7 @@ public class NearExpiryNotifier {
    */
   @Scheduled(cron = "${stockmanagement.nearExpiry.cron}", zone = "${time.zoneId}")
   public void checkNearExpiryAndNotify() {
-    // Expiration of six months from today, OLMIS-3186
-    // get expiry for day 30, 21, 14 and 7 to expiry
+    // Expiration of one month from today, OLMIS-3186
     expirationDate = LocalDate.now(ZoneId.of(timeZoneId)).plusDays(30);
     XLOGGER.debug("Expiration date = {}", expirationDate);
     expiringLotMap = lotReferenceDataService.getAllLotsExpiringOn(expirationDate)
@@ -104,13 +103,10 @@ public class NearExpiryNotifier {
 
   Map<String, String> constructSubstitutionMap(StockCard stockCard) {
     Map<String, String> valuesMap = new HashMap<>();
-    //  valuesMap.put("facilityName", stockCardNotifier.getFacilityName(stockCard.getFacilityId()));
     valuesMap.put("programName", stockCardNotifier.getProgramName(stockCard.getProgramId()));
     valuesMap.put("orderableName", stockCardNotifier.getOrderableName(stockCard.getOrderableId()));
     valuesMap.put("orderableNameLotInformation",
             getOrderableNameLotInformation(valuesMap.get("orderableName"), stockCard.getLotId()));
-    //  LotDto lot = expiringLotMap.get(stockCard.getLotId());
-    //  valuesMap.put("lotCode", null != lot ? lot.getLotCode() : "");
     valuesMap.put("expirationDate", stockCardNotifier.getDateFormatter().format(expirationDate));
     valuesMap.put("urlToViewBinCard", stockCardNotifier.getUrlToViewBinCard(stockCard.getId()));
     return valuesMap;

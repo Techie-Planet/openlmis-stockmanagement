@@ -76,13 +76,10 @@ public class StockCardNotifier extends BaseNotifier {
     profiler.start("NOTIFY_RECIPIENTS");
     for (UserDto recipient : recipients) {
       if (stockCard.getFacilityId().equals(recipient.getHomeFacilityId())) {
-        System.out.println("is home facility: " + recipient.getUsername());
         valuesMap.put("username", recipient.getUsername());
         XLOGGER.debug("Recipient username = {}", recipient.getUsername());
         notificationService.notify(recipient,
             sub.replace(params.getMessageSubject()), sub.replace(params.getMessageContent()));
-      } else {
-        System.out.println("is not home facility: " + recipient.getUsername());
       }
     }
 
