@@ -16,7 +16,11 @@
 package org.openlmis.stockmanagement.service.notifier;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.openlmis.stockmanagement.domain.card.StockCard;
@@ -25,6 +29,7 @@ import org.openlmis.stockmanagement.dto.referencedata.UserDto;
 import org.openlmis.stockmanagement.service.notification.NotificationService;
 import org.openlmis.stockmanagement.service.referencedata.SupervisingUsersReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.SupervisoryNodeReferenceDataService;
+import org.openlmis.stockmanagement.service.referencedata.UserReferenceDataService;
 import org.slf4j.ext.XLogger;
 import org.slf4j.ext.XLoggerFactory;
 import org.slf4j.profiler.Profiler;
@@ -45,6 +50,8 @@ public class StockCardNotifier extends BaseNotifier {
 
   @Autowired
   private NotificationService notificationService;
+  @Autowired
+  private UserReferenceDataService userReferenceDataService;
 
   /**
    * Notify users with a certain right for the facility/program that facility has stocked out of a
@@ -91,7 +98,19 @@ public class StockCardNotifier extends BaseNotifier {
     
     XLOGGER.debug("Supervisory node ID = {}", supervisoryNode.getId());
 
-    return supervisingUsersReferenceDataService
-        .findAll(supervisoryNode.getId(), rightId, stockCard.getProgramId());
+    Collection<UserDto> supervisingUsers = Optional
+            .ofNullable(supervisoryNode)
+            .map(node -> supervisingUsersReferenceDataService
+                    .findAll(node.getId(), rightId, programId))
+            .orElse(Collections.emptyList());
+
+    Collection<UserDto> homeUsers = userReferenceDataService
+            .findByRight(rightId, stockCard.getProgramId(), null);
+    Set<UserDto> users = new HashSet<>(supervisingUsers);
+    users.addAll(homeUsers);
+    //return supervisingUsersReferenceDataService
+    //        .findAll(supervisoryNode.getId(), rightId, stockCard.getProgramId());
+    return users;
+
   }
 }
