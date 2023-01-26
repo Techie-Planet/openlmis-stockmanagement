@@ -141,7 +141,8 @@ public class IssueNotifier extends BaseNotifier {
 
     profiler.start("NOTIFY_RECIPIENTS");
     for (UserDto recipient : recipients) {
-      if (receivingFacilityId.equals(recipient.getHomeFacilityId())) {
+      if ((recipient.getHomeFacilityId() != null)
+              && (receivingFacilityId.equals(recipient.getHomeFacilityId()))) {
         valuesMap.put("username", recipient.getUsername());
         XLOGGER.debug("Recipient username = {}", recipient.getUsername());
         notificationService.notify(recipient,
