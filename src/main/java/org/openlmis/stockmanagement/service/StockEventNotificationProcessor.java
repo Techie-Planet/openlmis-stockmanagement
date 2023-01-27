@@ -81,9 +81,7 @@ public class StockEventNotificationProcessor {
     OrderableLotIdentity identity = OrderableLotIdentity.identityOf(eventLine);
     StockCard stockCard = event.getContext().findCard(identity);
 
-    System.out.println("before stockout notifier");
     if (stockCard.getStockOnHand() == 0) { //testing
-      System.out.println("running stockout notifier");
       stockoutNotifier.notifyStockEditors(stockCard, rightId);
     }
     // add issue notification here
