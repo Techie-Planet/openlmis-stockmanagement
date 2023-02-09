@@ -172,6 +172,11 @@ public class IssueNotifier extends BaseNotifier {
                       programId, facilityId));
     }
 
+    Collection<UserDto> supervisingUsers = Optional
+            .ofNullable(supervisoryNode)
+            .map(node -> supervisingUsersReferenceDataService
+                    .findAll(node.getId(), rightId, stockCard.getProgramId()))
+            .orElse(Collections.emptyList());
 
     Collection<UserDto> homeUsers = userReferenceDataService
             .findByRight(rightId, programId, null);
