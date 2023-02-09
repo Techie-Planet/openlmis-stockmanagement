@@ -69,6 +69,9 @@ public class StockEventNotificationProcessor {
     eventDto
         .getLineItems()
         .forEach(line -> callNotifications(eventDto, line, right.getId()));
+    // here, instead of calling issue notifications one after another,
+    // send the whole event to issue notifiier, new method to be created in
+    // issueNotifier to check, sort and send the emails. Time complexity is O(n2)
   }
 
   private void callNotifications(StockEventDto event, StockEventLineItemDto eventLine,
@@ -81,7 +84,7 @@ public class StockEventNotificationProcessor {
     OrderableLotIdentity identity = OrderableLotIdentity.identityOf(eventLine);
     StockCard stockCard = event.getContext().findCard(identity);
 
-    if (stockCard.getStockOnHand() == 0) { //testing
+    if (stockCard.getStockOnHand() == 0) {
       stockoutNotifier.notifyStockEditors(stockCard, rightId);
     }
     // add issue notification here

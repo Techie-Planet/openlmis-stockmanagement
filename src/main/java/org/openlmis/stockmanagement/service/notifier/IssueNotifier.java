@@ -35,6 +35,7 @@ import org.apache.commons.lang.text.StrSubstitutor;
 import org.openlmis.stockmanagement.domain.card.StockCard;
 import org.openlmis.stockmanagement.dto.StockEventDto;
 import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
+import org.openlmis.stockmanagement.dto.referencedata.FacilityDto;
 import org.openlmis.stockmanagement.dto.referencedata.LotDto;
 import org.openlmis.stockmanagement.dto.referencedata.SupervisoryNodeDto;
 import org.openlmis.stockmanagement.dto.referencedata.UserDto;
@@ -43,6 +44,7 @@ import org.openlmis.stockmanagement.repository.NodeRepository;
 import org.openlmis.stockmanagement.service.notification.NotificationService;
 import org.openlmis.stockmanagement.service.notifier.BaseNotifier;
 import org.openlmis.stockmanagement.service.notifier.StockCardNotifier;
+import org.openlmis.stockmanagement.service.referencedata.FacilityReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.LotReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.SupervisingUsersReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.SupervisoryNodeReferenceDataService;
@@ -81,6 +83,8 @@ public class IssueNotifier extends BaseNotifier {
   private NodeRepository nodeRepository;
   @Autowired
   private UserReferenceDataService userReferenceDataService;
+  @Autowired
+  private FacilityReferenceDataService facilityReferenceDataService;
 
   @Value("${email.urlToStockReceive}")
   private String urlToStockReceive;
@@ -133,20 +137,24 @@ public class IssueNotifier extends BaseNotifier {
 
     UUID receivingFacilityId = nodeRepository
             .findById(eventLine.getDestinationId()).get().getReferenceId();
-    Collection<UserDto> recipients = getEditors(
-            stockCard.getProgramId(), receivingFacilityId, rightId);
+    FacilityDto receivingFacility = facilityReferenceDataService.findOne(receivingFacilityId);
+    if (!receivingFacility.getType().getName().equals("Health Facility")) {
 
-    Map<String, String> valuesMap = params.getSubstitutionMap();
-    StrSubstitutor sub = new StrSubstitutor(valuesMap);
+      Collection<UserDto> recipients = getEditors(
+              stockCard.getProgramId(), receivingFacilityId, rightId);
 
-    profiler.start("NOTIFY_RECIPIENTS");
-    for (UserDto recipient : recipients) {
-      if ((recipient.getHomeFacilityId() != null)
-              && (receivingFacilityId.equals(recipient.getHomeFacilityId()))) {
-        valuesMap.put("username", recipient.getUsername());
-        XLOGGER.debug("Recipient username = {}", recipient.getUsername());
-        notificationService.notify(recipient,
-                sub.replace(params.getMessageSubject()), sub.replace(params.getMessageContent()));
+      Map<String, String> valuesMap = params.getSubstitutionMap();
+      StrSubstitutor sub = new StrSubstitutor(valuesMap);
+
+      profiler.start("NOTIFY_RECIPIENTS");
+      for (UserDto recipient : recipients) {
+        if ((recipient.getHomeFacilityId() != null)
+                && (receivingFacilityId.equals(recipient.getHomeFacilityId()))) {
+          valuesMap.put("username", recipient.getUsername());
+          XLOGGER.debug("Recipient username = {}", recipient.getUsername());
+          notificationService.notify(recipient,
+                  sub.replace(params.getMessageSubject()), sub.replace(params.getMessageContent()));
+        }
       }
     }
 
@@ -164,13 +172,6 @@ public class IssueNotifier extends BaseNotifier {
                       programId, facilityId));
     }
 
-    XLOGGER.debug("Supervisory node ID = {}", supervisoryNode.getId());
-
-    Collection<UserDto> supervisingUsers = Optional
-            .ofNullable(supervisoryNode)
-            .map(node -> supervisingUsersReferenceDataService
-                    .findAll(node.getId(), rightId, programId))
-            .orElse(Collections.emptyList());
 
     Collection<UserDto> homeUsers = userReferenceDataService
             .findByRight(rightId, programId, null);
