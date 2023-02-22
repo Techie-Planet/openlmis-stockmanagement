@@ -148,8 +148,8 @@ public class StockCardSummariesV3DtoBuilder {
         CanFulfillForMeEntryExtDto cffm = iterator.next();
 
         Map<String, String> extraData = cffm.getExtraData();
-        if (Objects.isNull(cffm.getExtraData()) ||
-                Objects.isNull(extraData.get("vvmStatus"))) {
+        if (Objects.isNull(cffm.getExtraData())
+                || Objects.isNull(extraData.get("vvmStatus"))) {
           // if no vvm.... leave it
           if (!vvmStatus.equalsIgnoreCase("noVVM")) {
             iterator.remove();
