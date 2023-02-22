@@ -143,16 +143,20 @@ public class StockCardSummariesV3DtoBuilder {
       while (iterator.hasNext()) {
         CanFulfillForMeEntryExtDto cffm = iterator.next();
 
-        if (Objects.isNull(cffm.getExtraData())) {
-          iterator.remove();
+        Map<String, String> extraData = cffm.getExtraData();
+        if (Objects.isNull(cffm.getExtraData()) ||
+                Objects.isNull(extraData.get("vvmStatus"))) {
+          // if no vvm.... leave it
+          if (!vvmStatus.equalsIgnoreCase("noVVM")) {
+            iterator.remove();
+          }
           continue;
         }
 
-        Map<String, String> extraData = cffm.getExtraData();
-        if (Objects.isNull(extraData.get("vvmStatus"))) {
-          iterator.remove();
-          continue;
-        }
+        //if (Objects.isNull(extraData.get("vvmStatus"))) {
+        //  iterator.remove();
+        //  continue;
+        //}
 
         if (!extraData.get("vvmStatus").equalsIgnoreCase(vvmStatus)) {
           iterator.remove();
