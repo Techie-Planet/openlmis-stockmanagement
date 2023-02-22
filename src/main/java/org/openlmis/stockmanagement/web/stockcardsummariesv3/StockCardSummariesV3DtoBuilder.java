@@ -35,7 +35,6 @@ import org.apache.commons.collections4.MapUtils;
 import org.openlmis.stockmanagement.domain.card.StockCard;
 import org.openlmis.stockmanagement.domain.card.StockCardLineItem;
 import org.openlmis.stockmanagement.dto.ObjectReferenceDto;
-import org.openlmis.stockmanagement.dto.referencedata.LotDto;
 import org.openlmis.stockmanagement.dto.referencedata.OrderableDto;
 import org.openlmis.stockmanagement.dto.referencedata.OrderableFulfillDto;
 import org.openlmis.stockmanagement.dto.referencedata.VersionObjectReferenceDto;
@@ -182,7 +181,7 @@ public class StockCardSummariesV3DtoBuilder {
           continue;
         }
 
-        LotDto lot = cffm.getLot();
+        ObjectReferenceDto lot = cffm.getLot();
         if (Objects.isNull(lot.getLotCode())) {
           iterator.remove();
           continue;
