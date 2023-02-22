@@ -35,9 +35,12 @@ import org.apache.commons.collections4.MapUtils;
 import org.openlmis.stockmanagement.domain.card.StockCard;
 import org.openlmis.stockmanagement.domain.card.StockCardLineItem;
 import org.openlmis.stockmanagement.dto.ObjectReferenceDto;
+import org.openlmis.stockmanagement.dto.referencedata.LotDto;
 import org.openlmis.stockmanagement.dto.referencedata.OrderableDto;
 import org.openlmis.stockmanagement.dto.referencedata.OrderableFulfillDto;
 import org.openlmis.stockmanagement.dto.referencedata.VersionObjectReferenceDto;
+import org.openlmis.stockmanagement.service.referencedata.LotReferenceDataService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -51,6 +54,8 @@ public class StockCardSummariesV3DtoBuilder {
 
   @Value("${service.url}")
   private String serviceUrl;
+  @Autowired
+  private LotReferenceDataService lotReferenceDataService;
 
   /**
    * Builds Stock Card Summary dtos from stock cards and orderables.
@@ -181,7 +186,7 @@ public class StockCardSummariesV3DtoBuilder {
           continue;
         }
 
-        ObjectReferenceDto lot = cffm.getLot();
+        LotDto lot = lotReferenceDataService.findOne(cffm.getLot().getId());
         if (Objects.isNull(lot.getLotCode())) {
           iterator.remove();
           continue;
