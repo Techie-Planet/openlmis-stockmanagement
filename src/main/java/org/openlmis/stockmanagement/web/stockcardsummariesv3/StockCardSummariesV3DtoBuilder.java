@@ -35,6 +35,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.openlmis.stockmanagement.domain.card.StockCard;
 import org.openlmis.stockmanagement.domain.card.StockCardLineItem;
 import org.openlmis.stockmanagement.dto.ObjectReferenceDto;
+import org.openlmis.stockmanagement.dto.referencedata.LotDto;
 import org.openlmis.stockmanagement.dto.referencedata.OrderableDto;
 import org.openlmis.stockmanagement.dto.referencedata.OrderableFulfillDto;
 import org.openlmis.stockmanagement.dto.referencedata.VersionObjectReferenceDto;
@@ -66,6 +67,7 @@ public class StockCardSummariesV3DtoBuilder {
                                            List<StockCard> stockCards,
                                            Map<UUID, OrderableFulfillDto> orderables,
                                            String vvmStatus,
+                                           String lotCode,
                                            boolean nonEmptySummariesOnly,
                                            boolean hideZeroItems) {
 
@@ -82,6 +84,10 @@ public class StockCardSummariesV3DtoBuilder {
 
     if (nonEmptySummariesOnly) {
       summariesList = filterNonEmptySummaries(summariesList);
+    }
+    //filter for lotcode
+    if (Objects.nonNull(lotCode)) {
+      summariesList = filterLotCode(summariesList, lotCode);
     }
 
     // return summariesList.sorted().collect(toList());
@@ -138,15 +144,47 @@ public class StockCardSummariesV3DtoBuilder {
         CanFulfillForMeEntryExtDto cffm = iterator.next();
 
         if (Objects.isNull(cffm.getExtraData())) {
+          iterator.remove();
           continue;
         }
 
         Map<String, String> extraData = cffm.getExtraData();
         if (Objects.isNull(extraData.get("vvmStatus"))) {
+          iterator.remove();
           continue;
         }
 
         if (!extraData.get("vvmStatus").equalsIgnoreCase(vvmStatus)) {
+          iterator.remove();
+        }
+      }
+      return summary;
+    });
+
+    return summariesStream.sorted().collect(toList());
+  }
+
+  private List<StockCardSummaryV3Dto> filterLotCode(
+          List<StockCardSummaryV3Dto> summariesList, String lotCode) {
+
+    // Set<CanFulfillForMeEntryExtDto>
+    Stream<StockCardSummaryV3Dto> summariesStream = summariesList.stream().map(summary -> {
+      Iterator<CanFulfillForMeEntryExtDto> iterator = summary.getCanFulfillForMe().iterator();
+      while (iterator.hasNext()) {
+        CanFulfillForMeEntryExtDto cffm = iterator.next();
+
+        if (Objects.isNull(cffm.getLot())) {
+          iterator.remove();
+          continue;
+        }
+
+        LotDto lot = cffm.getLot();
+        if (Objects.isNull(lot.getLotCode())) {
+          iterator.remove();
+          continue;
+        }
+
+        if (!lot.getLotCode().equalsIgnoreCase(lotCode)) {
           iterator.remove();
         }
       }

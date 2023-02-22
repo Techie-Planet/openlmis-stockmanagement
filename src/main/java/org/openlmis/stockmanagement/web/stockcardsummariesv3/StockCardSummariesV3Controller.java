@@ -75,6 +75,7 @@ public class StockCardSummariesV3Controller {
             summaries.getStockCardsForFulfillOrderables(),
             summaries.getOrderableFulfillMap(),
             params.getVvmStatus(),
+            params.getLotCode(),
             params.isNonEmptyOnly(),
             params.isHideZeroItems());
 
