@@ -64,7 +64,7 @@ public class WeeklyReportNotifier {
   @Value("${publicUrl}")
   private String publicUrl;
   private LocalDate weeklyReportDate;
-  private final String sohUrl = "stockmanagement/stockCardSummaries";
+  private final String sohUrl = "/stockmanagement/stockCardSummaries";
   private final String stockAdjust = "STOCK_ADJUST";
   private static final XLogger XLOGGER = XLoggerFactory.getXLogger(WeeklyReportNotifier.class);
 
