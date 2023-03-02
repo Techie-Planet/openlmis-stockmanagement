@@ -51,6 +51,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.openlmis.stockmanagement.domain.JasperTemplate;
 import org.openlmis.stockmanagement.domain.event.StockEvent;
 import org.openlmis.stockmanagement.dto.StockCardDto;
+import org.openlmis.stockmanagement.dto.StockEventDto;
 import org.openlmis.stockmanagement.exception.JasperReportViewException;
 import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
 import org.openlmis.stockmanagement.repository.StockEventsRepository;
@@ -142,6 +143,28 @@ public class JasperReportService {
         facilityReferenceDataService.findOne(stockEvent.get().getFacilityId()));
     params.put("program", programReferenceDataService.findOne(stockEvent.get().getProgramId()));
     params.put("stockEventType", stockEventType);
+    params.put("creationDate", stockEvent.get().getProcessedDate().toLocalDate());
+    params.put("dateFormat", dateFormat);
+    params.put("decimalFormat", createDecimalFormat());
+
+    return fillAndExportReport(compileReportFromTemplateUrl(ISSUE_SUMMARY_REPORT_URL), params);
+  }
+
+  /**
+   * Generate issue summary report in PDF format.
+   *
+   * @param stockEventDto stock event object
+   * @return generated issue summary report.
+   */
+  public byte[] generateIssueSummaryReport(StockEventDto stockEventDto) {
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("transactionId", "DRAFT");
+    params.put("facility",
+            facilityReferenceDataService.findOne(stockEventDto.getFacilityId()));
+    params.put("program", programReferenceDataService.findOne(stockEventDto.getProgramId()));
+    params.put("stockEventType", "issue");
+    params.put("lineItems", stockEventDto.getLineItems());
     params.put("creationDate", stockEvent.get().getProcessedDate().toLocalDate());
     params.put("dateFormat", dateFormat);
     params.put("decimalFormat", createDecimalFormat());

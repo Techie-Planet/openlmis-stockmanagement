@@ -18,6 +18,7 @@ package org.openlmis.stockmanagement.web;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import java.util.UUID;
+import org.openlmis.stockmanagement.dto.StockEventDto;
 import org.openlmis.stockmanagement.service.JasperReportService;
 import org.openlmis.stockmanagement.service.PermissionService;
 import org.slf4j.Logger;
@@ -109,6 +110,27 @@ public class ReportsController {
             .contentType(MediaType.APPLICATION_PDF)
             .header("Content-Disposition",
                     "inline; filename=stock_adjustment_summary" + "_" + stockEventId + ".pdf")
+            .body(report);
+  }
+
+  /**
+   * Print issue summary report before submission.
+   *
+   * @return generated PDF report
+   */
+  @RequestMapping(value = "/issueSummaryBeforeSubmission/print", method = GET)
+  @ResponseBody
+  public ResponseEntity<byte[]> getIssueSummaryBeforeSubmission(
+          @RequestParam("stockEvent") StockEventDto stockEventDto) {
+    LOGGER.info("Try to generate stock issue summary report by before submission.");
+    permissionService.canViewStockCard(stockEventDto.getProgramId(), stockEventDto.getFacilityId());
+    byte[] report = reportService.generateIssueSummaryReport(stockEventDto);
+
+    return ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_PDF)
+            .header("Content-Disposition",
+                    "inline; filename=stock_adjustment_summary" + ".pdf")
             .body(report);
   }
 }
