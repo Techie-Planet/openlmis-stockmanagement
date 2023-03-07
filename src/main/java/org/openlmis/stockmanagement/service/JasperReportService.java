@@ -28,6 +28,7 @@ import java.io.ObjectInputStream;
 import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -50,12 +51,21 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.openlmis.stockmanagement.domain.JasperTemplate;
 import org.openlmis.stockmanagement.domain.event.StockEvent;
+import org.openlmis.stockmanagement.domain.reason.StockCardLineItemReason;
 import org.openlmis.stockmanagement.dto.StockCardDto;
 import org.openlmis.stockmanagement.dto.StockEventDto;
+import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
+import org.openlmis.stockmanagement.dto.referencedata.FacilityDto;
+import org.openlmis.stockmanagement.dto.referencedata.LotDto;
+import org.openlmis.stockmanagement.dto.referencedata.OrderableDto;
 import org.openlmis.stockmanagement.exception.JasperReportViewException;
 import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
+import org.openlmis.stockmanagement.repository.NodeRepository;
+import org.openlmis.stockmanagement.repository.StockCardLineItemReasonRepository;
 import org.openlmis.stockmanagement.repository.StockEventsRepository;
 import org.openlmis.stockmanagement.service.referencedata.FacilityReferenceDataService;
+import org.openlmis.stockmanagement.service.referencedata.LotReferenceDataService;
+import org.openlmis.stockmanagement.service.referencedata.OrderableReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.ProgramReferenceDataService;
 import org.openlmis.stockmanagement.util.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +79,8 @@ public class JasperReportService {
   static final String CARD_SUMMARY_REPORT_URL = "/jasperTemplates/stockCardSummary.jrxml";
   static final String PI_LINES_REPORT_URL = "/jasperTemplates/physicalinventoryLines.jrxml";
   static final String ISSUE_SUMMARY_REPORT_URL = "/jasperTemplates/issueSummary.jrxml";
+  static final String ISSUE_SUMMARY_BEFORE_SUBMISSION_REPORT_URL =
+          "/jasperTemplates/issueSummaryBeforeSubmission.jrxml";
   static final String CRITICAL_STOCK_POINTS_REPORT_URL =
           "/jasperTemplates/criticalStockPoints.jrxml";
 
@@ -85,6 +97,14 @@ public class JasperReportService {
   private FacilityReferenceDataService facilityReferenceDataService;
   @Autowired
   private ProgramReferenceDataService programReferenceDataService;
+  @Autowired
+  private OrderableReferenceDataService orderableReferenceDataService;
+  @Autowired
+  private LotReferenceDataService lotReferenceDataService;
+  @Autowired
+  private NodeRepository nodeRepository;
+  @Autowired
+  private StockCardLineItemReasonRepository stockCardLineItemReasonRepository;
 
   @Autowired
   private DataSource replicationDataSource;
@@ -164,16 +184,17 @@ public class JasperReportService {
             facilityReferenceDataService.findOne(stockEventDto.getFacilityId()));
     params.put("program", programReferenceDataService.findOne(stockEventDto.getProgramId()));
     params.put("stockEventType", "issue");
-    params.put("lineItems", stockEventDto.getLineItems());
-    params.put("creationDate", stockEvent.get().getProcessedDate().toLocalDate());
+    params.put("lineItems", convertLineItemDtosToListOfObjects(stockEventDto.getLineItems()));
+    params.put("creationDate", LocalDate.now());
     params.put("dateFormat", dateFormat);
     params.put("decimalFormat", createDecimalFormat());
 
-    return fillAndExportReport(compileReportFromTemplateUrl(ISSUE_SUMMARY_REPORT_URL), params);
+    return fillAndExportReport(compileReportFromTemplateUrl(
+            ISSUE_SUMMARY_BEFORE_SUBMISSION_REPORT_URL), params);
   }
 
   /**
-   * Generate issue summary report in PDF format.
+   * Generate critical stock points report in PDF format.
    *
    * @return generated issue summary report.
    */
@@ -318,5 +339,31 @@ public class JasperReportService {
                 (o1,o2) -> o1.getFullProductName()
                   .compareTo(o2.getFullProductName())))
             .collect(Collectors.toList());
+  }
+
+  private List<Map<String, Object>> convertLineItemDtosToListOfObjects(
+          List<StockEventLineItemDto> lineItems) {
+    List<Map<String, Object>> lineItemsAsListOfObjects = new ArrayList<>();
+    lineItems.forEach((lineItem) -> {
+      Map<String, Object> mapOfLineItemObjects = new HashMap<>();
+      UUID receivingFacilityId = nodeRepository
+              .findById(lineItem.getDestinationId()).get().getReferenceId();
+      mapOfLineItemObjects.put("orderable",
+              orderableReferenceDataService.findOne(lineItem.getOrderableId()));
+      mapOfLineItemObjects.put("receivingFacility",
+              facilityReferenceDataService.findOne(receivingFacilityId));
+      mapOfLineItemObjects.put("lot", (lineItem.getLotId() != null ?
+              lotReferenceDataService.findOne(lineItem.getLotId()) : "No Lot"));
+      mapOfLineItemObjects.put("vvmStatus",
+              lineItem.getExtraData().get("vvmStatus") != null ?
+                      lineItem.getExtraData().get("vvmStatus") : "N/A");
+      mapOfLineItemObjects.put("reason",
+              stockCardLineItemReasonRepository.findById(lineItem.getReasonId()).get());
+      mapOfLineItemObjects.put("quantity", lineItem.getQuantity());
+
+      lineItemsAsListOfObjects.add(mapOfLineItemObjects);
+    });
+    return lineItemsAsListOfObjects;
+
   }
 }
