@@ -353,11 +353,11 @@ public class JasperReportService {
               orderableReferenceDataService.findOne(lineItem.getOrderableId()));
       mapOfLineItemObjects.put("receivingFacility",
               facilityReferenceDataService.findOne(receivingFacilityId));
-      mapOfLineItemObjects.put("lot", (lineItem.getLotId() != null ?
-              lotReferenceDataService.findOne(lineItem.getLotId()) : "No Lot"));
+      mapOfLineItemObjects.put("lot", (lineItem.getLotId() != null
+              ? lotReferenceDataService.findOne(lineItem.getLotId()) : "No Lot"));
       mapOfLineItemObjects.put("vvmStatus",
-              lineItem.getExtraData().get("vvmStatus") != null ?
-                      lineItem.getExtraData().get("vvmStatus") : "N/A");
+              lineItem.getExtraData().get("vvmStatus") != null
+                      ? lineItem.getExtraData().get("vvmStatus") : "N/A");
       mapOfLineItemObjects.put("reason",
               stockCardLineItemReasonRepository.findById(lineItem.getReasonId()).get());
       mapOfLineItemObjects.put("quantity", lineItem.getQuantity());
