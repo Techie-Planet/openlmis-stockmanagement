@@ -122,7 +122,7 @@ public class ReportsController {
   @RequestMapping(value = "/issueSummaryBeforeSubmission/print", method = POST)
   @ResponseBody
   public ResponseEntity<byte[]> getIssueSummaryBeforeSubmission(
-          @RequestParam("stockEvent") StockEventDto stockEventDto) {
+          @RequestParam("stockEventDto") StockEventDto stockEventDto) {
     LOGGER.info("Try to generate stock issue summary report by before submission.");
     permissionService.canViewStockCard(stockEventDto.getProgramId(), stockEventDto.getFacilityId());
     byte[] report = reportService.generateIssueSummaryReport(stockEventDto);
