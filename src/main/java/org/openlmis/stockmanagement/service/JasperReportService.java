@@ -80,7 +80,7 @@ public class JasperReportService {
   static final String PI_LINES_REPORT_URL = "/jasperTemplates/physicalinventoryLines.jrxml";
   static final String ISSUE_SUMMARY_REPORT_URL = "/jasperTemplates/issueSummary.jrxml";
   static final String ISSUE_SUMMARY_BEFORE_SUBMISSION_REPORT_URL =
-          "/jasperTemplates/issueSummaryBeforeSubmission.jrxml";
+          "/jasperTemplates/issueSummary2.jrxml";
   static final String CRITICAL_STOCK_POINTS_REPORT_URL =
           "/jasperTemplates/criticalStockPoints.jrxml";
 
@@ -353,10 +353,9 @@ public class JasperReportService {
       mapOfLineItemObjects.put("receivingFacility",
               facilityReferenceDataService.findOne(receivingFacilityId));
       mapOfLineItemObjects.put("lot", (lineItem.getLotId() != null ?
-              lotReferenceDataService.findOne(lineItem.getLotId()) : "No Lot"));
+              lotReferenceDataService.findOne(lineItem.getLotId()).getLotCode() : "No Lot"));
       mapOfLineItemObjects.put("vvmStatus",
-              lineItem.getExtraData().get("vvmStatus") != null ?
-                      lineItem.getExtraData().get("vvmStatus") : "N/A");
+              lineItem.getExtraData().get("vvmStatus"));
       mapOfLineItemObjects.put("reason",
               stockCardLineItemReasonRepository.findById(lineItem.getReasonId()).get());
       mapOfLineItemObjects.put("quantity", lineItem.getQuantity());
