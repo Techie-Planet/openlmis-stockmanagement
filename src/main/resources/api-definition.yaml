@@ -440,6 +440,30 @@ traits:
               application/json:
                 schema: localizedMessage
 
+  /issueSummaryBeforeSubmission:
+    /print:
+      post:
+        is: [ secured ]
+        description: Get stock issue summary report to print in PDF before submission.
+        body:
+          application/json:
+            schema: stockEventDto
+        responses:
+          200:
+            description: Stock adjustment report generated successfully.
+            body:
+              application/pdf:
+          404:
+            description: Route not found.
+            body:
+              application/json:
+                schema: localizedMessage
+          403:
+            description: User does not have permission to get stock issue summary report.
+            body:
+              application/json:
+                schema: localizedMessage
+
   /v2/stockCardSummaries:
     get:
       is: [ secured, paginated ]
