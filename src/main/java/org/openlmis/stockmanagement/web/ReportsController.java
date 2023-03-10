@@ -30,6 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -122,7 +123,7 @@ public class ReportsController {
   @RequestMapping(value = "/issueSummaryBeforeSubmission/print", method = POST)
   @ResponseBody
   public ResponseEntity<byte[]> getIssueSummaryBeforeSubmission(
-          @RequestParam("stockEventDto") StockEventDto stockEventDto) {
+          @RequestBody StockEventDto stockEventDto) {
     LOGGER.info("Try to generate stock issue summary report by before submission.");
     permissionService.canViewStockCard(stockEventDto.getProgramId(), stockEventDto.getFacilityId());
     byte[] report = reportService.generateIssueSummaryReport(stockEventDto);
