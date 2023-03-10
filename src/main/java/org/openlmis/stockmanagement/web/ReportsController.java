@@ -16,6 +16,7 @@
 package org.openlmis.stockmanagement.web;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.UUID;
 import org.openlmis.stockmanagement.dto.StockEventDto;
