@@ -29,6 +29,7 @@ import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -352,8 +353,8 @@ public class JasperReportService {
               orderableReferenceDataService.findOne(lineItem.getOrderableId()));
       mapOfLineItemObjects.put("receivingFacility",
               facilityReferenceDataService.findOne(receivingFacilityId));
-      mapOfLineItemObjects.put("lot", (lineItem.getLotId() != null ?
-              lotReferenceDataService.findOne(lineItem.getLotId()).getLotCode() : "No Lot"));
+      mapOfLineItemObjects.put("lot", (lineItem.getLotId() != null
+              ? lotReferenceDataService.findOne(lineItem.getLotId()) : "No Lot"));
       mapOfLineItemObjects.put("vvmStatus",
               lineItem.getExtraData().get("vvmStatus"));
       mapOfLineItemObjects.put("reason",
