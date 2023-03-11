@@ -6,8 +6,11 @@
 	<import value="org.openlmis.stockmanagement.service.referencedata.FacilityReferenceDataService"/>
 	<import value="org.openlmis.stockmanagement.service.referencedata.OrderableReferenceDataService"/>
 	<import value="java.time.format.DateTimeFormatter"/>
+	<import value="java.time.LocalDate"/>
 	<import value="java.time.ZonedDateTime"/>
 	<import value="org.openlmis.stockmanagement.dto.referencedata.FacilityDto"/>
+	<import value="org.openlmis.stockmanagement.dto.referencedata.OrderableDto"/>
+	<import value="org.openlmis.stockmanagement.dto.referencedata.LotDto"/>
 	<import value="org.openlmis.stockmanagement.dto.referencedata.ProgramDto"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<import value="java.text.*"/>
