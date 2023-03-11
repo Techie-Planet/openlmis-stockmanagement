@@ -56,6 +56,7 @@
 	<subDataset name="LineItemDataset" uuid="d30e7c80-bc48-40f0-98c4-960e82d19e87">
 		<parameter name="dateFormat" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="decimalFormat" class="java.text.DecimalFormat" isForPrompting="false"/>
+		<parameter name="stockEventType" class="java.lang.String" isForPrompting="false"/>
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
@@ -86,13 +87,13 @@
 	<parameter name="transactionId" class="java.lang.String" isForPrompting="false">
 		<property name="displayName" value="TransactionId"/>
 	</parameter>
-	<parameter name="lineItems" class="java.lang.List" isForPrompting="false">
+	<parameter name="lineItems" class="java.util.List" isForPrompting="false">
 		<property name="displayName" value="lineItems"/>
 	</parameter>
 	<queryString language="SQL">
 		<![CDATA[]]>
 	</queryString>
-	<field name="lineItems" class="java.lang.List">
+	<field name="lineItems" class="java.util.List">
 		<fieldDescription><![CDATA[lineItems]]></fieldDescription>
 	</field>
 	<background>
