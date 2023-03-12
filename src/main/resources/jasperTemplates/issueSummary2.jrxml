@@ -454,7 +454,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{lineItem}.get("lot") != null ? ((LotDto) $F{lineItem}.get("lot")).getLotCode() : $F{lineItem}.get("lot")]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{lineItem}.get("lot") != null ? ((LotDto) $F{lineItem}.get("lot")).getLotCode() : "N/A"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -487,7 +487,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{lineItem}.get("lot") != null ? DateTimeFormatter.ofPattern($P{dateFormat}).format((LotDto) ((LotDto) $F{lineItem}.get("lot")).getExpirationDate().toString()) : $F{lineItem}.get("lot")]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{lineItem}.get("lot") != null ? DateTimeFormatter.ofPattern($P{dateFormat}).format(((LotDto) $F{lineItem}.get("lot")).getExpirationDate()) : "N/A"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -520,7 +520,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{lineItem}.get("vvmStatus") != null ? $F{lineItem}.get("vvmStatus").replace("STAGE_","").replace("1","I").replace("2", "II").replace("3","III").replace("4", "IV") : "N/A"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{lineItem}.get("vvmStatus") != null ? ((String) $F{lineItem}.get("vvmStatus")).replace("STAGE_","").replace("1","I").replace("2", "II").replace("3","III").replace("4", "IV") : "N/A"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
