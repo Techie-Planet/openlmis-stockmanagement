@@ -354,7 +354,7 @@ public class JasperReportService {
       mapOfLineItemObjects.put("receivingFacility",
               facilityReferenceDataService.findOne(receivingFacilityId));
       mapOfLineItemObjects.put("lot", (lineItem.getLotId() != null
-              ? lotReferenceDataService.findOne(lineItem.getLotId()) : "No Lot"));
+              ? lotReferenceDataService.findOne(lineItem.getLotId()) : null));
       mapOfLineItemObjects.put("vvmStatus",
               lineItem.getExtraData().get("vvmStatus"));
       mapOfLineItemObjects.put("reason",
