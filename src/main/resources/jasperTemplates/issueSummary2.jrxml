@@ -11,6 +11,7 @@
 	<import value="org.openlmis.stockmanagement.dto.referencedata.FacilityDto"/>
 	<import value="org.openlmis.stockmanagement.dto.referencedata.OrderableDto"/>
 	<import value="org.openlmis.stockmanagement.dto.referencedata.LotDto"/>
+	<import value="org.openlmis.stockmanagement.dto.StockCardLineItemReasonDto"/>
 	<import value="org.openlmis.stockmanagement.dto.referencedata.ProgramDto"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<import value="java.text.*"/>
@@ -353,7 +354,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{lineItem}.get("orderable").getProductCode()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[((OrderableDto) $F{lineItem}.get("orderable")).getProductCode()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -386,7 +387,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{lineItem}.get("orderable").getExtraData().get("productType")]]></textFieldExpression>
+								<textFieldExpression><![CDATA[((OrderableDto) $F{lineItem}.get("orderable")).getExtraData().get("productType")]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -420,7 +421,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{lineItem}.get("orderable").getExtraData().get("manufacturer")]]></textFieldExpression>
+								<textFieldExpression><![CDATA[((OrderableDto) $F{lineItem}.get("orderable")).getExtraData().get("manufacturer")]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -453,7 +454,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{lineItem}.get("lot")]]></textFieldExpression>
+								<textFieldExpression><![CDATA[!$F{lineItem}.get("lot").equalsIgnoreCase("No Lot") ? ((LotDto) $F{lineItem}.get("lot")).getLotCode() : $F{lineItem}.get("lot")]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -486,7 +487,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[DateTimeFormatter.ofPattern($P{dateFormat}).format($F{lineItem}.get("lot").getExpirationDate().toString())]]></textFieldExpression>
+								<textFieldExpression><![CDATA[!$F{lineItem}.get("lot").equalsIgnoreCase("No Lot") ? DateTimeFormatter.ofPattern($P{dateFormat}).format((LotDto) ((LotDto) $F{lineItem}.get("lot")).getExpirationDate().toString()) : $F{lineItem}.get("lot")]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -552,7 +553,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{lineItem}.get("receivingFacility").getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[((FacilityDto) $F{lineItem}.get("receivingFacility")).getName()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -578,7 +579,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{lineItem}.get("reason").getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[((StockCardLineItemReasonDto) $F{lineItem}.get("reason")).getName()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
