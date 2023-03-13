@@ -369,7 +369,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[((OrderableDto) $F{orderable}.getProductCode()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{orderable}.getProductCode()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
