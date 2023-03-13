@@ -185,7 +185,10 @@ public class JasperReportService {
             facilityReferenceDataService.findOne(stockEventDto.getFacilityId()));
     params.put("program", programReferenceDataService.findOne(stockEventDto.getProgramId()));
     params.put("stockEventType", "issue");
-    params.put("lineItems", convertLineItemDtosToListOfObjects(stockEventDto.getLineItems()));
+    List<Map<String, Object>> lineItemDtosToListOfObjects =
+            convertLineItemDtosToListOfObjects(stockEventDto.getLineItems());
+    System.out.println(lineItemDtosToListOfObjects);
+    params.put("lineItems", lineItemDtosToListOfObjects);
     params.put("creationDate", LocalDate.now());
     params.put("dateFormat", dateFormat);
     params.put("decimalFormat", createDecimalFormat());
@@ -344,6 +347,7 @@ public class JasperReportService {
 
   private List<Map<String, Object>> convertLineItemDtosToListOfObjects(
           List<StockEventLineItemDto> lineItems) {
+    System.out.println("converting line items");
     List<Map<String, Object>> lineItemsAsListOfObjects = new ArrayList<>();
     lineItems.forEach((lineItem) -> {
       Map<String, Object> mapOfLineItemObjects = new HashMap<>();

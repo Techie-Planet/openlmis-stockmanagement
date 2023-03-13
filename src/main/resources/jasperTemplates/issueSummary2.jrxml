@@ -51,12 +51,6 @@
 			<![CDATA[]]>
 		</queryString>
 	</subDataset>
-	<subDataset name="Dataset1" uuid="2a58c41b-e89f-44df-becd-cb33996084f8">
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-		<queryString>
-			<![CDATA[]]>
-		</queryString>
-	</subDataset>
 	<subDataset name="LineItemDataset" uuid="d30e7c80-bc48-40f0-98c4-960e82d19e87">
 		<parameter name="dateFormat" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="decimalFormat" class="java.text.DecimalFormat" isForPrompting="false"/>
