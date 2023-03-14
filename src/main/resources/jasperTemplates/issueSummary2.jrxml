@@ -79,7 +79,7 @@
 		<field name="vvmStatus" class="java.lang.String">
 			<fieldDescription><![CDATA[vvmStatus]]></fieldDescription>
 		</field>
-		<field name="reason" class="org.openlmis.stockmanagement.dto.StockCardLineItemReasonDto">
+		<field name="reason" class="org.openlmis.stockmanagement.domain.reason.StockCardLineItemReason">
 			<fieldDescription><![CDATA[reason]]></fieldDescription>
 		</field>
 		<field name="quantity" class="java.lang.Integer">
@@ -402,7 +402,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{orderable}.getExtraData().get("productType") != null ? ((OrderableDto) $F{orderable}).getExtraData().get("productType") : "N/A"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{orderable}.getExtraData().get("productType") != null ? $F{orderable}.getExtraData().get("productType") : "N/A"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -436,7 +436,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{orderable}.getExtraData().get("productType") != null ? ((OrderableDto) $F{orderable}).getExtraData().get("manufacturer") : "N/A"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{orderable}.getExtraData().get("productType") != null ? $F{orderable}.getExtraData().get("manufacturer") : "N/A"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -469,7 +469,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{lot} != null ? ((LotDto) $F{lot}).getLotCode() : "N/A"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{lot} != null ? $F{lot}.getLotCode() : "N/A"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -502,7 +502,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{lot} != null ? DateTimeFormatter.ofPattern($P{dateFormat}).format(((LotDto) $F{lot}).getExpirationDate()) : "N/A"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{lot} != null ? DateTimeFormatter.ofPattern($P{dateFormat}).format($F{lot}.getExpirationDate()) : "N/A"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -535,7 +535,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{vvmStatus} != null ? ((String) $F{vvmStatus}).replace("STAGE_","").replace("1","I").replace("2", "II").replace("3","III").replace("4", "IV") : "N/A"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{vvmStatus} != null ? $F{vvmStatus}.replace("STAGE_","").replace("1","I").replace("2", "II").replace("3","III").replace("4", "IV") : "N/A"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -568,7 +568,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[((FacilityDto) $F{receivingFacility}).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{receivingFacility}.getName()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -594,7 +594,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[((StockCardLineItemReasonDto) $F{reason}).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{reason}.getName()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
