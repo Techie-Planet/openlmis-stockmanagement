@@ -192,6 +192,7 @@ public class JasperReportService {
     params.put("creationDate", LocalDate.now());
     params.put("dateFormat", dateFormat);
     params.put("decimalFormat", createDecimalFormat());
+    params.put("isIssueSummary", true);
 
     return fillAndExportReport(compileReportFromTemplateUrl(
             ISSUE_SUMMARY_BEFORE_SUBMISSION_REPORT_URL), params);
@@ -275,7 +276,7 @@ public class JasperReportService {
       if (params.containsKey(PARAM_DATASOURCE)) {
         jasperPrint = JasperFillManager.fillReport(compiledReport, params,
                 new JRBeanCollectionDataSource((List<StockCardDto>) params.get(PARAM_DATASOURCE)));
-      } else if (params.containsKey("stockCardSummaries")) {
+      } else if (params.containsKey("stockCardSummaries") || params.containsKey("isIssueSummary")) {
         jasperPrint = JasperFillManager.fillReport(compiledReport, params,
                 new JREmptyDataSource());
       } else {
