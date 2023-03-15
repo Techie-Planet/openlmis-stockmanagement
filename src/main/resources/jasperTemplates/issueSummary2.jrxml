@@ -436,7 +436,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{orderable}.getExtraData().get("productType") != null ? $F{orderable}.getExtraData().get("manufacturer") : "N/A"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{orderable}.getExtraData().get("manufacturer") != null ? $F{orderable}.getExtraData().get("manufacturer") : "N/A"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
