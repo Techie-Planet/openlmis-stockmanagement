@@ -63,6 +63,7 @@
 	<subDataset name="LineItemDataset" uuid="d30e7c80-bc48-40f0-98c4-960e82d19e87">
 		<parameter name="dateFormat" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="decimalFormat" class="java.text.DecimalFormat" isForPrompting="false"/>
+		<parameter name="stockEventType" class="java.lang.String" isForPrompting="false"/>
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
@@ -291,6 +292,9 @@
 						</datasetParameter>
 						<datasetParameter name="decimalFormat">
 							<datasetParameterExpression><![CDATA[$P{decimalFormat}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="stockEventType">
+							<datasetParameterExpression><![CDATA[$P{stockEventType}]]></datasetParameterExpression>
 						</datasetParameter>
 						<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{lineItems})]]></dataSourceExpression>
 					</datasetRun>
