@@ -442,7 +442,7 @@ traits:
 
   /issueSummaryBeforeSubmission:
     /print:
-      post:
+      get:
         is: [ secured ]
         description: Get stock issue summary report to print in PDF before submission.
         body:
