@@ -177,14 +177,14 @@ public class JasperReportService {
    * @param stockEventDto stock event object
    * @return generated issue summary report.
    */
-  public byte[] generateIssueSummaryReport(StockEventDto stockEventDto) {
+  public byte[] generateIssueSummaryReport(StockEventDto stockEventDto, String stockEventType) {
 
     Map<String, Object> params = new HashMap<>();
     params.put("transactionId", "DRAFT");
     params.put("facility",
             facilityReferenceDataService.findOne(stockEventDto.getFacilityId()));
     params.put("program", programReferenceDataService.findOne(stockEventDto.getProgramId()));
-    params.put("stockEventType", "issue");
+    params.put("stockEventType", stockEventType);
     List<Map<String, Object>> lineItemDtosToListOfObjects =
             convertLineItemDtosToListOfObjects(stockEventDto.getLineItems());
     System.out.println(lineItemDtosToListOfObjects);
