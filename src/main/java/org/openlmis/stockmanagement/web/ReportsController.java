@@ -120,7 +120,7 @@ public class ReportsController {
    *
    * @return generated PDF report
    */
-  @RequestMapping(value = "/issueSummaryBeforeSubmission/print", method = POST)
+  @RequestMapping(value = "/issueSummaryBeforeSubmission/print", method = GET)
   @ResponseBody
   public ResponseEntity<byte[]> getIssueSummaryBeforeSubmission(
           @RequestBody StockEventDto stockEventDto) {
