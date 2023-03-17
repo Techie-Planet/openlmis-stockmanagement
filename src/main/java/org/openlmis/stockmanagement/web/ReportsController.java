@@ -124,11 +124,10 @@ public class ReportsController {
   @RequestMapping(value = "/issueSummaryBeforeSubmission/print", method = POST)
   @ResponseBody
   public ResponseEntity<String> getIssueSummaryBeforeSubmission(
-          @RequestParam("stockEventType") String stockEventType,
           @RequestBody StockEventDto stockEventDto) {
     LOGGER.info("Try to generate stock issue summary report by before submission.");
     permissionService.canViewStockCard(stockEventDto.getProgramId(), stockEventDto.getFacilityId());
-    byte[] report = reportService.generateIssueSummaryReport(stockEventDto, stockEventType);
+    byte[] report = reportService.generateIssueSummaryReport(stockEventDto);
     String reportToBase64 = Base64.getEncoder().encodeToString(report);
 
     return ResponseEntity
