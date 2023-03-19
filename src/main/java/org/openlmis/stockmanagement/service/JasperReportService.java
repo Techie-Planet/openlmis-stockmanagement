@@ -52,10 +52,10 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.openlmis.stockmanagement.domain.JasperTemplate;
 import org.openlmis.stockmanagement.domain.event.StockEvent;
-import org.openlmis.stockmanagement.dto.referencedata.OrderableDto;
 import org.openlmis.stockmanagement.dto.StockCardDto;
 import org.openlmis.stockmanagement.dto.StockEventDto;
 import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
+import org.openlmis.stockmanagement.dto.referencedata.OrderableDto;
 import org.openlmis.stockmanagement.exception.JasperReportViewException;
 import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
 import org.openlmis.stockmanagement.repository.NodeRepository;
@@ -372,7 +372,7 @@ public class JasperReportService {
   private List<String> getProductTypesSummary(List<StockEventLineItemDto> lineItems) {
     List<String> listOfSummaries = new ArrayList<>();
     Map<String, Integer> mapOfProductTypesAndQuantities = new HashMap<>();
-    lineItems.forEach((lineItem)->{
+    lineItems.forEach((lineItem) -> {
       OrderableDto orderableDto = orderableReferenceDataService
               .findOne(lineItem.getOrderableId());
       String productType = orderableDto.getExtraData().get("productType");
@@ -395,8 +395,8 @@ public class JasperReportService {
 
     mapOfProductTypesAndQuantities.entrySet().stream()
             .sorted(Map.Entry.comparingByKey())
-            .forEach(entry -> listOfSummaries.add("Total doses of " +
-                    entry.getKey() + ":        " + entry.getValue()));
+            .forEach(entry -> listOfSummaries.add("Total doses of "
+                    + entry.getKey() + ":        " + entry.getValue()));
     return listOfSummaries;
   }
 }
