@@ -14,17 +14,17 @@
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<import value="org.openlmis.stockmanagement.service.referencedata.FacilityReferenceDataService"/>
 	<import value="org.openlmis.stockmanagement.service.referencedata.OrderableReferenceDataService"/>
-	<import value="java.time.format.DateTimeFormatter"/>
-	<import value="java.time.LocalDate"/>
 	<import value="java.time.ZonedDateTime"/>
-	<import value="org.openlmis.stockmanagement.dto.referencedata.FacilityDto"/>
-	<import value="org.openlmis.stockmanagement.dto.referencedata.OrderableDto"/>
 	<import value="org.openlmis.stockmanagement.dto.referencedata.LotDto"/>
-	<import value="org.openlmis.stockmanagement.dto.StockCardLineItemReasonDto"/>
 	<import value="org.openlmis.stockmanagement.dto.referencedata.ProgramDto"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<import value="java.text.*"/>
 	<import value="java.time.ZoneId"/>
+	<import value="org.openlmis.stockmanagement.dto.referencedata.OrderableDto"/>
+	<import value="java.time.format.DateTimeFormatter"/>
+	<import value="java.time.LocalDate"/>
+	<import value="org.openlmis.stockmanagement.dto.StockCardLineItemReasonDto"/>
+	<import value="org.openlmis.stockmanagement.dto.referencedata.FacilityDto"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
@@ -53,9 +53,6 @@
 		</box>
 	</style>
 	<subDataset name="summary" uuid="f1d8cfe5-8173-4124-a76e-5864159057a8">
-		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-		<parameter name="stockEventIdSub" class="java.lang.String"/>
 		<queryString language="SQL">
 			<![CDATA[]]>
 		</queryString>
@@ -94,12 +91,6 @@
 	<parameter name="facility" class="org.openlmis.stockmanagement.dto.referencedata.FacilityDto" isForPrompting="false">
 		<property name="displayName" value="Facility"/>
 	</parameter>
-	<parameter name="facilityReferenceDataService" class="org.openlmis.stockmanagement.service.referencedata.FacilityReferenceDataService" isForPrompting="false">
-		<property name="displayName" value="facilityReferenceDataService"/>
-	</parameter>
-	<parameter name="orderableReferenceDataService" class="org.openlmis.stockmanagement.service.referencedata.OrderableReferenceDataService" isForPrompting="false">
-		<property name="displayName" value="orderableReferenceDataService"/>
-	</parameter>
 	<parameter name="program" class="org.openlmis.stockmanagement.dto.referencedata.ProgramDto" isForPrompting="false">
 		<property name="displayName" value="Program"/>
 	</parameter>
@@ -111,6 +102,9 @@
 	</parameter>
 	<parameter name="lineItems" class="java.util.List" isForPrompting="false">
 		<property name="displayName" value="lineItems"/>
+	</parameter>
+	<parameter name="listOfSummaries" class="java.util.List" isForPrompting="false">
+		<property name="displayName" value="listOfSummaries"/>
 	</parameter>
 	<queryString language="SQL">
 		<![CDATA[]]>
@@ -303,7 +297,7 @@
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="84" height="30" uuid="528d7e99-bbea-4fc2-9f57-a84955b5c686"/>
+								<reportElement mode="Transparent" x="0" y="0" width="84" height="30" uuid="528d7e99-bbea-4fc2-9f57-a84955b5c686"/>
 								<box>
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -325,7 +319,7 @@
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="84" height="30" uuid="3442e65e-4567-4aa5-9baf-75de733717ed"/>
+								<reportElement mode="Transparent" x="0" y="0" width="84" height="30" uuid="3442e65e-4567-4aa5-9baf-75de733717ed"/>
 								<box padding="2">
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -342,7 +336,7 @@
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="82" height="30" uuid="ec87f6ea-309a-4401-8940-96349091d86a"/>
+								<reportElement mode="Transparent" x="0" y="0" width="82" height="30" uuid="ec87f6ea-309a-4401-8940-96349091d86a"/>
 								<box>
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -364,7 +358,7 @@
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="82" height="30" uuid="f0f02791-44c8-44d8-96e0-15d78068606b"/>
+								<reportElement mode="Transparent" x="0" y="0" width="82" height="30" uuid="f0f02791-44c8-44d8-96e0-15d78068606b"/>
 								<box padding="2">
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -381,7 +375,7 @@
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 							<staticText>
-								<reportElement x="0" y="0" width="85" height="30" uuid="0ec436e5-75b7-4829-ba5e-ec04c9c513dc"/>
+								<reportElement mode="Transparent" x="0" y="0" width="85" height="30" uuid="0ec436e5-75b7-4829-ba5e-ec04c9c513dc"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -397,7 +391,7 @@
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="85" height="30" uuid="45281874-eba8-42a9-824b-62e4b04cdf75"/>
+								<reportElement mode="Transparent" x="0" y="0" width="85" height="30" uuid="45281874-eba8-42a9-824b-62e4b04cdf75"/>
 								<box padding="2">
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -414,7 +408,7 @@
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="98" height="30" uuid="e7e53351-886d-4831-a2ce-11702f5a04fb"/>
+								<reportElement mode="Transparent" x="0" y="0" width="98" height="30" uuid="e7e53351-886d-4831-a2ce-11702f5a04fb"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -431,7 +425,7 @@
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="98" height="30" uuid="2237b77f-d8d1-40c8-9a3c-350b740eecd2"/>
+								<reportElement mode="Transparent" x="0" y="0" width="98" height="30" uuid="2237b77f-d8d1-40c8-9a3c-350b740eecd2"/>
 								<box padding="2">
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -448,7 +442,7 @@
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="81" height="30" uuid="b3db6488-20ac-4da7-b6b7-115d6523e904"/>
+								<reportElement mode="Transparent" x="0" y="0" width="81" height="30" uuid="b3db6488-20ac-4da7-b6b7-115d6523e904"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -464,7 +458,7 @@
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="81" height="30" uuid="109c656e-5a92-4ab3-9578-cf1e39ee1e3d"/>
+								<reportElement mode="Transparent" x="0" y="0" width="81" height="30" uuid="109c656e-5a92-4ab3-9578-cf1e39ee1e3d"/>
 								<box padding="2">
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -481,7 +475,7 @@
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="79" height="30" uuid="3fc0ffa4-44ed-4cfa-9731-88a9143a7317"/>
+								<reportElement mode="Transparent" x="0" y="0" width="79" height="30" uuid="3fc0ffa4-44ed-4cfa-9731-88a9143a7317"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -497,7 +491,7 @@
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="79" height="30" uuid="2b8cc7f3-6461-4122-b530-cdacfa242a8c"/>
+								<reportElement mode="Transparent" x="0" y="0" width="79" height="30" uuid="2b8cc7f3-6461-4122-b530-cdacfa242a8c"/>
 								<box padding="2">
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -514,7 +508,7 @@
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="65" height="30" uuid="b28203ef-4c5f-486e-bb26-2026c7c96cf6"/>
+								<reportElement mode="Transparent" x="0" y="0" width="65" height="30" uuid="b28203ef-4c5f-486e-bb26-2026c7c96cf6"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -530,7 +524,7 @@
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="65" height="30" uuid="5629b2c0-76c4-4e54-b053-9bc829d12719"/>
+								<reportElement mode="Transparent" x="0" y="0" width="65" height="30" uuid="5629b2c0-76c4-4e54-b053-9bc829d12719"/>
 								<box padding="2">
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -547,7 +541,7 @@
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<textField>
-								<reportElement x="0" y="0" width="105" height="30" uuid="b1d5a195-aa6d-4c0b-8d1d-2035abe5688f"/>
+								<reportElement mode="Transparent" x="0" y="0" width="105" height="30" uuid="b1d5a195-aa6d-4c0b-8d1d-2035abe5688f"/>
 								<textElement>
 									<font isBold="true"/>
 								</textElement>
@@ -563,7 +557,7 @@
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="105" height="30" uuid="ef145284-93eb-4f5f-a9a6-b3c979a527e1"/>
+								<reportElement mode="Transparent" x="0" y="0" width="105" height="30" uuid="ef145284-93eb-4f5f-a9a6-b3c979a527e1"/>
 								<box padding="2">
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -580,7 +574,7 @@
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="71" height="30" uuid="7260424e-efc3-407f-979c-15a3cf945c94"/>
+								<reportElement mode="Transparent" x="0" y="0" width="71" height="30" uuid="7260424e-efc3-407f-979c-15a3cf945c94"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -589,7 +583,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="71" height="30" uuid="02034fc6-e168-4356-a6b7-7e407fbe734c"/>
+								<reportElement mode="Transparent" x="0" y="0" width="71" height="30" uuid="02034fc6-e168-4356-a6b7-7e407fbe734c"/>
 								<box padding="2">
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -606,7 +600,7 @@
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="52" height="30" uuid="23909a7c-5c5b-4f67-b68e-3d87032d0be5"/>
+								<reportElement mode="Transparent" x="0" y="0" width="52" height="30" uuid="23909a7c-5c5b-4f67-b68e-3d87032d0be5"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -615,7 +609,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="52" height="30" uuid="388b946b-77c1-4f08-ac53-cc5853f54768"/>
+								<reportElement mode="Transparent" x="0" y="0" width="52" height="30" uuid="388b946b-77c1-4f08-ac53-cc5853f54768"/>
 								<box padding="2">
 									<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -631,7 +625,27 @@
 			</componentElement>
 		</band>
 	</detail>
-	<pageFooter>
-		<band height="54" splitType="Stretch"/>
-	</pageFooter>
+	<summary>
+		<band height="134">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<componentElement>
+				<reportElement mode="Transparent" x="0" y="84" width="370" height="30" uuid="1c246806-d8e6-429f-a5a4-4c583a25f675"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="summary" uuid="254b903a-978a-487b-b59f-2a7d79aaf8f6">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{listOfSummaries})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="30" width="370"/>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement x="0" y="50" width="180" height="30" uuid="2e8983d9-32a0-4675-bab0-9d92e60d7eec">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Summary]]></text>
+			</staticText>
+		</band>
+	</summary>
 </jasperReport>

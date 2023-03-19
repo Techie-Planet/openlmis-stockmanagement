@@ -52,13 +52,10 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.openlmis.stockmanagement.domain.JasperTemplate;
 import org.openlmis.stockmanagement.domain.event.StockEvent;
-import org.openlmis.stockmanagement.domain.reason.StockCardLineItemReason;
+import org.openlmis.stockmanagement.dto.referencedata.OrderableDto;
 import org.openlmis.stockmanagement.dto.StockCardDto;
 import org.openlmis.stockmanagement.dto.StockEventDto;
 import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
-import org.openlmis.stockmanagement.dto.referencedata.FacilityDto;
-import org.openlmis.stockmanagement.dto.referencedata.LotDto;
-import org.openlmis.stockmanagement.dto.referencedata.OrderableDto;
 import org.openlmis.stockmanagement.exception.JasperReportViewException;
 import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
 import org.openlmis.stockmanagement.repository.NodeRepository;
@@ -192,7 +189,7 @@ public class JasperReportService {
     params.put("creationDate", LocalDate.now());
     params.put("dateFormat", dateFormat);
     params.put("decimalFormat", createDecimalFormat());
-    params.put("isIssueSummary", true);
+    params.put("listOfSummaries", getProductTypesSummary(stockEventDto.getLineItems()));
 
     return fillAndExportReport(compileReportFromTemplateUrl(
             ISSUE_SUMMARY_BEFORE_SUBMISSION_REPORT_URL), params);
@@ -370,5 +367,36 @@ public class JasperReportService {
     });
     return lineItemsAsListOfObjects;
 
+  }
+
+  private List<String> getProductTypesSummary(List<StockEventLineItemDto> lineItems) {
+    List<String> listOfSummaries = new ArrayList<>();
+    Map<String, Integer> mapOfProductTypesAndQuantities = new HashMap<>();
+    lineItems.forEach((lineItem)->{
+      OrderableDto orderableDto = orderableReferenceDataService
+              .findOne(lineItem.getOrderableId());
+      String productType = orderableDto.getExtraData().get("productType");
+      if (productType != null && !productType.isEmpty()) {
+        if (mapOfProductTypesAndQuantities.get(productType) != null) {
+          mapOfProductTypesAndQuantities.put(productType,
+                  mapOfProductTypesAndQuantities.get(productType) + lineItem.getQuantity());
+        } else {
+          mapOfProductTypesAndQuantities.put(productType, lineItem.getQuantity());
+        }
+      } else {
+        if (mapOfProductTypesAndQuantities.get("N/A") != null) {
+          mapOfProductTypesAndQuantities.put("N/A",
+                  mapOfProductTypesAndQuantities.get("N/A") + lineItem.getQuantity());
+        } else {
+          mapOfProductTypesAndQuantities.put("N/A", lineItem.getQuantity());
+        }
+      }
+    });
+
+    mapOfProductTypesAndQuantities.entrySet().stream()
+            .sorted(Map.Entry.comparingByKey())
+            .forEach(entry -> listOfSummaries.add("Total doses of " +
+                    entry.getKey() + ":        " + entry.getValue()));
+    return listOfSummaries;
   }
 }
