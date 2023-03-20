@@ -632,7 +632,7 @@
 						<textField>
 							<reportElement x="0" y="0" width="370" height="30" uuid="be3f56fc-f1f3-4ee7-8738-30c773516171"/>
 							<textElement textAlignment="Left" verticalAlignment="Middle"/>
-							<textFieldExpression><![CDATA[$P{listOfsummaries}.get($V{REPORT_COUNT}-1)]]></textFieldExpression>
+							<textFieldExpression><![CDATA[$P{listOfSummaries}.get($V{REPORT_COUNT}-1)]]></textFieldExpression>
 						</textField>
 					</jr:listContents>
 				</jr:list>
