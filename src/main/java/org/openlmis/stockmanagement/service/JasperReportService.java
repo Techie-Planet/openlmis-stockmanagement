@@ -175,6 +175,7 @@ public class JasperReportService {
    * @return generated issue summary report.
    */
   public byte[] generateIssueSummaryReport(StockEventDto stockEventDto) {
+    System.out.println(stockEventDto);
 
     Map<String, Object> params = new HashMap<>();
     params.put("transactionId", "DRAFT");
