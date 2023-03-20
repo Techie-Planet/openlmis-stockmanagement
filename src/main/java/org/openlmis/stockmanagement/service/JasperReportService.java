@@ -364,7 +364,7 @@ public class JasperReportService {
       mapOfLineItemObjects.put("vvmStatus",
               lineItem.getExtraData().get("vvmStatus"));
       mapOfLineItemObjects.put("manufacturer",
-              lineItem.getExtraData().get("manufacturer"));
+              lineItem.getExtraData().get("productManufacturer"));
       mapOfLineItemObjects.put("reason",
               stockCardLineItemReasonRepository.findById(lineItem.getReasonId()).get());
       mapOfLineItemObjects.put("quantity", lineItem.getQuantity());

@@ -32,13 +32,13 @@
 			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
 		</box>
 	</style>
-	<style name="Table_CH" mode="Opaque" backcolor="#FFFFFF">
+	<style name="Table_CH" mode="Transparent">
 		<box>
-			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
-			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
 	<style name="Table_TD" mode="Transparent">
@@ -628,7 +628,15 @@
 					<datasetRun subDataset="summary" uuid="254b903a-978a-487b-b59f-2a7d79aaf8f6">
 						<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{listOfSummaries})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:listContents height="30" width="370"/>
+					<jr:listContents height="30" width="370">
+					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+						<reportElement mode="Transparent" x="0" y="0" width="200" height="30" uuid="388b946b-77c1-4f08-ac53-cc5853f54768"/>
+						<box padding="2">
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle"/>
+						<textFieldExpression><![CDATA[$P{listOfSummaries}.get($P{REPORT_COUNT - 1})]]></textFieldExpression>
+					</textField>
+					</jr:listContents>
 				</jr:list>
 			</componentElement>
 			<staticText>
