@@ -629,13 +629,11 @@
 						<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{listOfSummaries})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:listContents height="30" width="370">
-					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-						<reportElement mode="Transparent" x="0" y="0" width="200" height="30" uuid="388b946b-77c1-4f08-ac53-cc5853f54768"/>
-						<box padding="2">
-						</box>
-						<textElement textAlignment="Center" verticalAlignment="Middle"/>
-						<textFieldExpression><![CDATA[$P{listOfSummaries}.get($P{REPORT_COUNT - 1})]]></textFieldExpression>
-					</textField>
+						<textField>
+							<reportElement x="0" y="0" width="370" height="30" uuid="be3f56fc-f1f3-4ee7-8738-30c773516171"/>
+							<textElement textAlignment="Left" verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$P{listOfsummaries}.get($V{REPORT_COUNT}-1)]]></textFieldExpression>
+						</textField>
 					</jr:listContents>
 				</jr:list>
 			</componentElement>
