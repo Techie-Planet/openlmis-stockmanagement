@@ -609,7 +609,6 @@
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement mode="Transparent" x="0" y="0" width="52" height="30" uuid="388b946b-77c1-4f08-ac53-cc5853f54768"/>
 								<box padding="2">
-
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
