@@ -50,32 +50,6 @@
 			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
 		</box>
 	</style>
-	<parameter name="stockEventId" class="java.lang.String"/>
-	<parameter name="dateFormat" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="dateTimeFormat" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="stockEventType" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="decimalFormat" class="java.text.DecimalFormat" isForPrompting="false"/>
-	<parameter name="facility" class="org.openlmis.stockmanagement.dto.referencedata.FacilityDto" isForPrompting="false">
-		<property name="displayName" value="Facility"/>
-	</parameter>
-	<parameter name="program" class="org.openlmis.stockmanagement.dto.referencedata.ProgramDto" isForPrompting="false">
-		<property name="displayName" value="Program"/>
-	</parameter>
-	<parameter name="creationDate" class="java.time.LocalDate" isForPrompting="false">
-		<property name="displayName" value="CreationDate"/>
-	</parameter>
-	<parameter name="transactionId" class="java.lang.String" isForPrompting="false">
-		<property name="displayName" value="TransactionId"/>
-	</parameter>
-	<parameter name="lineItems" class="java.util.List" isForPrompting="false">
-		<property name="displayName" value="lineItems"/>
-	</parameter>
-	<parameter name="listOfSummaries" class="java.util.List" isForPrompting="false">
-		<property name="displayName" value="listOfSummaries"/>
-	</parameter>
-	<queryString language="SQL">
-		<![CDATA[]]>
-	</queryString>
 	<subDataset name="summary" uuid="f1d8cfe5-8173-4124-a76e-5864159057a8">
 		<queryString language="SQL">
 			<![CDATA[]]>
@@ -107,6 +81,32 @@
 			<fieldDescription><![CDATA[quantity]]></fieldDescription>
 		</field>
 	</subDataset>
+	<parameter name="stockEventId" class="java.lang.String"/>
+	<parameter name="dateFormat" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="dateTimeFormat" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="stockEventType" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="decimalFormat" class="java.text.DecimalFormat" isForPrompting="false"/>
+	<parameter name="facility" class="org.openlmis.stockmanagement.dto.referencedata.FacilityDto" isForPrompting="false">
+		<property name="displayName" value="Facility"/>
+	</parameter>
+	<parameter name="program" class="org.openlmis.stockmanagement.dto.referencedata.ProgramDto" isForPrompting="false">
+		<property name="displayName" value="Program"/>
+	</parameter>
+	<parameter name="creationDate" class="java.time.LocalDate" isForPrompting="false">
+		<property name="displayName" value="CreationDate"/>
+	</parameter>
+	<parameter name="transactionId" class="java.lang.String" isForPrompting="false">
+		<property name="displayName" value="TransactionId"/>
+	</parameter>
+	<parameter name="lineItems" class="java.util.List" isForPrompting="false">
+		<property name="displayName" value="lineItems"/>
+	</parameter>
+	<parameter name="listOfSummaries" class="java.util.List" isForPrompting="false">
+		<property name="displayName" value="listOfSummaries"/>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[]]>
+	</queryString>
 	<background>
 		<band height="390" splitType="Stretch">
 			<image>
