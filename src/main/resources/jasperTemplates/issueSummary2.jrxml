@@ -51,6 +51,9 @@
 		</box>
 	</style>
 	<subDataset name="summary" uuid="f1d8cfe5-8173-4124-a76e-5864159057a8">
+		<parameter name="listOfSummaries" class="java.util.List" isForPrompting="false">
+			<property name="displayName" value="listOfSummaries"/>
+		</parameter>
 		<queryString language="SQL">
 			<![CDATA[]]>
 		</queryString>
