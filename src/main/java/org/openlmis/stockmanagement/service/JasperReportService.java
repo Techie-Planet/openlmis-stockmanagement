@@ -276,7 +276,8 @@ public class JasperReportService {
       if (params.containsKey(PARAM_DATASOURCE)) {
         jasperPrint = JasperFillManager.fillReport(compiledReport, params,
                 new JRBeanCollectionDataSource((List<StockCardDto>) params.get(PARAM_DATASOURCE)));
-      } else if (params.containsKey("stockCardSummaries") || params.containsKey("listOfSummaries")) {
+      } else if (params.containsKey("stockCardSummaries")
+              || params.containsKey("listOfSummaries")) {
         jasperPrint = JasperFillManager.fillReport(compiledReport, params,
                 new JREmptyDataSource());
       } else {
