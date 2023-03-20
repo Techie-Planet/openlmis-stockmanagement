@@ -285,9 +285,6 @@
 						<datasetParameter name="decimalFormat">
 							<datasetParameterExpression><![CDATA[$P{decimalFormat}]]></datasetParameterExpression>
 						</datasetParameter>
-						<datasetParameter name="stockEventType">
-							<datasetParameterExpression><![CDATA[$P{stockEventType}]]></datasetParameterExpression>
-						</datasetParameter>
 						<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{lineItems})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="84" uuid="7a732a0d-a24a-4968-adbd-c89871de6e04">
