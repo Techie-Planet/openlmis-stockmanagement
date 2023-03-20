@@ -434,7 +434,7 @@
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{orderable}.getExtraData().get("manufacturer") != null ? $F{orderable}.getExtraData().get("manufacturer") : "N/A"]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{orderable}.getExtraData().get("productManufacturer") != null ? $F{orderable}.getExtraData().get("productManufacturer") : "N/A"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -543,9 +543,7 @@
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<textField>
 								<reportElement mode="Transparent" x="0" y="0" width="105" height="30" uuid="b1d5a195-aa6d-4c0b-8d1d-2035abe5688f"/>
-								<textElement>
-									<font isBold="true"/>
-								</textElement>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$P{stockEventType}.equalsIgnoreCase("issue") ? "Receiving Facility" : "Issuing Facility"]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
