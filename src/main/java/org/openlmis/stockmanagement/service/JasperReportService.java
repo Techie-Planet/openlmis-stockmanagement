@@ -175,8 +175,6 @@ public class JasperReportService {
    * @return generated issue summary report.
    */
   public byte[] generateIssueSummaryReport(StockEventDto stockEventDto) {
-    System.out.println(stockEventDto);
-
     Map<String, Object> params = new HashMap<>();
     params.put("transactionId", "DRAFT");
     params.put("facility",
@@ -185,9 +183,7 @@ public class JasperReportService {
     params.put("stockEventType", stockEventDto.getDocumentNumber());
     List<Map<String, Object>> lineItemDtosToListOfObjects =
             convertLineItemDtosToListOfObjects(stockEventDto.getLineItems());
-    System.out.println(lineItemDtosToListOfObjects);
     List<String> list = getProductTypesSummary(stockEventDto.getLineItems());
-    System.out.println(list);
     params.put("lineItems", lineItemDtosToListOfObjects);
     params.put("creationDate", LocalDate.now());
     params.put("dateFormat", dateFormat);
@@ -349,7 +345,6 @@ public class JasperReportService {
 
   private List<Map<String, Object>> convertLineItemDtosToListOfObjects(
           List<StockEventLineItemDto> lineItems) {
-    System.out.println("converting line items");
     List<Map<String, Object>> lineItemsAsListOfObjects = new ArrayList<>();
     lineItems.forEach((lineItem) -> {
       Map<String, Object> mapOfLineItemObjects = new HashMap<>();
