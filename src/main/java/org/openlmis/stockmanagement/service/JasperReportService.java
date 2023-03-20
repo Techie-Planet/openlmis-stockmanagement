@@ -357,9 +357,11 @@ public class JasperReportService {
       mapOfLineItemObjects.put("lot", (lineItem.getLotId() != null
               ? lotReferenceDataService.findOne(lineItem.getLotId()) : null));
       mapOfLineItemObjects.put("vvmStatus",
-              lineItem.getExtraData().get("vvmStatus"));
+              lineItem.getExtraData().get("vvmStatus") != null
+                      ? lineItem.getExtraData().get("vvmStatus") : null);
       mapOfLineItemObjects.put("manufacturer",
-              lineItem.getExtraData().get("productManufacturer"));
+              lineItem.getExtraData().get("productManufacturer") != null
+                      ? lineItem.getExtraData().get("productManufacturer") : null);
       mapOfLineItemObjects.put("reason",
               stockCardLineItemReasonRepository.findById(lineItem.getReasonId()).get());
       mapOfLineItemObjects.put("quantity", lineItem.getQuantity());
