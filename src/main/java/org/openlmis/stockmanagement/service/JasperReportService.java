@@ -186,11 +186,13 @@ public class JasperReportService {
     List<Map<String, Object>> lineItemDtosToListOfObjects =
             convertLineItemDtosToListOfObjects(stockEventDto.getLineItems());
     System.out.println(lineItemDtosToListOfObjects);
+    List<String> list = getProductTypesSummary(stockEventDto.getLineItems());
+    System.out.println(list);
     params.put("lineItems", lineItemDtosToListOfObjects);
     params.put("creationDate", LocalDate.now());
     params.put("dateFormat", dateFormat);
     params.put("decimalFormat", createDecimalFormat());
-    params.put("listOfSummaries", getProductTypesSummary(stockEventDto.getLineItems()));
+    params.put("listOfSummaries", list);
 
     return fillAndExportReport(compileReportFromTemplateUrl(
             ISSUE_SUMMARY_BEFORE_SUBMISSION_REPORT_URL), params);
