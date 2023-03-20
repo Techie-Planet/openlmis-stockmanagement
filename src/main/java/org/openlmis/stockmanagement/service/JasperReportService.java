@@ -379,6 +379,7 @@ public class JasperReportService {
     lineItems.forEach((lineItem) -> {
       OrderableDto orderableDto = orderableReferenceDataService
               .findOne(lineItem.getOrderableId());
+      System.out.println(orderableDto.toString());
       String productType = orderableDto.getExtraData().get("productType");
       if (productType != null && !productType.isEmpty()) {
         if (mapOfProductTypesAndQuantities.get(productType) != null) {
