@@ -17,6 +17,7 @@
 	<import value="org.openlmis.stockmanagement.dto.referencedata.ProgramDto"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<import value="java.text.*"/>
+	<import value="java.util.*"/>
 	<import value="java.time.ZoneId"/>
 	<import value="org.openlmis.stockmanagement.dto.referencedata.OrderableDto"/>
 	<import value="java.time.format.DateTimeFormatter"/>
@@ -575,9 +576,11 @@
 				<reportElement x="0" y="84" width="370" height="30" uuid="1c246806-d8e6-429f-a5a4-4c583a25f675"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[
-        for (String summary : $P{listOfSummaries}) {
-            summary + "\n";
+        StringBuffer sb = new StringBuffer();
+        for (Object summary : $P{listOfSummaries}) {
+            sb.append(summary.toString() + "\n");
         }
+        return sb.toString();
     ]]></textFieldExpression>
 			</textField>
 			<staticText>
