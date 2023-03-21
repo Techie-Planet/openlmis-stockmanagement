@@ -182,7 +182,8 @@ public class JasperReportService {
     params.put("program", programReferenceDataService.findOne(stockEventDto.getProgramId()));
     params.put("stockEventType", stockEventDto.getDocumentNumber());
     List<Map<String, Object>> lineItemDtosToListOfObjects =
-            convertLineItemDtosToListOfObjects(stockEventDto.getLineItems());
+            convertLineItemDtosToListOfObjects(
+                    stockEventDto.getLineItems(), stockEventDto.getDocumentNumber());
     String list = getProductTypesSummary(stockEventDto.getLineItems());
     params.put("lineItems", lineItemDtosToListOfObjects);
     params.put("creationDate", LocalDate.now());
