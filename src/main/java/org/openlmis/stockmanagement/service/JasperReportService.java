@@ -183,7 +183,8 @@ public class JasperReportService {
     params.put("stockEventType", stockEventDto.getDocumentNumber());
     List<Map<String, Object>> lineItemDtosToListOfObjects =
             convertLineItemDtosToListOfObjects(stockEventDto.getLineItems());
-    List<String> list = getProductTypesSummary(stockEventDto.getLineItems());
+    String list = getProductTypesSummary(stockEventDto.getLineItems());
+    System.out.println(list);
     params.put("lineItems", lineItemDtosToListOfObjects);
     params.put("creationDate", LocalDate.now());
     params.put("dateFormat", dateFormat);
@@ -369,8 +370,8 @@ public class JasperReportService {
 
   }
 
-  private List<String> getProductTypesSummary(List<StockEventLineItemDto> lineItems) {
-    List<String> listOfSummaries = new ArrayList<>();
+  private String getProductTypesSummary(List<StockEventLineItemDto> lineItems) {
+    StringBuffer listOfSummaries = new StringBuffer();
     Map<String, Integer> mapOfProductTypesAndQuantities = new HashMap<>();
     lineItems.forEach((lineItem) -> {
       OrderableDto orderableDto = orderableReferenceDataService
@@ -396,8 +397,8 @@ public class JasperReportService {
 
     mapOfProductTypesAndQuantities.entrySet().stream()
             .sorted(Map.Entry.comparingByKey())
-            .forEach(entry -> listOfSummaries.add("Total doses of "
-                    + entry.getKey() + ":        " + entry.getValue()));
-    return listOfSummaries;
+            .forEach(entry -> listOfSummaries.append("Total doses of "
+                    + entry.getKey() + ":         " + entry.getValue() + "\n"));
+    return listOfSummaries.toString();
   }
 }

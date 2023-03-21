@@ -52,7 +52,7 @@
 		</box>
 	</style>
 	<subDataset name="summary" uuid="f1d8cfe5-8173-4124-a76e-5864159057a8">
-		<parameter name="listOfSummaries" class="java.util.List" isForPrompting="false">
+		<parameter name="listOfSummaries" class="java.lang.String" isForPrompting="false">
 			<property name="displayName" value="listOfSummaries"/>
 		</parameter>
 		<queryString language="SQL">
@@ -105,7 +105,7 @@
 	<parameter name="lineItems" class="java.util.List" isForPrompting="false">
 		<property name="displayName" value="lineItems"/>
 	</parameter>
-	<parameter name="listOfSummaries" class="java.util.List" isForPrompting="false">
+	<parameter name="listOfSummaries" class="java.lang.String" isForPrompting="false">
 		<property name="displayName" value="listOfSummaries"/>
 	</parameter>
 	<queryString language="SQL">
@@ -575,13 +575,7 @@
 			<textField>
 				<reportElement x="0" y="84" width="370" height="30" uuid="1c246806-d8e6-429f-a5a4-4c583a25f675"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[
-        StringBuffer sb = new StringBuffer();
-        for (Object summary : $P{listOfSummaries}) {
-            sb.append(summary.toString() + "\n");
-        }
-        return sb.toString();
-    ]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{listOfSummaries}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="50" width="180" height="30" uuid="2e8983d9-32a0-4675-bab0-9d92e60d7eec">
