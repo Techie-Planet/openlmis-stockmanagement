@@ -396,7 +396,7 @@ public class JasperReportService {
     mapOfProductTypesAndQuantities.entrySet().stream()
             .sorted(Map.Entry.comparingByKey())
             .forEach(entry -> listOfSummaries.append("Total doses of "
-                    + entry.getKey() + ": \t \t \t \t" + entry.getValue() + "\n"));
+                    + entry.getKey() + ": \t \t \t \t" + entry.getValue() + "\n \n"));
     return listOfSummaries.toString();
   }
 }
