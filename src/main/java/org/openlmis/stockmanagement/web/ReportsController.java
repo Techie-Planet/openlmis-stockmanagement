@@ -132,6 +132,7 @@ public class ReportsController {
 
     return ResponseEntity
             .ok()
+            .contentType(MediaType.APPLICATION_PDF)
             .header("Content-Disposition",
                     "inline; filename=stock_adjustment_summary" + ".pdf")
             .body(reportToBase64);
