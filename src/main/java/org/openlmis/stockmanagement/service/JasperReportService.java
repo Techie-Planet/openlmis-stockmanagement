@@ -344,12 +344,14 @@ public class JasperReportService {
   }
 
   private List<Map<String, Object>> convertLineItemDtosToListOfObjects(
-          List<StockEventLineItemDto> lineItems) {
+          List<StockEventLineItemDto> lineItems, String stockEventType) {
     List<Map<String, Object>> lineItemsAsListOfObjects = new ArrayList<>();
     lineItems.forEach((lineItem) -> {
       Map<String, Object> mapOfLineItemObjects = new HashMap<>();
+      UUID sourceDestinationId = stockEventType.equalsIgnoreCase("issue")
+              ? lineItem.getDestinationId() : lineItem.getSourceId();
       UUID receivingFacilityId = nodeRepository
-              .findById(lineItem.getDestinationId()).get().getReferenceId();
+              .findById(sourceDestinationId).get().getReferenceId();
       mapOfLineItemObjects.put("orderable",
               orderableReferenceDataService.findOne(lineItem.getOrderableId()));
       mapOfLineItemObjects.put("receivingFacility",
