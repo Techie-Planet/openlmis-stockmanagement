@@ -15,9 +15,9 @@
 
 package org.openlmis.stockmanagement.web;
 
-import static java.util.Arrays.asList;
+//import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
+//import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,8 +35,6 @@ import org.openlmis.stockmanagement.repository.OrganizationRepository;
 import org.openlmis.stockmanagement.service.PermissionService;
 import org.openlmis.stockmanagement.util.Message;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
