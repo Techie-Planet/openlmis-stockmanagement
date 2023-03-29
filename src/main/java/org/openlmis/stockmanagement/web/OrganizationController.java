@@ -80,7 +80,7 @@ public class OrganizationController {
   @RequestMapping(value = "organizations", method = RequestMethod.GET)
   public ResponseEntity<Page<Organization>> getAllOrganizations(Pageable pageable) {
     permissionService.canManageOrganizations();
-    return new ResponseEntity<>(organizationRepository.findAllOrganizations(pageable), OK);
+    return new ResponseEntity<>(organizationRepository.findAll(pageable), OK);
   }
 
   /**
