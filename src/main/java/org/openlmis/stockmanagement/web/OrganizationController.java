@@ -75,12 +75,25 @@ public class OrganizationController {
   /**
    * Retrieve all organizations.
    *
-   * @return list of organizations.
+   * @return page of organizations.
    */
   @RequestMapping(value = "organizations", method = RequestMethod.GET)
   public ResponseEntity<Page<Organization>> getAllOrganizations(Pageable pageable) {
     permissionService.canManageOrganizations();
     return new ResponseEntity<>(organizationRepository.findAll(pageable), OK);
+  }
+
+  /**
+   * Retrieves an organization by id.
+   *
+   * @return the organization requested.
+   */
+  @RequestMapping(value = "organizations/{id}", method = RequestMethod.GET)
+  public ResponseEntity<Page<Organization>> getOrganizationById(@PathVariable("id") UUID id) {
+    permissionService.canManageOrganizations();
+    return new ResponseEntity<>(organizationRepository.findById(id).orElseThrow(
+            () -> new ValidationMessageException(ERROR_ORGANIZATION_ID_NOT_FOUND)
+    ), OK);
   }
 
   /**

@@ -1175,7 +1175,7 @@ traits:
           Regular users can get the list of sources or destinations they can use through /api/validSources and /api/validDestinations.
         responses:
           200:
-            description: Return a list of organizations.
+            description: Return a page of organizations.
             body:
               application/json:
                 schema: organizations
@@ -1241,6 +1241,27 @@ traits:
                   schema: localizedMessage
             403:
               description: User does not have permission to manage organization.
+              body:
+                application/json:
+                  schema: localizedMessage
+        /{id}:
+        get:
+          is: [ secured ]
+          description: Retrieves an organization by id.
+
+          responses:
+            200:
+              description: Retrieved an organization.
+              body:
+                application/json:
+                  schema: organization
+            403:
+              description: User does not have permission to manage organization.
+              body:
+                application/json:
+                  schema: localizedMessage
+            404:
+              description: Organization by id provided, not found.
               body:
                 application/json:
                   schema: localizedMessage
