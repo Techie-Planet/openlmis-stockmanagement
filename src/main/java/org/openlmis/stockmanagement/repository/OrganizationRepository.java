@@ -26,6 +26,7 @@ import org.springframework.data.repository.query.Param;
 public interface OrganizationRepository extends PagingAndSortingRepository<Organization, UUID> {
   Organization findByName(@Param("name") String name);
 
-  @Override
-  Page<Organization> findAll(Pageable pageable);
+  //  @Override
+  //  List<Organization> findAll();
+  Page<Organization> findAllOrganizations(Pageable pageable);
 }
