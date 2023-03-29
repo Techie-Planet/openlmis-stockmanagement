@@ -92,7 +92,7 @@ public class OrganizationController {
   public ResponseEntity<Organization> getOrganizationById(@PathVariable("id") UUID id) {
     permissionService.canManageOrganizations();
     return new ResponseEntity<>(organizationRepository.findById(id).orElseThrow(
-            () -> new ValidationMessageException(ERROR_ORGANIZATION_ID_NOT_FOUND)
+        () -> new ValidationMessageException(ERROR_ORGANIZATION_ID_NOT_FOUND)
     ), OK);
   }
 
