@@ -18,6 +18,8 @@ package org.openlmis.stockmanagement.repository;
 import java.util.List;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.sourcedestination.Organization;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
@@ -25,5 +27,5 @@ public interface OrganizationRepository extends PagingAndSortingRepository<Organ
   Organization findByName(@Param("name") String name);
 
   @Override
-  List<Organization> findAll();
+  Page<Organization> findAll(Pageable pageable);
 }
