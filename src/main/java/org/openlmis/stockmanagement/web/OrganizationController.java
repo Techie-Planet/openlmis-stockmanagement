@@ -89,7 +89,7 @@ public class OrganizationController {
    * @return the organization requested.
    */
   @RequestMapping(value = "organizations/{id}", method = RequestMethod.GET)
-  public ResponseEntity<Page<Organization>> getOrganizationById(@PathVariable("id") UUID id) {
+  public ResponseEntity<Organization> getOrganizationById(@PathVariable("id") UUID id) {
     permissionService.canManageOrganizations();
     return new ResponseEntity<>(organizationRepository.findById(id).orElseThrow(
             () -> new ValidationMessageException(ERROR_ORGANIZATION_ID_NOT_FOUND)
