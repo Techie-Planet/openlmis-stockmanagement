@@ -29,7 +29,10 @@ public interface OrganizationRepository extends PagingAndSortingRepository<Organ
 
   //  List<Organization> findAll();
   @Query(value = "SELECT * FROM stockmanagement.organizations\n"
-          + "    WHERE (:name IS NULL OR name ILIKE %:name%)",
+          + "    WHERE (:name IS NULL OR name ILIKE :wildcardedName)",
           nativeQuery = true)
-  Page<Organization> findAll(Pageable pageable, @Param("name") String name);
+  Page<Organization> findAll(Pageable pageable, @Param("name") String name) {
+    String wildcardedName = (name == null) ? null : "%" + name + "%";
+    return organizationRepository.findAll(pageable, wildcardedName);
+  }
 }
