@@ -82,7 +82,8 @@ public class OrganizationController {
   public ResponseEntity<Page<Organization>> getAllOrganizations(Pageable pageable,
       @RequestParam(name = "name", required = false) String name) {
     permissionService.canManageOrganizations();
-    return new ResponseEntity<>(organizationRepository.findAll(pageable, name), OK);
+    String wildcardedName = (name == null) ? null : "%" + name + "%";
+    return new ResponseEntity<>(organizationRepository.findAll(pageable, wildcardedName), OK);
   }
 
   /**
