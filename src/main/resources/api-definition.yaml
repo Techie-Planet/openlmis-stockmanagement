@@ -1175,6 +1175,7 @@ traits:
           Regular users can get the list of sources or destinations they can use through /api/validSources and /api/validDestinations.
         queryParameters:
           name:
+            type: string
             required: false
         responses:
           200:
