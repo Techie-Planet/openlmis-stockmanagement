@@ -1173,6 +1173,9 @@ traits:
           This is for administrators only.
           It requires the permission STOCK_ORGANIZATIONS_MANAGE.
           Regular users can get the list of sources or destinations they can use through /api/validSources and /api/validDestinations.
+        queryParameters:
+          name:
+            required: false
         responses:
           200:
             description: Return a page of organizations.

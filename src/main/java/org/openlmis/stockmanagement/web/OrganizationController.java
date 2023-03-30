@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/api")
@@ -78,9 +79,10 @@ public class OrganizationController {
    * @return page of organizations.
    */
   @RequestMapping(value = "organizations", method = RequestMethod.GET)
-  public ResponseEntity<Page<Organization>> getAllOrganizations(Pageable pageable) {
+  public ResponseEntity<Page<Organization>> getAllOrganizations(Pageable pageable,
+      @RequestParam("name") String name) {
     permissionService.canManageOrganizations();
-    return new ResponseEntity<>(organizationRepository.findAll(pageable), OK);
+    return new ResponseEntity<>(organizationRepository.findAll(pageable, name), OK);
   }
 
   /**

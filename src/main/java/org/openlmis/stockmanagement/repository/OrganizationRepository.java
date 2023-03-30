@@ -28,5 +28,8 @@ public interface OrganizationRepository extends PagingAndSortingRepository<Organ
 
   @Override
   //  List<Organization> findAll();
-  Page<Organization> findAll(Pageable pageable);
+  @Query(value = "SELECT * FROM stockmanagement.organizations\n"
+          + "    WHERE (:name IS NULL OR name ILIKE %:name%)",
+          nativeQuery = true)
+  Page<Organization> findAll(Pageable pageable, @Param("name") String name);
 }
