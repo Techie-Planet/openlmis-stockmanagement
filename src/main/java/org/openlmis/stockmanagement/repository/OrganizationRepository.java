@@ -27,7 +27,6 @@ import org.springframework.data.repository.query.Param;
 public interface OrganizationRepository extends PagingAndSortingRepository<Organization, UUID> {
   Organization findByName(@Param("name") String name);
 
-  @Override
   //  List<Organization> findAll();
   @Query(value = "SELECT * FROM stockmanagement.organizations\n"
           + "    WHERE (:name IS NULL OR name ILIKE %:name%)",
