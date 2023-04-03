@@ -93,11 +93,14 @@ public class NearExpiryNotifier {
     RightDto right = rightReferenceDataService.findRight(STOCK_INVENTORIES_EDIT);
     UUID rightId = right.getId();
     expiringStockCards.forEach(card -> {
-      NotificationMessageParams params = new NotificationMessageParams(
-          getMessage(NOTIFICATION_NEAR_EXPIRY_SUBJECT),
-          getMessage(NOTIFICATION_NEAR_EXPIRY_CONTENT),
-          constructSubstitutionMap(card));
-      stockCardNotifier.notifyStockEditors(card, rightId, params);
+      // if card has SOH > 0 send email
+      if (card.getStockOnHand() != null && card.getStockOnHand() > 0) {
+        NotificationMessageParams params = new NotificationMessageParams(
+                getMessage(NOTIFICATION_NEAR_EXPIRY_SUBJECT),
+                getMessage(NOTIFICATION_NEAR_EXPIRY_CONTENT),
+                constructSubstitutionMap(card));
+        stockCardNotifier.notifyStockEditors(card, rightId, params);
+      }
     });
   }
 
