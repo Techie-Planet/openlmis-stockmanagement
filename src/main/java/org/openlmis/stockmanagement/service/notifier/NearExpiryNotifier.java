@@ -94,7 +94,10 @@ public class NearExpiryNotifier {
     UUID rightId = right.getId();
     expiringStockCards.forEach(card -> {
       // if card has SOH > 0 send email
+      System.out.println(expiringStockCards);
+      System.out.println("condition check");
       if (card.getStockOnHand() != null && card.getStockOnHand() > 0) {
+        System.out.println(card);
         NotificationMessageParams params = new NotificationMessageParams(
                 getMessage(NOTIFICATION_NEAR_EXPIRY_SUBJECT),
                 getMessage(NOTIFICATION_NEAR_EXPIRY_CONTENT),
