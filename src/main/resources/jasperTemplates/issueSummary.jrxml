@@ -531,7 +531,7 @@ WHERE s.id = $P{stockEventId}::uuid]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{vvmStatus} != null ? $F{vvmStatus}.replace("STAGE_","").replace("1","I").replace("2", "II").replace("3","III").replace("4", "IV") : "N/A"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{vvmstatus} != null ? $F{vvmstatus}.replace("STAGE_","").replace("1","I").replace("2", "II").replace("3","III").replace("4", "IV") : "N/A"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="572" y="0" width="108" height="30" uuid="29b897ab-f807-4e70-9ee2-ce1ccdfba926">
