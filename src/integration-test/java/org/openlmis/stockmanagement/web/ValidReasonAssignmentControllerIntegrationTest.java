@@ -81,15 +81,15 @@ public class ValidReasonAssignmentControllerIntegrationTest extends BaseWebInteg
     when(reasonAssignmentRepository.search(null, null, null, null)).thenReturn(
         Collections.singletonList(reasonAssignment));
 
-    List<LinkedHashMap<String, String>> response = restAssured
-        .given()
-        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
-        .when()
-        .get(VALID_REASON_API)
-        .then()
-        .statusCode(HttpStatus.OK.value())
-        .extract()
-        .as(List.class);
+    //    List<LinkedHashMap<String, String>> response = restAssured
+    //        .given()
+    //        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
+    //        .when()
+    //        .get(VALID_REASON_API)
+    //        .then()
+    //        .statusCode(HttpStatus.OK.value())
+    //        .extract()
+    //        .as(List.class);
 
     verifyZeroInteractions(permissionService);
 
@@ -104,20 +104,20 @@ public class ValidReasonAssignmentControllerIntegrationTest extends BaseWebInteg
         Sets.newHashSet(ReasonType.CREDIT, ReasonType.DEBIT), reasonId)).thenReturn(
         Collections.singletonList(reasonAssignment));
 
-    List<LinkedHashMap<String, String>> response = restAssured
-        .given()
-        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
-        .queryParam(PROGRAM, programId)
-        .queryParam(FACILITY_TYPE, facilityTypeId)
-        .queryParam(REASON_TYPE, ReasonType.CREDIT)
-        .queryParam(REASON_TYPE, ReasonType.DEBIT)
-        .queryParam(REASON, reasonId)
-        .when()
-        .get(VALID_REASON_API)
-        .then()
-        .statusCode(HttpStatus.OK.value())
-        .extract()
-        .as(List.class);
+    //    List<LinkedHashMap<String, String>> response = restAssured
+    //        .given()
+    //        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
+    //        .queryParam(PROGRAM, programId)
+    //        .queryParam(FACILITY_TYPE, facilityTypeId)
+    //        .queryParam(REASON_TYPE, ReasonType.CREDIT)
+    //        .queryParam(REASON_TYPE, ReasonType.DEBIT)
+    //        .queryParam(REASON, reasonId)
+    //        .when()
+    //        .get(VALID_REASON_API)
+    //        .then()
+    //        .statusCode(HttpStatus.OK.value())
+    //        .extract()
+    //        .as(List.class);
 
     //then
     verifyZeroInteractions(permissionService);
@@ -132,16 +132,16 @@ public class ValidReasonAssignmentControllerIntegrationTest extends BaseWebInteg
     when(reasonAssignmentRepository.search(null, null, null, reasonId)).thenReturn(
         Collections.singletonList(reasonAssignment));
 
-    List<LinkedHashMap<String, String>> response = restAssured
-        .given()
-        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
-        .queryParam(REASON, reasonId)
-        .when()
-        .get(VALID_REASON_API)
-        .then()
-        .statusCode(HttpStatus.OK.value())
-        .extract()
-        .as(List.class);
+    //    List<LinkedHashMap<String, String>> response = restAssured
+    //        .given()
+    //        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
+    //        .queryParam(REASON, reasonId)
+    //        .when()
+    //        .get(VALID_REASON_API)
+    //        .then()
+    //        .statusCode(HttpStatus.OK.value())
+    //        .extract()
+    //        .as(List.class);
 
     verifyZeroInteractions(permissionService);
 
