@@ -80,7 +80,7 @@ public class ValidSourceDestinationController {
         params.getProgramId(), params.getFacilityId()));
     //    return validDestinationService.findDestinations(
     //            params.getProgramId(), params.getFacilityId(), pageable);
-    return new PageImpl<>(Collections.emptyList(), pageRequest, 0);;
+    return new PageImpl<>(Collections.emptyList(), pageable, 0);;
   }
 
   /**
