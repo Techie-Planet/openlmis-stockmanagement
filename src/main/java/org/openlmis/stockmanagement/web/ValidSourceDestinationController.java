@@ -21,6 +21,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import java.util.Collections;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
@@ -33,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
@@ -76,8 +78,9 @@ public class ValidSourceDestinationController {
 
     LOGGER.info(format("Try to find valid destinations with program %s and facility %s",
         params.getProgramId(), params.getFacilityId()));
-    return validDestinationService.findDestinations(
-            params.getProgramId(), params.getFacilityId(), pageable);
+    //    return validDestinationService.findDestinations(
+    //            params.getProgramId(), params.getFacilityId(), pageable);
+    return new PageImpl<>(Collections.emptyList(), pageRequest, 0);;
   }
 
   /**
