@@ -148,7 +148,7 @@ public class ValidReasonAssignmentControllerIntegrationTest extends BaseWebInteg
     //    // assertThat(response.get(0).get("id"), is(reasonAssignment.getId().toString()));
     //    assertThat(RAML_ASSERT_MESSAGE,
     //        restAssured.getLastReport(), RamlMatchers.hasNoViolations());
-    //  }
+  //  }
 
   @Test
   public void shouldAssignReasonToProgramFacilityType() {
