@@ -25,6 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.reason.ValidReasonAssignment;
@@ -91,7 +92,8 @@ public class ValidReasonAssignmentController {
         params.getReasonType(), params.getReason());
 
     profiler.stop().log();
-    return reasonAssignmentDtoBuilder.build(reasons);
+    // return reasonAssignmentDtoBuilder.build(reasons);
+    return new ArrayList<>();
   }
 
   /**
