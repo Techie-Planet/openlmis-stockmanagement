@@ -25,11 +25,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-import com.google.common.collect.Sets;
+//import com.google.common.collect.Sets;
 import guru.nidi.ramltester.junit.RamlMatchers;
 import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
+//import java.util.LinkedHashMap;
+//import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.Before;
@@ -45,17 +45,17 @@ import org.openlmis.stockmanagement.testutils.ValidReasonAssignmentDataBuilder;
 import org.openlmis.stockmanagement.web.BaseWebTest.SaveAnswer;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+//import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 @SuppressWarnings("PMD.TooManyMethods")
 public class ValidReasonAssignmentControllerIntegrationTest extends BaseWebIntegrationTest {
   private static final String VALID_REASON_API = "/api/validReasons";
   private static final String ID_URL = VALID_REASON_API + "/{id}";
-  private static final String PROGRAM = "program";
-  private static final String FACILITY_TYPE = "facilityType";
-  private static final String REASON_TYPE = "reasonType";
-  private static final String REASON = "reason";
+  //  private static final String PROGRAM = "program";
+  //  private static final String FACILITY_TYPE = "facilityType";
+  //  private static final String REASON_TYPE = "reasonType";
+  //  private static final String REASON = "reason";
 
   @MockBean
   private ValidReasonAssignmentRepository reasonAssignmentRepository;
@@ -64,8 +64,8 @@ public class ValidReasonAssignmentControllerIntegrationTest extends BaseWebInteg
   private ProgramFacilityTypeExistenceService programFacilityTypeExistenceService;
 
   private ValidReasonAssignment reasonAssignment;
-  private UUID programId = UUID.randomUUID();
-  private UUID facilityTypeId = UUID.randomUUID();
+  //  private UUID programId = UUID.randomUUID();
+  //  private UUID facilityTypeId = UUID.randomUUID();
   private UUID reasonId = UUID.randomUUID();
 
   @Before
