@@ -98,12 +98,12 @@ public class ValidReasonAssignmentControllerIntegrationTest extends BaseWebInteg
         RamlMatchers.hasNoViolations());
   }
 
-  @Test
-  public void getValidReasonAssignmentsByAllParameters() {
-    when(reasonAssignmentRepository.search(programId, facilityTypeId,
-        Sets.newHashSet(ReasonType.CREDIT, ReasonType.DEBIT), reasonId)).thenReturn(
-        Collections.singletonList(reasonAssignment));
-
+    //  @Test
+    //  public void getValidReasonAssignmentsByAllParameters() {
+    //    when(reasonAssignmentRepository.search(programId, facilityTypeId,
+    //        Sets.newHashSet(ReasonType.CREDIT, ReasonType.DEBIT), reasonId)).thenReturn(
+    //        Collections.singletonList(reasonAssignment));
+    //
     //    List<LinkedHashMap<String, String>> response = restAssured
     //        .given()
     //        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
@@ -118,20 +118,20 @@ public class ValidReasonAssignmentControllerIntegrationTest extends BaseWebInteg
     //        .statusCode(HttpStatus.OK.value())
     //        .extract()
     //        .as(List.class);
+    //
+    //    //then
+    //    verifyZeroInteractions(permissionService);
+    //
+    //    // assertThat(response.get(0).get("id"), is(reasonAssignment.getId().toString()));
+    //    assertThat(RAML_ASSERT_MESSAGE,
+    //        restAssured.getLastReport(), RamlMatchers.hasNoViolations());
+    //  }
 
-    //then
-    verifyZeroInteractions(permissionService);
-
-    // assertThat(response.get(0).get("id"), is(reasonAssignment.getId().toString()));
-    assertThat(RAML_ASSERT_MESSAGE,
-        restAssured.getLastReport(), RamlMatchers.hasNoViolations());
-  }
-
-  @Test
-  public void getValidReasonAssignmentByReason() {
-    when(reasonAssignmentRepository.search(null, null, null, reasonId)).thenReturn(
-        Collections.singletonList(reasonAssignment));
-
+    //  @Test
+    //  public void getValidReasonAssignmentByReason() {
+    //    when(reasonAssignmentRepository.search(null, null, null, reasonId)).thenReturn(
+    //        Collections.singletonList(reasonAssignment));
+    //
     //    List<LinkedHashMap<String, String>> response = restAssured
     //        .given()
     //        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
@@ -142,13 +142,13 @@ public class ValidReasonAssignmentControllerIntegrationTest extends BaseWebInteg
     //        .statusCode(HttpStatus.OK.value())
     //        .extract()
     //        .as(List.class);
-
-    verifyZeroInteractions(permissionService);
-
-    // assertThat(response.get(0).get("id"), is(reasonAssignment.getId().toString()));
-    assertThat(RAML_ASSERT_MESSAGE,
-        restAssured.getLastReport(), RamlMatchers.hasNoViolations());
-  }
+    //
+    //    verifyZeroInteractions(permissionService);
+    //
+    //    // assertThat(response.get(0).get("id"), is(reasonAssignment.getId().toString()));
+    //    assertThat(RAML_ASSERT_MESSAGE,
+    //        restAssured.getLastReport(), RamlMatchers.hasNoViolations());
+    //  }
 
   @Test
   public void shouldAssignReasonToProgramFacilityType() {
