@@ -25,8 +25,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-//import com.google.common.collect.Sets;
 import guru.nidi.ramltester.junit.RamlMatchers;
+//import com.google.common.collect.Sets;
 import java.util.Collections;
 //import java.util.LinkedHashMap;
 //import java.util.List;
