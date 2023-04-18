@@ -15,7 +15,6 @@
 
 package org.openlmis.stockmanagement.web.stockcardsummariesv3;
 
-import java.util.Collections;
 import java.util.List;
 import org.openlmis.stockmanagement.service.StockCardSummaries;
 import org.openlmis.stockmanagement.service.StockCardSummariesService;
@@ -26,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.profiler.Profiler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 // import org.springframework.security.access.prepost.PreAuthorize;
@@ -85,7 +83,6 @@ public class StockCardSummariesV3Controller {
     Page<StockCardSummaryV3Dto> page = Pagination.getPage(dtos, pageable);
 
     profiler.stop().log();
-    // return page;
-    return new PageImpl<>(Collections.emptyList(), pageable, 0);
+    return page;
   }
 }
