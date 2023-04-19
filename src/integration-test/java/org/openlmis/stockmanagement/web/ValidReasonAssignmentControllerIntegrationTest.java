@@ -25,16 +25,16 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import com.google.common.collect.Sets;
 import guru.nidi.ramltester.junit.RamlMatchers;
-//import com.google.common.collect.Sets;
 import java.util.Collections;
-//import java.util.LinkedHashMap;
-//import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
-//import org.openlmis.stockmanagement.domain.reason.ReasonType;
+import org.openlmis.stockmanagement.domain.reason.ReasonType;
 import org.openlmis.stockmanagement.domain.reason.StockCardLineItemReason;
 import org.openlmis.stockmanagement.domain.reason.ValidReasonAssignment;
 import org.openlmis.stockmanagement.dto.ValidReasonAssignmentDto;
@@ -45,17 +45,17 @@ import org.openlmis.stockmanagement.testutils.ValidReasonAssignmentDataBuilder;
 import org.openlmis.stockmanagement.web.BaseWebTest.SaveAnswer;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
-//import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 @SuppressWarnings("PMD.TooManyMethods")
 public class ValidReasonAssignmentControllerIntegrationTest extends BaseWebIntegrationTest {
   private static final String VALID_REASON_API = "/api/validReasons";
   private static final String ID_URL = VALID_REASON_API + "/{id}";
-  //  private static final String PROGRAM = "program";
-  //  private static final String FACILITY_TYPE = "facilityType";
-  //  private static final String REASON_TYPE = "reasonType";
-  //  private static final String REASON = "reason";
+  private static final String PROGRAM = "program";
+  private static final String FACILITY_TYPE = "facilityType";
+  private static final String REASON_TYPE = "reasonType";
+  private static final String REASON = "reason";
 
   @MockBean
   private ValidReasonAssignmentRepository reasonAssignmentRepository;
@@ -64,8 +64,8 @@ public class ValidReasonAssignmentControllerIntegrationTest extends BaseWebInteg
   private ProgramFacilityTypeExistenceService programFacilityTypeExistenceService;
 
   private ValidReasonAssignment reasonAssignment;
-  //  private UUID programId = UUID.randomUUID();
-  //  private UUID facilityTypeId = UUID.randomUUID();
+  private UUID programId = UUID.randomUUID();
+  private UUID facilityTypeId = UUID.randomUUID();
   private UUID reasonId = UUID.randomUUID();
 
   @Before
@@ -81,74 +81,74 @@ public class ValidReasonAssignmentControllerIntegrationTest extends BaseWebInteg
     when(reasonAssignmentRepository.search(null, null, null, null)).thenReturn(
         Collections.singletonList(reasonAssignment));
 
-    //    List<LinkedHashMap<String, String>> response = restAssured
-    //        .given()
-    //        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
-    //        .when()
-    //        .get(VALID_REASON_API)
-    //        .then()
-    //        .statusCode(HttpStatus.OK.value())
-    //        .extract()
-    //        .as(List.class);
+    List<LinkedHashMap<String, String>> response = restAssured
+        .given()
+        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
+        .when()
+        .get(VALID_REASON_API)
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .extract()
+        .as(List.class);
 
     verifyZeroInteractions(permissionService);
 
-    // assertThat(response.get(0).get("id"), is(reasonAssignment.getId().toString()));
+    assertThat(response.get(0).get("id"), is(reasonAssignment.getId().toString()));
     assertThat(RAML_ASSERT_MESSAGE, restAssured.getLastReport(),
         RamlMatchers.hasNoViolations());
   }
 
-  //  @Test
-  //  public void getValidReasonAssignmentsByAllParameters() {
-  //    when(reasonAssignmentRepository.search(programId, facilityTypeId,
-  //        Sets.newHashSet(ReasonType.CREDIT, ReasonType.DEBIT), reasonId)).thenReturn(
-  //        Collections.singletonList(reasonAssignment));
-  //
-  //    List<LinkedHashMap<String, String>> response = restAssured
-  //        .given()
-  //        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
-  //        .queryParam(PROGRAM, programId)
-  //        .queryParam(FACILITY_TYPE, facilityTypeId)
-  //        .queryParam(REASON_TYPE, ReasonType.CREDIT)
-  //        .queryParam(REASON_TYPE, ReasonType.DEBIT)
-  //        .queryParam(REASON, reasonId)
-  //        .when()
-  //        .get(VALID_REASON_API)
-  //        .then()
-  //        .statusCode(HttpStatus.OK.value())
-  //        .extract()
-  //        .as(List.class);
-  //
-  //    //then
-  //    verifyZeroInteractions(permissionService);
-  //
-  //    // assertThat(response.get(0).get("id"), is(reasonAssignment.getId().toString()));
-  //    assertThat(RAML_ASSERT_MESSAGE,
-  //        restAssured.getLastReport(), RamlMatchers.hasNoViolations());
-  //  }
+  @Test
+  public void getValidReasonAssignmentsByAllParameters() {
+    when(reasonAssignmentRepository.search(programId, facilityTypeId,
+        Sets.newHashSet(ReasonType.CREDIT, ReasonType.DEBIT), reasonId)).thenReturn(
+        Collections.singletonList(reasonAssignment));
 
-  //  @Test
-  //  public void getValidReasonAssignmentByReason() {
-  //    when(reasonAssignmentRepository.search(null, null, null, reasonId)).thenReturn(
-  //        Collections.singletonList(reasonAssignment));
-  //
-  //    List<LinkedHashMap<String, String>> response = restAssured
-  //        .given()
-  //        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
-  //        .queryParam(REASON, reasonId)
-  //        .when()
-  //        .get(VALID_REASON_API)
-  //        .then()
-  //        .statusCode(HttpStatus.OK.value())
-  //        .extract()
-  //        .as(List.class);
-  //
-  //    verifyZeroInteractions(permissionService);
-  //
-  //    // assertThat(response.get(0).get("id"), is(reasonAssignment.getId().toString()));
-  //    assertThat(RAML_ASSERT_MESSAGE,
-  //        restAssured.getLastReport(), RamlMatchers.hasNoViolations());
-  //  }
+    List<LinkedHashMap<String, String>> response = restAssured
+        .given()
+        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
+        .queryParam(PROGRAM, programId)
+        .queryParam(FACILITY_TYPE, facilityTypeId)
+        .queryParam(REASON_TYPE, ReasonType.CREDIT)
+        .queryParam(REASON_TYPE, ReasonType.DEBIT)
+        .queryParam(REASON, reasonId)
+        .when()
+        .get(VALID_REASON_API)
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .extract()
+        .as(List.class);
+
+    //then
+    verifyZeroInteractions(permissionService);
+
+    assertThat(response.get(0).get("id"), is(reasonAssignment.getId().toString()));
+    assertThat(RAML_ASSERT_MESSAGE,
+        restAssured.getLastReport(), RamlMatchers.hasNoViolations());
+  }
+
+  @Test
+  public void getValidReasonAssignmentByReason() {
+    when(reasonAssignmentRepository.search(null, null, null, reasonId)).thenReturn(
+        Collections.singletonList(reasonAssignment));
+
+    List<LinkedHashMap<String, String>> response = restAssured
+        .given()
+        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
+        .queryParam(REASON, reasonId)
+        .when()
+        .get(VALID_REASON_API)
+        .then()
+        .statusCode(HttpStatus.OK.value())
+        .extract()
+        .as(List.class);
+
+    verifyZeroInteractions(permissionService);
+
+    assertThat(response.get(0).get("id"), is(reasonAssignment.getId().toString()));
+    assertThat(RAML_ASSERT_MESSAGE,
+        restAssured.getLastReport(), RamlMatchers.hasNoViolations());
+  }
 
   @Test
   public void shouldAssignReasonToProgramFacilityType() {
