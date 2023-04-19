@@ -119,9 +119,9 @@ public class ValidSourceDestinationController {
 
     LOGGER.debug(format("Try to find valid sources with program %s and facility %s",
         params.getProgramId(), params.getFacilityId()));
-    // return validSourceService.findSources(
-    //     params.getProgramId(), params.getFacilityId(), pageable);
-    return new PageImpl<>(Collections.emptyList(), pageable, 0);
+    return validSourceService.findSources(
+        params.getProgramId(), params.getFacilityId(), pageable);
+    // return new PageImpl<>(Collections.emptyList(), pageable, 0);
   }
 
   /**
