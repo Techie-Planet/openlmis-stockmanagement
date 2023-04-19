@@ -20,7 +20,6 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -176,12 +175,12 @@ public class StockEventsController extends BaseController {
   public ResponseEntity<List<String>> getStockLineItemIssuedToFacilityNumber(
       @RequestParam(value = "program") UUID programId,
       @RequestParam(value = "facility") UUID facilityId) {
-    //    List<String> result = stockEventLineItemRepository
-    //                                                .getAllLineItemIssuedToFacilityNumber(
-    //                                                    programId,
-    //                                                    facilityId
-    //      );
-    List<String> result = new ArrayList<>();
+    List<String> result = stockEventLineItemRepository
+                                                .getAllLineItemIssuedToFacilityNumber(
+                                                    programId,
+                                                    facilityId
+      );
+    // List<String> result = new ArrayList<>();
     return new ResponseEntity<>(result, OK);
   }
 
