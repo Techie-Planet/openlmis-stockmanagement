@@ -314,14 +314,14 @@ public abstract class SourceDestinationBaseService {
 
     profiler.start("FIND_FACILITY_IDS");
     List<UUID> facilitiesIds = assignments.stream()
-            .limit(2)
+            // .limit(2)
             .filter(assignment -> assignment.getNode().isRefDataFacility())
             .map(assignment -> assignment.getNode().getReferenceId())
             .collect(Collectors.toList());
     System.out.println("\nlimited to only two items\n");
 
     profiler.start("FIND_FACILITIES_BY_ID_MAP");
-    Map<UUID, FacilityDto> facilitiesById = facilityRefDataService.findByIds(facilitiesIds);
+    Map<UUID, FacilityDto> facilitiesById = facilityRefDataService.findByIds(facilitiesIds.subList(0,2));
 
     profiler.start("FIND_GEO_ASSIGNMENTS");
     List<SourceDestinationAssignment> geoAssigment = assignments.stream()
