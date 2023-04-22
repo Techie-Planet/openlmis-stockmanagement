@@ -321,7 +321,8 @@ public abstract class SourceDestinationBaseService {
     System.out.println("\nlimited to only two items\n");
 
     profiler.start("FIND_FACILITIES_BY_ID_MAP");
-    Map<UUID, FacilityDto> facilitiesById = facilityRefDataService.findByIds(facilitiesIds.subList(0,2));
+    Map<UUID, FacilityDto> facilitiesById = facilityRefDataService
+            .findByIds(facilitiesIds.subList(0,2));
 
     profiler.start("FIND_GEO_ASSIGNMENTS");
     List<SourceDestinationAssignment> geoAssigment = assignments.stream()
