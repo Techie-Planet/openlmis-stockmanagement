@@ -306,18 +306,19 @@ public abstract class SourceDestinationBaseService {
     programFacilityTypeExistenceService.checkProgramAndFacilityTypeExist(programId, facilityTypeId);
 
     profiler.start("FIND_ASSIGNMENTS_BY_PROGRAM_AND_FACILITY_TYPE");
-    System.out.println("before assignments");
+    System.out.println("\nbefore assignments\n");
     List<T> assignments = repository
             .findByProgramIdAndFacilityTypeId(programId, facilityTypeId, Pageable.unpaged());
-    System.out.println("after assignments");
+    System.out.println(assignments);
+    System.out.println("\nafter assignments\n");
 
     profiler.start("FIND_FACILITY_IDS");
     List<UUID> facilitiesIds = assignments.stream()
-            .limit(1)
+            .limit(2)
             .filter(assignment -> assignment.getNode().isRefDataFacility())
             .map(assignment -> assignment.getNode().getReferenceId())
             .collect(Collectors.toList());
-    System.out.println("limited to only one item");
+    System.out.println("\nlimited to only two items\n");
 
     profiler.start("FIND_FACILITIES_BY_ID_MAP");
     Map<UUID, FacilityDto> facilitiesById = facilityRefDataService.findByIds(facilitiesIds);
