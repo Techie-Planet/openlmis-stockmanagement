@@ -309,7 +309,7 @@ public abstract class SourceDestinationBaseService {
     System.out.println("\nbefore assignments\n");
     List<T> assignments = repository
             .findByProgramIdAndFacilityTypeId(programId, facilityTypeId, Pageable.unpaged());
-    // System.out.println(assignments);
+    System.out.println(assignments.get(0));
     System.out.println("\nafter assignments\n");
 
     profiler.start("FIND_FACILITY_IDS");
