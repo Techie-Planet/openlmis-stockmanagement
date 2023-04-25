@@ -35,7 +35,7 @@ public interface ValidDestinationAssignmentRepository extends
             "on fglm.key = vd.geolevelaffinityid and fglm.value = gz.id\n" +
             "where vd.facilitytypeid = :facilityTypeId\n" +
             "and vd.programid = :programId", nativeQuery = true)
-    List<T> findOnlyValidByFacilityGeoLevelMap(
+    List<ValidDestinationAssignment> findOnlyValidByFacilityGeoLevelMap(
             @Param("facilityGeoLevelMap") List<Map.Entry<UUID, UUID>> facilityGeoLevelMap,
             @Param("facilityTypeId") UUID facilityTypeId,
             @Param("programId") UUID programId);
