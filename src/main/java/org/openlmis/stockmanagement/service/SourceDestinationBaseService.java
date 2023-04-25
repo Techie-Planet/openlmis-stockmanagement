@@ -156,14 +156,16 @@ public abstract class SourceDestinationBaseService {
    * @param <T> assignment type
    * @return a list of assignment dto or empty list if not found.
    */
-  protected <T extends SourceDestinationAssignment> Page<ValidSourceDestinationDto> findOnlyValidAssignments(
-          UUID programId, UUID facilityId, SourceDestinationAssignmentRepository<T> repository,
+  protected <T extends SourceDestinationAssignment> Page<ValidSourceDestinationDto>
+      findOnlyValidAssignments(UUID programId, UUID facilityId,
+          SourceDestinationAssignmentRepository<T> repository,
           Profiler profiler, Pageable pageable) {
     boolean isFiltered = programId != null && facilityId != null;
 
     profiler.start("FIND_ASSIGNMENTS");
     return isFiltered
-            ? findOnlyValidFilteredAssignments(programId, facilityId, repository, profiler, pageable)
+            ? findOnlyValidFilteredAssignments(
+                    programId, facilityId, repository, profiler, pageable)
             : findAllAssignments(repository, profiler, pageable);
   }
 
@@ -360,7 +362,7 @@ public abstract class SourceDestinationBaseService {
   }
 
   private <T extends SourceDestinationAssignment> Page<ValidSourceDestinationDto>
-  findOnlyValidFilteredAssignments(UUID programId, UUID facilityId,
+      findOnlyValidFilteredAssignments(UUID programId, UUID facilityId,
                           SourceDestinationAssignmentRepository<T> repository,
                                    Profiler profiler, Pageable pageable) {
     // get the facility, get it's geolevelAffinity

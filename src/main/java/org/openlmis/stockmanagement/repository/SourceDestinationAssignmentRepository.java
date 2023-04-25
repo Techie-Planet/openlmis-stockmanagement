@@ -21,8 +21,8 @@ import java.util.UUID;
 import org.openlmis.stockmanagement.domain.sourcedestination.SourceDestinationAssignment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
 
 @NoRepositoryBean
@@ -38,16 +38,16 @@ public interface SourceDestinationAssignmentRepository<T extends SourceDestinati
       @Param("nodeId") UUID nodeId);
 
   @Query(value = "with facility_geo_level_map as (select * from unnest(:facilityGeoLevelMap))\n" +
-          "\n" +
-          "select vd.*, f.name from stockmanagement.valid_destination_assignments vd\n" +
-          "join stockmanagement.nodes node on node.id = vd.nodeid\n" +
-          "join referencedata.facilities f on f.id = node.referenceid\n" +
-          "join referencedata.geographic_zones gz on gz.id = f.geographiczoneid\n" +
-          "join referencedata.geographic_levels gl on gl.id = gz.levelid\n" +
-          "join facility_geo_level_map fglm " +
-          "on fglm.key = vd.geolevelaffinityid and fglm.value = gz.id\n" +
-          "where vd.facilitytypeid = :facilityTypeId\n" +
-          "and vd.programid = :programId", nativeQuery = true)
+          "\n"
+          + "select vd.*, f.name from stockmanagement.valid_destination_assignments vd\n"
+          + "join stockmanagement.nodes node on node.id = vd.nodeid\n"
+          + "join referencedata.facilities f on f.id = node.referenceid\n"
+          + "join referencedata.geographic_zones gz on gz.id = f.geographiczoneid\n"
+          + "join referencedata.geographic_levels gl on gl.id = gz.levelid\n"
+          + "join facility_geo_level_map fglm "
+          + "on fglm.key = vd.geolevelaffinityid and fglm.value = gz.id\n"
+          + "where vd.facilitytypeid = :facilityTypeId\n"
+          + "and vd.programid = :programId", nativeQuery = true)
   List<T> findOnlyValidByFacilityGeoLevelMap(
           @Param("facilityGeoLevelMap") List<Map.Entry<UUID, UUID>> facilityGeoLevelMap,
           @Param("facilityTypeId") UUID facilityTypeId,
