@@ -37,7 +37,8 @@ public interface SourceDestinationAssignmentRepository<T extends SourceDestinati
       @Param("programId") UUID programId, @Param("facilityTypeId") UUID facilityTypeId,
       @Param("nodeId") UUID nodeId);
 
-  @Query(value = "with facility_geo_level_map as (select * from unnest(:facilityGeoLevelMap))\n"
+  @Query(value = "with facility_geo_level_map as (select key, value from unnest(map_keys(:facilityGeoLevelMap))"
+          + "as key, unnest(map_values(:facilityGeoLevelMap)))\n"
           + "\n"
           + "select vd.* from stockmanagement.valid_destination_assignments vd\n"
           + "join stockmanagement.nodes node on node.id = vd.nodeid\n"
@@ -48,7 +49,7 @@ public interface SourceDestinationAssignmentRepository<T extends SourceDestinati
           + "on fglm.key = vd.geolevelaffinityid and fglm.value = gz.id\n"
           + "where vd.facilitytypeid = :facilityTypeId\n"
           + "and vd.programid = :programId", nativeQuery = true)
-  List<T> findOnlyValidByFacilityGeoLevelMap(
+  List<SourceDestinationAssignment> findOnlyValidByFacilityGeoLevelMap(
           @Param("facilityGeoLevelMap") List<Map.Entry<UUID, UUID>> facilityGeoLevelMap,
           @Param("facilityTypeId") UUID facilityTypeId,
           @Param("programId") UUID programId);
