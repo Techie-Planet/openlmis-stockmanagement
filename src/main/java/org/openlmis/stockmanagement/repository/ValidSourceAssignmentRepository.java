@@ -17,6 +17,7 @@ package org.openlmis.stockmanagement.repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourceAssignment;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
