@@ -393,7 +393,7 @@ public abstract class SourceDestinationBaseService {
     programFacilityTypeExistenceService.checkProgramAndFacilityTypeExist(programId, facilityTypeId);
     System.out.println("before geoMap");
     profiler.start("GET_FACILITY_GEO_LEVEL_MAP");
-    List<Map.Entry<UUID, UUID>> facilityGeoLevelZoneMap = getFacilityGeoLevelZoneMap(facility);
+    Map<UUID, UUID> facilityGeoLevelZoneMap = getFacilityGeoLevelZoneMap(facility);
     //            .entrySet()
     //            .stream()
     //            .collect(Collectors.toList());
