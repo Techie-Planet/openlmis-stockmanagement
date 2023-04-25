@@ -15,9 +15,29 @@
 
 package org.openlmis.stockmanagement.repository;
 
+import java.util.List;
+import java.util.Map;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourceAssignment;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ValidSourceAssignmentRepository extends
     SourceDestinationAssignmentRepository<ValidSourceAssignment> {
+    @Query(value = "with facility_geo_level_map as (select * from unnest(:facilityGeoLevelMap))\n" +
+            "\n" +
+            "select vs.*, f.name from stockmanagement.valid_source_assignments vs\n" +
+            "join stockmanagement.nodes node on node.id = vs.nodeid\n" +
+            "join referencedata.facilities f on f.id = node.referenceid\n" +
+            "join referencedata.geographic_zones gz on gz.id = f.geographiczoneid\n" +
+            "join referencedata.geographic_levels gl on gl.id = gz.levelid\n" +
+            "join facility_geo_level_map fglm " +
+            "on fglm.key = vs.geolevelaffinityid and fglm.value = gz.id\n" +
+            "where vs.facilitytypeid = :facilityTypeId\n" +
+            "and vs.programid = :programId", nativeQuery = true)
+    List<T> findOnlyValidByFacilityGeoLevelMap(
+            @Param("facilityGeoLevelMap") List<Map.Entry<UUID, UUID>> facilityGeoLevelMap,
+            @Param("facilityTypeId") UUID facilityTypeId,
+            @Param("programId") UUID programId);
+
 
 }

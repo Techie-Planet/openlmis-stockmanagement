@@ -62,8 +62,10 @@ public class ValidDestinationService extends SourceDestinationBaseService {
     Profiler profiler = new Profiler("FIND_DESTINATION_ASSIGNMENTS");
     profiler.setLogger(XLOGGER);
 
+    // Page<ValidSourceDestinationDto> assignments =
+    //         findAssignments(programId, facilityId, validDestinationRepository, profiler, pageable);
     Page<ValidSourceDestinationDto> assignments =
-            findAssignments(programId, facilityId, validDestinationRepository, profiler, pageable);
+            findOnlyValidAssignments(programId, facilityId, validDestinationRepository, profiler, pageable);
     profiler.stop().log();
     XLOGGER.exit();
     return assignments;
