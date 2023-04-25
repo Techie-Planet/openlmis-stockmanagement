@@ -329,32 +329,46 @@ public abstract class SourceDestinationBaseService {
     UUID facilityTypeId = facility.getType().getId();
     programFacilityTypeExistenceService.checkProgramAndFacilityTypeExist(programId, facilityTypeId);
 
+    long startTime = System.currentTimeMillis();
     profiler.start("FIND_ASSIGNMENTS_BY_PROGRAM_AND_FACILITY_TYPE");
     System.out.println("\nbefore assignments\n");
     List<T> assignments = repository
             .findByProgramIdAndFacilityTypeId(programId, facilityTypeId, Pageable.unpaged());
+    long assignmentsEndTime = System.currentTimeMillis();
+    System.out.println("\nAssignments time = " + (assignmentsEndTime - startTime) + "\n");
+
     System.out.println(assignments.get(0));
     System.out.println("\nafter assignments\n");
-
+    startTime = System.currentTimeMillis();
     profiler.start("FIND_FACILITY_IDS");
     List<UUID> facilitiesIds = assignments.stream()
             .filter(assignment -> assignment.getNode().isRefDataFacility())
             .map(assignment -> assignment.getNode().getReferenceId())
             .collect(Collectors.toList());
-    System.out.println("\nlimited to only two items\n");
+    long filterEndTime = System.currentTimeMillis();
+    System.out.println("\nFirst filter time = " + (filterEndTime - startTime) + "\n");
 
+    startTime = System.currentTimeMillis();
     profiler.start("FIND_FACILITIES_BY_ID_MAP");
     Map<UUID, FacilityDto> facilitiesById = facilityRefDataService.findByIds(facilitiesIds);
+    long facilitiesFetchEndTime = System.currentTimeMillis();
+    System.out.println("\nFacilities fetch time = " + (facilitiesFetchEndTime - startTime) + "\n");
 
+    startTime = System.currentTimeMillis();
     profiler.start("FIND_GEO_ASSIGNMENTS");
     List<SourceDestinationAssignment> geoAssigment = assignments.stream()
             .filter(assignment -> !assignment.getNode().isRefDataFacility()
                     || hasGeoAffinity(assignment, facility, facilitiesById))
             .collect(Collectors.toList());
+    long geoAssignmentsEndTime = System.currentTimeMillis();
+    System.out.println("\nGeoAssignments time = " + (geoAssignmentsEndTime - startTime) + "\n");
 
+    startTime = System.currentTimeMillis();
     List<ValidSourceDestinationDto> result = geoAssigment.stream()
             .map(assignment -> createAssignmentDto(assignment, facilitiesById))
             .collect(Collectors.toList());
+    long convertingToDtosEndTime = System.currentTimeMillis();
+    System.out.println("\nConverting to DTOs time = " + (convertingToDtosEndTime - startTime) + "\n");
 
     return pageable.isUnpaged()
             ? Pagination.getPage(result)
@@ -379,7 +393,7 @@ public abstract class SourceDestinationBaseService {
     programFacilityTypeExistenceService.checkProgramAndFacilityTypeExist(programId, facilityTypeId);
     System.out.println("before geoMap");
     profiler.start("GET_FACILITY_GEO_LEVEL_MAP");
-    List<Map.Entry<UUID, UUID>> facilityGeoLevelMap = getFacilityGeoLevelZoneMap(facility);
+    List<Map.Entry<UUID, UUID>> facilityGeoLevelZoneMap = getFacilityGeoLevelZoneMap(facility);
     //            .entrySet()
     //            .stream()
     //            .collect(Collectors.toList());
