@@ -39,7 +39,7 @@ public interface SourceDestinationAssignmentRepository<T extends SourceDestinati
 
   @Query(value = "with facility_geo_level_map as (select * from unnest(:facilityGeoLevelMap))\n"
           + "\n"
-          + "select vd.*, f.name from stockmanagement.valid_destination_assignments vd\n"
+          + "select vd.* from stockmanagement.valid_destination_assignments vd\n"
           + "join stockmanagement.nodes node on node.id = vd.nodeid\n"
           + "join referencedata.facilities f on f.id = node.referenceid\n"
           + "join referencedata.geographic_zones gz on gz.id = f.geographiczoneid\n"
