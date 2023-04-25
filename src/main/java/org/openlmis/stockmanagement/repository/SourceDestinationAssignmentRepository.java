@@ -37,7 +37,8 @@ public interface SourceDestinationAssignmentRepository<T extends SourceDestinati
       @Param("programId") UUID programId, @Param("facilityTypeId") UUID facilityTypeId,
       @Param("nodeId") UUID nodeId);
 
-  @Query(value = "with facility_geo_level_map as (select key, value from unnest(map_keys(:facilityGeoLevelMap))"
+  @Query(value = "with facility_geo_level_map as "
+          + "(select key, value from unnest(map_keys(:facilityGeoLevelMap))"
           + "as key, unnest(map_values(:facilityGeoLevelMap)) as value)\n"
           + "\n"
           + "select vd.* from stockmanagement.valid_destination_assignments vd\n"
