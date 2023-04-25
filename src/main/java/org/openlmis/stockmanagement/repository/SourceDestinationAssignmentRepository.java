@@ -51,7 +51,7 @@ public interface SourceDestinationAssignmentRepository<T extends SourceDestinati
           + "where vd.facilitytypeid = :facilityTypeId\n"
           + "and vd.programid = :programId", nativeQuery = true)
   List<T> findOnlyValidByFacilityGeoLevelMap(
-          @Param("facilityGeoLevelMap") List<Map.Entry<UUID, UUID>> facilityGeoLevelMap,
+          @Param("facilityGeoLevelArray") Object[] facilityGeoLevelArray,
           @Param("facilityTypeId") UUID facilityTypeId,
           @Param("programId") UUID programId);
 }

@@ -379,17 +379,21 @@ public abstract class SourceDestinationBaseService {
     programFacilityTypeExistenceService.checkProgramAndFacilityTypeExist(programId, facilityTypeId);
     System.out.println("before geoMap");
     profiler.start("GET_FACILITY_GEO_LEVEL_MAP");
-    List<Map.Entry<UUID, UUID>> facilityGeoLevelMap = getFacilityGeoLevelZoneMap(facility)
-            .entrySet()
-            .stream()
-            .collect(Collectors.toList());
+    List<Map.Entry<UUID, UUID>> facilityGeoLevelMap = getFacilityGeoLevelZoneMap(facility);
+    //            .entrySet()
+    //            .stream()
+    //            .collect(Collectors.toList());
     System.out.println("before repo call");
+    Object[] facilityGeoLevelArray = facilityGeoLevelZoneMap.entrySet()
+            .stream()
+            .map(entry -> new Object[]{entry.getKey(), entry.getValue()})
+            .toArray();
 
     profiler.start("FIND_ASSIGNMENTS_BY_FACILITY_GEO_LEVEL_MAP");
     // can also make it fetch exactly the dto fields, so that it will return the dto fields.
     // no need to convert to dtos
     List<T> listOfValidAssignmentDtos = repository
-            .findOnlyValidByFacilityGeoLevelMap(facilityGeoLevelMap, facilityTypeId, programId);
+            .findOnlyValidByFacilityGeoLevelMap(facilityGeoLevelArray, facilityTypeId, programId);
     System.out.println("after repo call, before conversion to DTOs");
     // convert all to assignmentDTOs
     List<ValidSourceDestinationDto> result = listOfValidAssignmentDtos.stream()
