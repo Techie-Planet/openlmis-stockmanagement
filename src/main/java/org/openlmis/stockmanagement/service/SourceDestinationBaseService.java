@@ -347,7 +347,6 @@ public abstract class SourceDestinationBaseService {
             .collect(Collectors.toList());
     long filterEndTime = System.currentTimeMillis();
     System.out.println("\nFirst filter time = " + (filterEndTime - startTime) + "\n");
-
     startTime = System.currentTimeMillis();
     profiler.start("FIND_FACILITIES_BY_ID_MAP");
     Map<UUID, FacilityDto> facilitiesById = facilityRefDataService.findByIds(facilitiesIds);
@@ -368,7 +367,8 @@ public abstract class SourceDestinationBaseService {
             .map(assignment -> createAssignmentDto(assignment, facilitiesById))
             .collect(Collectors.toList());
     long convertingToDtosEndTime = System.currentTimeMillis();
-    System.out.println("\nConverting to DTOs time = " + (convertingToDtosEndTime - startTime) + "\n");
+    System.out.println("\nConverting to DTOs time = "
+            + (convertingToDtosEndTime - startTime) + "\n");
 
     return pageable.isUnpaged()
             ? Pagination.getPage(result)
