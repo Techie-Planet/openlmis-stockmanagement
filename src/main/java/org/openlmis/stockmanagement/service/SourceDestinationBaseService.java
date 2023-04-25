@@ -385,7 +385,7 @@ public abstract class SourceDestinationBaseService {
     profiler.start("FIND_ASSIGNMENTS_BY_FACILITY_GEO_LEVEL_MAP");
     // can also make it fetch exactly the dto fields, so that it will return the dto fields.
     // no need to convert to dtos
-    List<SourceDestinationAssignment> listOfValidAssignmentDtos = repository
+    List<T> listOfValidAssignmentDtos = repository
             .findOnlyValidByFacilityGeoLevelMap(facilityGeoLevelMap, facilityTypeId, programId);
     // convert all to assignmentDTOs
     List<ValidSourceDestinationDto> result = listOfValidAssignmentDtos.stream()
