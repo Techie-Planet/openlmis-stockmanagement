@@ -42,6 +42,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -87,9 +88,8 @@ public class ValidSourceDestinationController {
     // return validDestinationService.findDestinations(
     //         params.getProgramId(), params.getFacilityId(), pageable);
     // return new PageImpl<>(Collections.emptyList(), pageable, 0);
-    ClassPathResource resource = new ClassPathResource("jsonText.txt");
-    byte[] data = resource.getInputStream().readAllBytes();
-    String jsonStr = new String(data);
+    ClassPathResource resource = new ClassPathResource("example.txt");
+    String jsonStr = StreamUtils.copyToString(resource.getInputStream(), Charset.defaultCharset());
     JSONObject jsonObject = new JSONObject(jsonStr);
     return jsonObject;
   }
