@@ -89,7 +89,7 @@ public class ValidSourceDestinationController {
     // return validDestinationService.findDestinations(
     //         params.getProgramId(), params.getFacilityId(), pageable);
     // return new PageImpl<>(Collections.emptyList(), pageable, 0);
-    ClassPathResource resource = new ClassPathResource("example.txt");
+    ClassPathResource resource = new ClassPathResource("jsonText.txt");
     String jsonStr = StreamUtils.copyToString(resource.getInputStream(), Charset.defaultCharset());
     JSONObject jsonObject = new JSONObject(jsonStr);
     return jsonObject;
