@@ -21,7 +21,11 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
+import org.json.JSONObject;
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourceAssignment;
@@ -70,15 +74,20 @@ public class ValidSourceDestinationController {
    * @return found valid destinations
    */
   @GetMapping(value = "/validDestinations")
-  public Page<ValidSourceDestinationDto> getValidDestinations(
-      @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
+  // public Page<ValidSourceDestinationDto> getValidDestinations(
+  public JSONObject getValidDestinations(
+      @RequestParam MultiValueMap<String, String> parameters,
+      Pageable pageable) throws IOException {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
-    LOGGER.info(format("Try to find valid destinations with program %s and facility %s",
-        params.getProgramId(), params.getFacilityId()));
-    return validDestinationService.findDestinations(
-            params.getProgramId(), params.getFacilityId(), pageable);
+    // LOGGER.info(format("Try to find valid destinations with program %s and facility %s",
+    //     params.getProgramId(), params.getFacilityId()));
+    // return validDestinationService.findDestinations(
+    //         params.getProgramId(), params.getFacilityId(), pageable);
     // return new PageImpl<>(Collections.emptyList(), pageable, 0);
+    String jsonStr = new String(Files.readAllBytes(Paths.get("jsonText.txt")));
+    JSONObject jsonObject = new JSONObject(jsonStr);
+    return jsonObject;
   }
 
   /**
