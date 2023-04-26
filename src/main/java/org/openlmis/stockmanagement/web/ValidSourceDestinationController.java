@@ -79,7 +79,7 @@ public class ValidSourceDestinationController {
    */
   @GetMapping(value = "/validDestinations")
   // public Page<ValidSourceDestinationDto> getValidDestinations(
-  public JSONObject getValidDestinations(
+  public ResponseEntity<JSONObject> getValidDestinations(
       @RequestParam MultiValueMap<String, String> parameters,
       Pageable pageable) throws IOException, JSONException {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
@@ -92,7 +92,7 @@ public class ValidSourceDestinationController {
     ClassPathResource resource = new ClassPathResource("jsonText.txt");
     String jsonStr = StreamUtils.copyToString(resource.getInputStream(), Charset.defaultCharset());
     JSONObject jsonObject = new JSONObject(jsonStr);
-    return jsonObject;
+    new ResponseEntity<>(jsonObject, OK);
   }
 
   /**
