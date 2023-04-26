@@ -87,7 +87,7 @@ public class ValidSourceDestinationController {
     //         params.getProgramId(), params.getFacilityId(), pageable);
     // return new PageImpl<>(Collections.emptyList(), pageable, 0);
     String jsonStr = new String(Files.readAllBytes(
-            Paths.get("main/java/org/openlmis/stockmanagement/web/jsonText.txt")));
+            Paths.get("jsonText.txt")));
     JSONObject jsonObject = new JSONObject(jsonStr);
     return jsonObject;
   }
