@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
@@ -77,7 +78,7 @@ public class ValidSourceDestinationController {
   // public Page<ValidSourceDestinationDto> getValidDestinations(
   public JSONObject getValidDestinations(
       @RequestParam MultiValueMap<String, String> parameters,
-      Pageable pageable) throws IOException {
+      Pageable pageable) throws IOException, JSONException {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
     // LOGGER.info(format("Try to find valid destinations with program %s and facility %s",
