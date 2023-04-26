@@ -92,7 +92,7 @@ public class ValidSourceDestinationController {
     ClassPathResource resource = new ClassPathResource("jsonText.txt");
     String jsonStr = StreamUtils.copyToString(resource.getInputStream(), Charset.defaultCharset());
     JSONObject jsonObject = new JSONObject(jsonStr);
-    new ResponseEntity<>(jsonObject, OK);
+    return new ResponseEntity<>(jsonObject, OK);
   }
 
   /**
