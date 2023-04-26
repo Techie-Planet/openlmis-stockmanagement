@@ -41,6 +41,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StreamUtils;
@@ -79,7 +81,7 @@ public class ValidSourceDestinationController {
    */
   @GetMapping(value = "/validDestinations")
   // public Page<ValidSourceDestinationDto> getValidDestinations(
-  public ResponseEntity<JSONObject> getValidDestinations(
+  public ResponseEntity<String> getValidDestinations(
       @RequestParam MultiValueMap<String, String> parameters,
       Pageable pageable) throws IOException, JSONException {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
@@ -92,7 +94,9 @@ public class ValidSourceDestinationController {
     ClassPathResource resource = new ClassPathResource("jsonText.txt");
     String jsonStr = StreamUtils.copyToString(resource.getInputStream(), Charset.defaultCharset());
     JSONObject jsonObject = new JSONObject(jsonStr);
-    return new ResponseEntity<>(jsonObject, OK);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    return ResponseEntity.ok().headers(headers).body(jsonObject.toString());
   }
 
   /**
