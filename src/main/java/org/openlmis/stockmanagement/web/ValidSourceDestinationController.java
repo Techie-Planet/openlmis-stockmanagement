@@ -37,6 +37,7 @@ import org.openlmis.stockmanagement.service.ValidSourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -86,8 +87,9 @@ public class ValidSourceDestinationController {
     // return validDestinationService.findDestinations(
     //         params.getProgramId(), params.getFacilityId(), pageable);
     // return new PageImpl<>(Collections.emptyList(), pageable, 0);
-    String jsonStr = new String(Files.readAllBytes(
-            Paths.get("jsonText.txt")));
+    ClassPathResource resource = new ClassPathResource("jsonText.txt");
+    byte[] data = resource.getInputStream().readAllBytes();
+    String jsonStr = new String(data);
     JSONObject jsonObject = new JSONObject(jsonStr);
     return jsonObject;
   }
