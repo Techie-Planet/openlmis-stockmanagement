@@ -101,7 +101,7 @@ public class ValidSourceDestinationController {
   @GetMapping(value = "/validDestinations")
   public ResponseEntity<?> getValidDestinations(
       @RequestParam MultiValueMap<String, String> parameters,
-      Pageable pageable) throws IOException, JSONException {
+      Pageable pageable) throws IOException {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
     HttpHeaders headers = new HttpHeaders();
