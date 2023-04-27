@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourcesCache;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 public interface ValidSourcesCacheRepository extends PagingAndSortingRepository<ValidSourcesCache, UUID> {
     Optional<ValidSourcesCache> findByProgramIdAndFacilityId(
             @Param("programId") UUID programId,
