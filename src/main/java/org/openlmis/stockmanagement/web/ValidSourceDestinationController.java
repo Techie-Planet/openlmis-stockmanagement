@@ -106,14 +106,14 @@ public class ValidSourceDestinationController {
 
     Optional<ValidDestinationsCache> destinationsCache = validDestinationsCacheRepository
             .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
-    if (destinationsCache.isEmpty()) {
+    if (!destinationsCache.isPresent()) {
       ClassPathResource resource = new ClassPathResource("jsonText2.txt");
       String jsonStr = StreamUtils.copyToString(resource.getInputStream(), Charset.defaultCharset());
       JSONObject jsonObject = new JSONObject(jsonStr);
       return ResponseEntity.ok().headers(headers).body(jsonObject.toString());
     }
 
-    return ResponseEntity.ok().headers(headers).body(destinationsCache.get().getDestinations());
+    return ResponseEntity.ok().headers(headers).body(destinationsCache.get().getValidDestinations());
   }
 
   /**
