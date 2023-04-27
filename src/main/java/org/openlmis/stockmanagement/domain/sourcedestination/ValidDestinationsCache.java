@@ -35,6 +35,6 @@ public class ValidDestinationsCache extends BaseEntity {
     @Type(type = PG_UUID)
     private UUID programId;
     @Column(name = "valid_destinations", columnDefinition = "jsonb")
-    private UUID validDestinations;
+    private String validDestinations;
 
 }
