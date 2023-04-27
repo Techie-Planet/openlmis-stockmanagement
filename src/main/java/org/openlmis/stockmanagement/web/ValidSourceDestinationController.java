@@ -113,7 +113,8 @@ public class ValidSourceDestinationController {
       return ResponseEntity.ok().headers(headers).body(jsonObject.toString());
     }
 
-    return ResponseEntity.ok().headers(headers).body(destinationsCache.get().getValidDestinations());
+    return ResponseEntity.ok().headers(headers).body(destinationsCache.get()
+            .getValidDestinations().toString());
   }
 
   /**
