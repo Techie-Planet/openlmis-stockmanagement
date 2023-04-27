@@ -75,6 +75,24 @@ public class ValidSourceDestinationController {
   @Autowired
   private ValidDestinationsCacheRepository validDestinationsCacheRepository;
 
+  //  /**
+  //   * Get a page with list of valid sources.
+  //   *
+  //   * @param parameters filtering parameters.
+  //   * @param pageable valid sources pagination parameters
+  //   * @return found valid sources
+  //   */
+  //  @GetMapping(value = "/validSources")
+  //  public Page<ValidSourceDestinationDto> getValidSources(
+  //          @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
+  //    ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
+  //
+  //    LOGGER.debug(format("Try to find valid sources with program %s and facility %s",
+  //            params.getProgramId(), params.getFacilityId()));
+  //    return validSourceService.findSources(
+  //            params.getProgramId(), params.getFacilityId(), pageable);
+  //  }
+
   /**
    * Get a page with list of valid destinations.
    *
@@ -83,38 +101,31 @@ public class ValidSourceDestinationController {
    * @return found valid destinations
    */
   @GetMapping(value = "/validDestinations")
-  // public Page<ValidSourceDestinationDto> getValidDestinations(
-  public ResponseEntity<String> getValidDestinations(
+  public ResponseEntity<?> getValidDestinations(
       @RequestParam MultiValueMap<String, String> parameters,
       Pageable pageable) throws IOException, JSONException {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
-
-    // LOGGER.info(format("Try to find valid destinations with program %s and facility %s",
-    //     params.getProgramId(), params.getFacilityId()));
-    // return validDestinationService.findDestinations(
-    //         params.getProgramId(), params.getFacilityId(), pageable);
-    // return new PageImpl<>(Collections.emptyList(), pageable, 0);
-    // ClassPathResource resource = new ClassPathResource("jsonText.txt");
-    // String jsonStr = StreamUtils.copyToString(resource.getInputStream(), Charset.defaultCharset());
-    // JSONObject jsonObject = new JSONObject(jsonStr);
-    // HttpHeaders headers = new HttpHeaders();
-    // headers.setContentType(MediaType.APPLICATION_JSON);
-    // return ResponseEntity.ok().headers(headers).body(jsonObject.toString());
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
     Optional<ValidDestinationsCache> destinationsCache = validDestinationsCacheRepository
             .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
-    if (!destinationsCache.isPresent()) {
-      ClassPathResource resource = new ClassPathResource("jsonText2.txt");
-      String jsonStr = StreamUtils.copyToString(resource.getInputStream(), Charset.defaultCharset());
-      JSONObject jsonObject = new JSONObject(jsonStr);
-      return ResponseEntity.ok().headers(headers).body(jsonObject.toString());
+    if (destinationsCache.isPresent()) {
+      return ResponseEntity.ok().headers(headers).body(destinationsCache.get()
+              .getValidDestinations().toString());
     }
+    Page<ValidSourceDestinationDto> resultPage = validDestinationService
+            .findDestinations(params.getProgramId(), params.getFacilityId(), pageable);
 
-    return ResponseEntity.ok().headers(headers).body(destinationsCache.get()
-            .getValidDestinations().toString());
+    ObjectMapper objectMapper = new ObjectMapper();
+    String jsonString = objectMapper.writeValueAsString(resultPage);
+    ValidDestinationsCache newValidDestination = new ValidDestinationsCache(
+            params.getFacilityId(), params.getProgramId(), jsonString
+    );
+    validDestinationsCacheRepository.save(newValidDestination);
+
+    return ResponseEntity.ok().body(resultPage);
   }
 
   /**
