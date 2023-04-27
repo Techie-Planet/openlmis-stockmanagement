@@ -118,9 +118,11 @@ public class ValidSourceDestinationController {
 
     ObjectMapper objectMapper = new ObjectMapper();
     String jsonString = objectMapper.writeValueAsString(resultPage);
-    ValidDestinationsCache newValidDestination = new ValidDestinationsCache(
-            params.getFacilityId(), params.getProgramId(), jsonString
-    );
+
+    ValidDestinationsCache newValidDestination = new ValidDestinationsCache();
+    newValidDestination.setFacilityId(params.getFacilityId());
+    newValidDestination.setProgramId(params.getProgramId());
+    newValidDestination.setValidDestinations(jsonString);
     validDestinationsCacheRepository.save(newValidDestination);
 
     return ResponseEntity.ok().body(resultPage);
