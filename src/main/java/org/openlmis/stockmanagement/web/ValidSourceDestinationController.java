@@ -28,10 +28,12 @@ import java.nio.file.Paths;
 import java.util.UUID;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.openlmis.stockmanagement.domain.sourcedestination.DestinationsCache;
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourceAssignment;
 import org.openlmis.stockmanagement.dto.ValidSourceDestinationDto;
+import org.openlmis.stockmanagement.repository.DestinationsCacheRepository;
 import org.openlmis.stockmanagement.service.PermissionService;
 import org.openlmis.stockmanagement.service.ValidDestinationService;
 import org.openlmis.stockmanagement.service.ValidSourceService;
@@ -71,6 +73,8 @@ public class ValidSourceDestinationController {
 
   @Autowired
   private ValidDestinationService validDestinationService;
+  @Autowired
+  private DestinationsCacheRepository destinationsCacheRepository;
 
   /**
    * Get a page with list of valid destinations.
@@ -91,12 +95,26 @@ public class ValidSourceDestinationController {
     // return validDestinationService.findDestinations(
     //         params.getProgramId(), params.getFacilityId(), pageable);
     // return new PageImpl<>(Collections.emptyList(), pageable, 0);
-    ClassPathResource resource = new ClassPathResource("jsonText.txt");
-    String jsonStr = StreamUtils.copyToString(resource.getInputStream(), Charset.defaultCharset());
-    JSONObject jsonObject = new JSONObject(jsonStr);
+    // ClassPathResource resource = new ClassPathResource("jsonText.txt");
+    // String jsonStr = StreamUtils.copyToString(resource.getInputStream(), Charset.defaultCharset());
+    // JSONObject jsonObject = new JSONObject(jsonStr);
+    // HttpHeaders headers = new HttpHeaders();
+    // headers.setContentType(MediaType.APPLICATION_JSON);
+    // return ResponseEntity.ok().headers(headers).body(jsonObject.toString());
+
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    return ResponseEntity.ok().headers(headers).body(jsonObject.toString());
+
+    Optional<DestinationsCache> destinationsCache = destinationsCacheRepository
+            .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
+    if (destinationsCache.isEmpty()) {
+      ClassPathResource resource = new ClassPathResource("jsonText2.txt");
+      String jsonStr = StreamUtils.copyToString(resource.getInputStream(), Charset.defaultCharset());
+      JSONObject jsonObject = new JSONObject(jsonStr);
+      return ResponseEntity.ok().headers(headers).body(jsonObject.toString());
+    }
+
+    return ResponseEntity.ok().headers(headers).body(destinationsCache.get().getDestinations());
   }
 
   /**
