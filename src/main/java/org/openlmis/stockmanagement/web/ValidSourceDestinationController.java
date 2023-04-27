@@ -21,12 +21,10 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Optional;
 import java.util.UUID;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationsCache;
