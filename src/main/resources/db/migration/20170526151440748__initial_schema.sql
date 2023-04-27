@@ -149,6 +149,13 @@ CREATE TABLE valid_destinations_cache
     programid UUID NOT NULL,
     validdestinations jsonb NOT NULL
 );
+CREATE TABLE valid_sources_cache
+(
+    id UUID PRIMARY KEY NOT NULL,
+    facilityid UUID NOT NULL,
+    programid UUID NOT NULL,
+    validsources jsonb NOT NULL
+);
 ALTER TABLE physical_inventories ADD FOREIGN KEY (stockeventid) REFERENCES stock_events (id);
 ALTER TABLE physical_inventory_line_items ADD FOREIGN KEY (physicalinventoryid) REFERENCES physical_inventories (id);
 ALTER TABLE stock_card_fields ADD FOREIGN KEY (availablestockcardfieldsid) REFERENCES available_stock_card_fields (id);
