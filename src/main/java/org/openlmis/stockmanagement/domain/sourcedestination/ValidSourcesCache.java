@@ -20,6 +20,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import lombok.Data;
+import org.hibernate.annotations.Type;
 import org.openlmis.stockmanagement.domain.BaseEntity;
 
 @Entity
@@ -27,8 +28,10 @@ import org.openlmis.stockmanagement.domain.BaseEntity;
 @Table(name = "valid_sources_cache", schema = "stockmanagement")
 public class ValidSourcesCache extends BaseEntity {
     @Column(nullable = false)
+    @Type(type = PG_UUID)
     private UUID facilityId;
     @Column(nullable = false)
+    @Type(type = PG_UUID)
     private UUID programId;
     @Column(name = "valid_sources", columnDefinition = "jsonb")
     private UUID validSources;
