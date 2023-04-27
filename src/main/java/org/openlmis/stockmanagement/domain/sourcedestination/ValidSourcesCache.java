@@ -24,13 +24,13 @@ import org.openlmis.stockmanagement.domain.BaseEntity;
 
 @Entity
 @Data
-@Table(name = "sources_cache", schema = "stockmanagement")
-public class SourcesCache extends BaseEntity {
+@Table(name = "valid_sources_cache", schema = "stockmanagement")
+public class ValidSourcesCache extends BaseEntity {
     @Column(nullable = false)
     private UUID facilityId;
     @Column(nullable = false)
     private UUID programId;
-    @Column(name = "sources", columnDefinition = "jsonb")
-    private UUID sources;
+    @Column(name = "valid_sources", columnDefinition = "jsonb")
+    private UUID validSources;
 
 }

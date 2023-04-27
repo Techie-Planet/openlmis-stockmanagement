@@ -13,25 +13,15 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
 
-package org.openlmis.stockmanagement.domain.sourcedestination;
+package org.openlmis.stockmanagement.repository;
 
+import java.util.Optional;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import lombok.Data;
-import org.openlmis.stockmanagement.domain.BaseEntity;
-
-
-@Entity
-@Data
-@Table(name = "destinations_cache", schema = "stockmanagement")
-public class DestinationsCache extends BaseEntity {
-    @Column(nullable = false)
-    private UUID facilityId;
-    @Column(nullable = false)
-    private UUID programId;
-    @Column(name = "destinations", columnDefinition = "jsonb")
-    private UUID destinations;
-
+import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationsCache;
+import org.springframework.data.repository.PagingAndSortingRepository;
+public interface ValidDestinationsCacheRepository extends PagingAndSortingRepository<ValidDestinationsCache, UUID> {
+    Optional<ValidDestinationsCache> findByProgramIdAndFacilityId(
+            @Param("programId") UUID programId,
+            @Param("facilityId") UUID facilityId
+    );
 }

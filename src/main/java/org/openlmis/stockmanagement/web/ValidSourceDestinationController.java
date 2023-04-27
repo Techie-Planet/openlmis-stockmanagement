@@ -23,17 +23,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.UUID;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.openlmis.stockmanagement.domain.sourcedestination.DestinationsCache;
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
+import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationsCache;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourceAssignment;
 import org.openlmis.stockmanagement.dto.ValidSourceDestinationDto;
-import org.openlmis.stockmanagement.repository.DestinationsCacheRepository;
+import org.openlmis.stockmanagement.repository.ValidDestinationsCacheRepository;
 import org.openlmis.stockmanagement.service.PermissionService;
 import org.openlmis.stockmanagement.service.ValidDestinationService;
 import org.openlmis.stockmanagement.service.ValidSourceService;
@@ -74,7 +72,7 @@ public class ValidSourceDestinationController {
   @Autowired
   private ValidDestinationService validDestinationService;
   @Autowired
-  private DestinationsCacheRepository destinationsCacheRepository;
+  private ValidDestinationsCacheRepository validDestinationsCacheRepository;
 
   /**
    * Get a page with list of valid destinations.
@@ -105,7 +103,7 @@ public class ValidSourceDestinationController {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
-    Optional<DestinationsCache> destinationsCache = destinationsCacheRepository
+    Optional<ValidDestinationsCache> destinationsCache = validDestinationsCacheRepository
             .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
     if (destinationsCache.isEmpty()) {
       ClassPathResource resource = new ClassPathResource("jsonText2.txt");
