@@ -185,7 +185,7 @@ public class ValidSourceDestinationController {
    * @return found valid sources
    */
   @GetMapping(value = "/validSources")
-  public Page<ValidSourceDestinationDto> getValidSources(
+  public ResponseEntity<?> getValidSources(
       @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
