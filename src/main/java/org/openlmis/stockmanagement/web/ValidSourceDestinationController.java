@@ -29,8 +29,10 @@ import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationsCache;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourceAssignment;
+import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourcesCache;
 import org.openlmis.stockmanagement.dto.ValidSourceDestinationDto;
 import org.openlmis.stockmanagement.repository.ValidDestinationsCacheRepository;
+import org.openlmis.stockmanagement.repository.ValidSourcesCacheRepository;
 import org.openlmis.stockmanagement.service.PermissionService;
 import org.openlmis.stockmanagement.service.ValidDestinationService;
 import org.openlmis.stockmanagement.service.ValidSourceService;
@@ -72,6 +74,8 @@ public class ValidSourceDestinationController {
   private ValidDestinationService validDestinationService;
   @Autowired
   private ValidDestinationsCacheRepository validDestinationsCacheRepository;
+  @Autowired
+  private ValidSourcesCacheRepository validSourcesCacheRepository;
 
   //  /**
   //   * Get a page with list of valid sources.
@@ -106,9 +110,13 @@ public class ValidSourceDestinationController {
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
+    long startTime = System.currentTimeMillis();
 
     Optional<ValidDestinationsCache> destinationsCache = validDestinationsCacheRepository
             .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
+    long endTime = System.currentTimeMillis();
+    System.out.println("\n\nFetching Valid Destinations from cache time = "
+            + (endTime - startTime) + "\n\n");
     if (destinationsCache.isPresent()) {
       return ResponseEntity.ok().headers(headers).body(destinationsCache.get()
               .getValidDestinations().toString());
@@ -150,6 +158,25 @@ public class ValidSourceDestinationController {
         validDestinationService.assignDestination(assignment), CREATED);
   }
 
+  //  /**
+  //   * Get a page with list of valid sources.
+  //   *
+  //   * @param parameters filtering parameters.
+  //   * @param pageable valid sources pagination parameters
+  //   * @return found valid sources
+  //   */
+  //  @GetMapping(value = "/validSources")
+  //  public Page<ValidSourceDestinationDto> getValidSources(
+  //      @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
+  //    ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
+  //
+  //    LOGGER.debug(format("Try to find valid sources with program %s and facility %s",
+  //        params.getProgramId(), params.getFacilityId()));
+  //    return validSourceService.findSources(
+  //        params.getProgramId(), params.getFacilityId(), pageable);
+  //    // return new PageImpl<>(Collections.emptyList(), pageable, 0);
+  //  }
+
   /**
    * Get a page with list of valid sources.
    *
@@ -162,10 +189,32 @@ public class ValidSourceDestinationController {
       @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
-    LOGGER.debug(format("Try to find valid sources with program %s and facility %s",
-        params.getProgramId(), params.getFacilityId()));
-    return validSourceService.findSources(
-        params.getProgramId(), params.getFacilityId(), pageable);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    long startTime = System.currentTimeMillis();
+
+    Optional<ValidSourcesCache> sourcesCache = validSourcesCacheRepository
+            .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
+    long endTime = System.currentTimeMillis();
+    System.out.println("\n\nFetching Valid Sources from cache time = "
+            + (endTime - startTime) + "\n\n");
+    if (sourcesCache.isPresent()) {
+      return ResponseEntity.ok().headers(headers).body(sourcesCache.get()
+              .getValidSources().toString());
+    }
+    Page<ValidSourceDestinationDto> resultPage = validSourceService
+            .findSources(params.getProgramId(), params.getFacilityId(), pageable);
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String jsonString = objectMapper.writeValueAsString(resultPage);
+
+    ValidSourcesCache newValidSource = new ValidSourcesCache();
+    newValidSource.setFacilityId(params.getFacilityId());
+    newValidSource.setProgramId(params.getProgramId());
+    newValidDestination.setValidSources(jsonString);
+    validDestinationsCacheRepository.save(newValidSource);
+
+    return ResponseEntity.ok().body(resultPage);
     // return new PageImpl<>(Collections.emptyList(), pageable, 0);
   }
 
