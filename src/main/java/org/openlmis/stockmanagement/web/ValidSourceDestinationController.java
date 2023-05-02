@@ -211,8 +211,8 @@ public class ValidSourceDestinationController {
     ValidSourcesCache newValidSource = new ValidSourcesCache();
     newValidSource.setFacilityId(params.getFacilityId());
     newValidSource.setProgramId(params.getProgramId());
-    newValidDestination.setValidSources(jsonString);
-    validDestinationsCacheRepository.save(newValidSource);
+    newValidSource.setValidSources(jsonString);
+    validSourcesCacheRepository.save(newValidSource);
 
     return ResponseEntity.ok().body(resultPage);
     // return new PageImpl<>(Collections.emptyList(), pageable, 0);
