@@ -110,13 +110,9 @@ public class ValidSourceDestinationController {
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    long startTime = System.currentTimeMillis();
 
     Optional<ValidDestinationsCache> destinationsCache = validDestinationsCacheRepository
             .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
-    long endTime = System.currentTimeMillis();
-    System.out.println("\n\nFetching Valid Destinations from cache time = "
-            + (endTime - startTime) + "\n\n");
     if (destinationsCache.isPresent()) {
       return ResponseEntity.ok().headers(headers).body(destinationsCache.get()
               .getValidDestinations().toString());
@@ -192,13 +188,9 @@ public class ValidSourceDestinationController {
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    long startTime = System.currentTimeMillis();
 
     Optional<ValidSourcesCache> sourcesCache = validSourcesCacheRepository
             .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
-    long endTime = System.currentTimeMillis();
-    System.out.println("\n\nFetching Valid Sources from cache time = "
-            + (endTime - startTime) + "\n\n");
     if (sourcesCache.isPresent()) {
       return ResponseEntity.ok().headers(headers).body(sourcesCache.get()
               .getValidSources().toString());

@@ -146,30 +146,6 @@ public abstract class SourceDestinationBaseService {
   }
 
   /**
-   * Get a list of assignments.
-   * This method will return only those assignments that match the geo level affinity
-   * or all possible assignments (when filtering params are not provided).
-   *
-   * @param programId program id
-   * @param facilityId facility id
-   * @param repository assignment repository
-   * @param <T> assignment type
-   * @return a list of assignment dto or empty list if not found.
-   */
-  protected <T extends SourceDestinationAssignment> Page<ValidSourceDestinationDto>
-      findOnlyValidAssignments(UUID programId, UUID facilityId,
-          SourceDestinationAssignmentRepository<T> repository,
-          Profiler profiler, Pageable pageable) {
-    boolean isFiltered = programId != null && facilityId != null;
-
-    profiler.start("FIND_ASSIGNMENTS");
-    return isFiltered
-            ? findOnlyValidFilteredAssignments(
-                    programId, facilityId, repository, profiler, pageable)
-            : findAllAssignments(repository, profiler, pageable);
-  }
-
-  /**
    * Create a new assignment.
    *
    * @param assignment assignment
@@ -329,91 +305,28 @@ public abstract class SourceDestinationBaseService {
     UUID facilityTypeId = facility.getType().getId();
     programFacilityTypeExistenceService.checkProgramAndFacilityTypeExist(programId, facilityTypeId);
 
-    long startTime = System.currentTimeMillis();
     profiler.start("FIND_ASSIGNMENTS_BY_PROGRAM_AND_FACILITY_TYPE");
-    System.out.println("\nbefore assignments\n");
     List<T> assignments = repository
             .findByProgramIdAndFacilityTypeId(programId, facilityTypeId, Pageable.unpaged());
-    long assignmentsEndTime = System.currentTimeMillis();
-    System.out.println("\nAssignments time = " + (assignmentsEndTime - startTime) + "\n");
 
-    System.out.println(assignments.get(0));
-    System.out.println("\nafter assignments\n");
-    startTime = System.currentTimeMillis();
     profiler.start("FIND_FACILITY_IDS");
     List<UUID> facilitiesIds = assignments.stream()
             .filter(assignment -> assignment.getNode().isRefDataFacility())
             .map(assignment -> assignment.getNode().getReferenceId())
             .collect(Collectors.toList());
-    long filterEndTime = System.currentTimeMillis();
-    System.out.println("\nFirst filter time = " + (filterEndTime - startTime) + "\n");
-    startTime = System.currentTimeMillis();
+
     profiler.start("FIND_FACILITIES_BY_ID_MAP");
     Map<UUID, FacilityDto> facilitiesById = facilityRefDataService.findByIds(facilitiesIds);
-    long facilitiesFetchEndTime = System.currentTimeMillis();
-    System.out.println("\nFacilities fetch time = " + (facilitiesFetchEndTime - startTime) + "\n");
 
-    startTime = System.currentTimeMillis();
     profiler.start("FIND_GEO_ASSIGNMENTS");
     List<SourceDestinationAssignment> geoAssigment = assignments.stream()
             .filter(assignment -> !assignment.getNode().isRefDataFacility()
                     || hasGeoAffinity(assignment, facility, facilitiesById))
             .collect(Collectors.toList());
-    long geoAssignmentsEndTime = System.currentTimeMillis();
-    System.out.println("\nGeoAssignments time = " + (geoAssignmentsEndTime - startTime) + "\n");
 
-    startTime = System.currentTimeMillis();
     List<ValidSourceDestinationDto> result = geoAssigment.stream()
             .map(assignment -> createAssignmentDto(assignment, facilitiesById))
             .collect(Collectors.toList());
-    long convertingToDtosEndTime = System.currentTimeMillis();
-    System.out.println("\nConverting to DTOs time = "
-            + (convertingToDtosEndTime - startTime) + "\n");
-
-    return pageable.isUnpaged()
-            ? Pagination.getPage(result)
-            : Pagination.getPage(result, pageable);
-  }
-
-  private <T extends SourceDestinationAssignment> Page<ValidSourceDestinationDto>
-      findOnlyValidFilteredAssignments(UUID programId, UUID facilityId,
-                          SourceDestinationAssignmentRepository<T> repository,
-                                   Profiler profiler, Pageable pageable) {
-    // get the facility, get it's geolevelAffinity
-    profiler.start("FIND_FACILITY_BY_ID");
-    FacilityDto facility = facilityRefDataService.findOne(facilityId);
-
-    if (facility == null) {
-      throw new ValidationMessageException(
-              new Message(ERROR_FACILITY_NOT_FOUND, facilityId.toString()));
-    }
-
-    profiler.start("CHECK_PROGRAM_AND_FACILITY_TYPE_EXIST");
-    UUID facilityTypeId = facility.getType().getId();
-    programFacilityTypeExistenceService.checkProgramAndFacilityTypeExist(programId, facilityTypeId);
-    System.out.println("before geoMap");
-    profiler.start("GET_FACILITY_GEO_LEVEL_MAP");
-    Map<UUID, UUID> facilityGeoLevelZoneMap = getFacilityGeoLevelZoneMap(facility);
-    //            .entrySet()
-    //            .stream()
-    //            .collect(Collectors.toList());
-    System.out.println("before repo call");
-    Object[] facilityGeoLevelArray = facilityGeoLevelZoneMap.entrySet()
-            .stream()
-            .map(entry -> new Object[]{entry.getKey(), entry.getValue()})
-            .toArray();
-
-    profiler.start("FIND_ASSIGNMENTS_BY_FACILITY_GEO_LEVEL_MAP");
-    // can also make it fetch exactly the dto fields, so that it will return the dto fields.
-    // no need to convert to dtos
-    List<T> listOfValidAssignmentDtos = repository
-            .findOnlyValidByFacilityGeoLevelMap(facilityGeoLevelArray, facilityTypeId, programId);
-    System.out.println("after repo call, before conversion to DTOs");
-    // convert all to assignmentDTOs
-    List<ValidSourceDestinationDto> result = listOfValidAssignmentDtos.stream()
-            .map(assignment -> createAssignmentDto(assignment, null))
-            .collect(Collectors.toList());
-    System.out.println("after conversion");
 
     return pageable.isUnpaged()
             ? Pagination.getPage(result)
