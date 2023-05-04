@@ -112,7 +112,7 @@ public class ValidSourceDestinationController {
     headers.setContentType(MediaType.APPLICATION_JSON);
 
     Optional<ValidDestinationsCache> destinationsCache = validDestinationsCacheRepository
-            .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
+            .findFirst1ByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
     if (destinationsCache.isPresent()) {
       return ResponseEntity.ok().headers(headers).body(destinationsCache.get()
               .getValidDestinations().toString());
@@ -190,7 +190,7 @@ public class ValidSourceDestinationController {
     headers.setContentType(MediaType.APPLICATION_JSON);
 
     Optional<ValidSourcesCache> sourcesCache = validSourcesCacheRepository
-            .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
+            .findFirst1ByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
     if (sourcesCache.isPresent()) {
       return ResponseEntity.ok().headers(headers).body(sourcesCache.get()
               .getValidSources().toString());
