@@ -59,6 +59,7 @@ import org.openlmis.stockmanagement.dto.referencedata.OrderableDto;
 import org.openlmis.stockmanagement.exception.JasperReportViewException;
 import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
 import org.openlmis.stockmanagement.repository.NodeRepository;
+import org.openlmis.stockmanagement.repository.OrganizationRepository;
 import org.openlmis.stockmanagement.repository.StockCardLineItemReasonRepository;
 import org.openlmis.stockmanagement.repository.StockEventsRepository;
 import org.openlmis.stockmanagement.service.referencedata.FacilityReferenceDataService;
@@ -106,6 +107,8 @@ public class JasperReportService {
 
   @Autowired
   private DataSource replicationDataSource;
+  @Autowired
+  private OrganizationRepository organizationRepository;
 
   @Value("${dateFormat}")
   private String dateFormat;
@@ -357,6 +360,8 @@ public class JasperReportService {
               orderableReferenceDataService.findOne(lineItem.getOrderableId()));
       mapOfLineItemObjects.put("receivingFacility",
               facilityReferenceDataService.findOne(receivingFacilityId));
+      mapOfLineItemObjects.put("receivingOrganization",
+              organizationRepository.findById(receivingFacilityId).get());
       mapOfLineItemObjects.put("lot", (lineItem.getLotId() != null
               ? lotReferenceDataService.findOne(lineItem.getLotId()) : null));
       mapOfLineItemObjects.put("vvmStatus",
