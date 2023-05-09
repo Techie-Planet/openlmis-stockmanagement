@@ -19,6 +19,7 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.openlmis.stockmanagement.domain.BaseEntity;
@@ -26,7 +27,8 @@ import org.openlmis.stockmanagement.domain.BaseEntity;
 
 @Entity
 @Data
-@Table(name = "valid_destinations_cache", schema = "stockmanagement")
+@Table(name = "valid_destinations_cache", schema = "stockmanagement",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"facilityid", "programid"})})
 public class ValidDestinationsCache extends BaseEntity {
     @Column(nullable = false)
     @Type(type = PG_UUID)

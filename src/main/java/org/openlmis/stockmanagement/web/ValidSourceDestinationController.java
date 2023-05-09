@@ -123,11 +123,14 @@ public class ValidSourceDestinationController {
     ObjectMapper objectMapper = new ObjectMapper();
     String jsonString = objectMapper.writeValueAsString(resultPage);
 
-    ValidDestinationsCache newValidDestination = new ValidDestinationsCache();
-    newValidDestination.setFacilityId(params.getFacilityId());
-    newValidDestination.setProgramId(params.getProgramId());
-    newValidDestination.setValidDestinations(jsonString);
-    validDestinationsCacheRepository.save(newValidDestination);
+    if (!validDestinationsCacheRepository
+            .existsByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId())) {
+        ValidDestinationsCache newValidDestination = new ValidDestinationsCache();
+        newValidDestination.setFacilityId(params.getFacilityId());
+        newValidDestination.setProgramId(params.getProgramId());
+        newValidDestination.setValidDestinations(jsonString);
+        validDestinationsCacheRepository.save(newValidDestination);
+    }
 
     return ResponseEntity.ok().body(resultPage);
   }
@@ -201,11 +204,14 @@ public class ValidSourceDestinationController {
     ObjectMapper objectMapper = new ObjectMapper();
     String jsonString = objectMapper.writeValueAsString(resultPage);
 
-    ValidSourcesCache newValidSource = new ValidSourcesCache();
-    newValidSource.setFacilityId(params.getFacilityId());
-    newValidSource.setProgramId(params.getProgramId());
-    newValidSource.setValidSources(jsonString);
-    validSourcesCacheRepository.save(newValidSource);
+      if (!validSourcesCacheRepository
+              .existsByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId())) {
+          ValidSourcesCache newValidSource = new ValidSourcesCache();
+          newValidSource.setFacilityId(params.getFacilityId());
+          newValidSource.setProgramId(params.getProgramId());
+          newValidSource.setValidSources(jsonString);
+          validSourcesCacheRepository.save(newValidSource);
+      }
 
     return ResponseEntity.ok().body(resultPage);
     // return new PageImpl<>(Collections.emptyList(), pageable, 0);

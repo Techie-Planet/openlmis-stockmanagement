@@ -25,4 +25,8 @@ public interface ValidSourcesCacheRepository extends PagingAndSortingRepository<
             @Param("programId") UUID programId,
             @Param("facilityId") UUID facilityId
     );
+    boolean existsByProgramIdAndFacilityId(
+            @Param("programId") UUID programId,
+            @Param("facilityId") UUID facilityId
+    );
 }
