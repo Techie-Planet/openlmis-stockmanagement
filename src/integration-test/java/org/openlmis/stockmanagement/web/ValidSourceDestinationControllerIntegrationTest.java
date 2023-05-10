@@ -94,11 +94,11 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     when(validSourcesCacheRepository.findByProgramIdAndFacilityId(program, facility))
             .thenReturn(Optional.empty());
 
-    when(validSourceService.findSources(program, facility, pageRequest))
+    when(validSourceService.findSources(program, facility, any(PageRequest.class)))
         .thenReturn(Pagination.getPage(singletonList(sourceDestination)));
 
-    when(validDestinationService.findDestinations(program, facility, pageRequest))
-        .thenReturn(Pagination.getPage(singletonList(destinationAssignmentDto)));
+    when(validDestinationService.findDestinations(program, facility, any(PageRequest.class)))
+        .thenReturn(Pagination.getPage(singletonList(sourceDestination)));
 
     verifyZeroInteractions(permissionService);
 
@@ -167,10 +167,10 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     when(validSourcesCacheRepository.findByProgramIdAndFacilityId(null, null))
             .thenReturn(Optional.empty());
 
-    when(validSourceService.findSources(null, null, pageRequest))
+    when(validSourceService.findSources(null, null, any(PageRequest.class)))
             .thenReturn(Pagination.getPage(singletonList(sourceAssignmentDto)));
 
-    when(validDestinationService.findDestinations(null, null, pageRequest))
+    when(validDestinationService.findDestinations(null, null, any(PageRequest.class)))
             .thenReturn(Pagination.getPage(singletonList(destinationAssignmentDto)));
 
     verifyZeroInteractions(permissionService);
