@@ -17,7 +17,7 @@ package org.openlmis.stockmanagement.web;
 
 import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
-//import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -96,7 +96,7 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     when(validDestinationsCacheRepository.findFirst1ByProgramIdAndFacilityId(program, facility))
             .thenReturn(Optional.of(validDestinationsCache));
 
-    when(validDestinationsCacheRepository.findFirst1ByProgramIdAndFacilityId(program, facility))
+    when(validSourcesCacheRepository.findFirst1ByProgramIdAndFacilityId(program, facility))
             .thenReturn(Optional.of(validSourcesCache));
 
     when(validSourceService.findSources(program, facility, pageRequest))
