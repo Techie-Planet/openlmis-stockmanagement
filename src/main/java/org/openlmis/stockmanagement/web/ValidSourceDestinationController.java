@@ -119,8 +119,6 @@ public class ValidSourceDestinationController {
                     PageRequest.of(0, Integer.MAX_VALUE));
 
     String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
-    System.out.println(resultPage);
-    System.out.println(jsonString);
 
     if (!validDestinationsCacheRepository
             .existsByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId())) {

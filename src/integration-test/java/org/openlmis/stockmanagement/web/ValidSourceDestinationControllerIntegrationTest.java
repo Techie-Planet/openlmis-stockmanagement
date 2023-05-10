@@ -85,7 +85,6 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     ValidSourceDestinationDto sourceDestination = destinationAssignmentDto;
 
 
-
     UUID program = randomUUID();
     UUID facility = randomUUID();
 
@@ -99,7 +98,7 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
         .thenReturn(Pagination.getPage(singletonList(sourceDestination)));
 
     when(validDestinationService.findDestinations(program, facility, pageRequest))
-        .thenReturn(Pagination.getPage(singletonList(sourceDestination)));
+        .thenReturn(Pagination.getPage(singletonList(destinationAssignmentDto)));
 
     verifyZeroInteractions(permissionService);
 
