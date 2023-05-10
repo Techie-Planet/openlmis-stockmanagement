@@ -20,6 +20,7 @@ import static java.util.UUID.randomUUID;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.openlmis.stockmanagement.testutils.ValidDestinationAssignmentDataBuilder.createDestination;
@@ -170,7 +171,8 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     when(validSourceService.findSources(null, null, any(PageRequest.class)))
             .thenReturn(Pagination.getPage(singletonList(sourceAssignmentDto)));
 
-    when(validDestinationService.findDestinations(null, null, any(PageRequest.class)))
+    when(validDestinationService.findDestinations(
+            null, null, PageRequest.of(anyInt(), anyInt())))
             .thenReturn(Pagination.getPage(singletonList(destinationAssignmentDto)));
 
     verifyZeroInteractions(permissionService);
