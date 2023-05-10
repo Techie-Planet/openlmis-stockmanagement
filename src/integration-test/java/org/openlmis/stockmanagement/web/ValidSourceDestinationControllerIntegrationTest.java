@@ -84,30 +84,18 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     destinationAssignmentDto.setIsFreeTextAllowed(true);
     ValidSourceDestinationDto sourceDestination = destinationAssignmentDto;
 
-    ObjectMapper objectMapper = new ObjectMapper();
-    ValidDestinationsCache validDestinationsCache = new ValidDestinationsCache();
-    validDestinationsCache.setId(randomUUID());
-    validDestinationsCache.setValidDestinations(
-            objectMapper.writeValueAsString(singletonList(sourceDestination)));
 
-    ValidSourcesCache validSourcesCache = new ValidSourcesCache();
-    validSourcesCache.setId(randomUUID());
-    validSourcesCache.setValidSources(
-            objectMapper.writeValueAsString(singletonList(sourceDestination)));
 
     UUID program = randomUUID();
     UUID facility = randomUUID();
 
     when(validDestinationsCacheRepository.findByProgramIdAndFacilityId(program, facility))
-            .thenReturn(Optional.of(validDestinationsCache));
+            .thenReturn(Optional.empty());
 
     when(validSourcesCacheRepository.findByProgramIdAndFacilityId(program, facility))
-            .thenReturn(Optional.of(validSourcesCache));
+            .thenReturn(Optional.empty());
     doNothing().when(validDestinationsCacheRepository).save(any(ValidDestinationsCache.class));
     doNothing().when(validSourcesCacheRepository).save(any(ValidSourcesCache.class));
-
-    when(validSourcesCacheRepository.findByProgramIdAndFacilityId(program, facility))
-            .thenReturn(Optional.of(validSourcesCache));
 
     when(validSourceService.findSources(program, facility, pageRequest))
         .thenReturn(Pagination.getPage(singletonList(sourceDestination)));

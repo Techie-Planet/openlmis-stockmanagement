@@ -21,6 +21,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -101,7 +102,8 @@ public class ValidSourceDestinationController {
   }
 
   private Page<ValidSourceDestinationDto> getValidDestinationsDtoPage(
-          Pageable pageable, ValidSourceDestinationSearchParams params) {
+          Pageable pageable, ValidSourceDestinationSearchParams params
+  ) throws JsonProcessingException {
     ObjectMapper objectMapper = new ObjectMapper();
     Optional<ValidDestinationsCache> destinationsCache = validDestinationsCacheRepository
             .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
@@ -172,7 +174,8 @@ public class ValidSourceDestinationController {
   }
 
   private Page<ValidSourceDestinationDto> getValidSourcesDtoPage(
-          Pageable pageable, ValidSourceDestinationSearchParams params) {
+          Pageable pageable, ValidSourceDestinationSearchParams params
+  ) throws JsonProcessingException {
     ObjectMapper objectMapper = new ObjectMapper();
     Optional<ValidSourcesCache> sourcesCache = validSourcesCacheRepository
             .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
