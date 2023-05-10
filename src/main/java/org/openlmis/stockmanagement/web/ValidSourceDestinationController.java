@@ -118,10 +118,10 @@ public class ValidSourceDestinationController {
             .findDestinations(params.getProgramId(), params.getFacilityId(),
                     PageRequest.of(0, Integer.MAX_VALUE));
 
-    String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
 
     if (!validDestinationsCacheRepository
             .existsByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId())) {
+        String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
         ValidDestinationsCache newValidDestination = new ValidDestinationsCache();
         newValidDestination.setFacilityId(params.getFacilityId());
         newValidDestination.setProgramId(params.getProgramId());
