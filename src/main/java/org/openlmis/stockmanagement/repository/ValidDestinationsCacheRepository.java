@@ -21,7 +21,7 @@ import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationsCa
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 public interface ValidDestinationsCacheRepository extends PagingAndSortingRepository<ValidDestinationsCache, UUID> {
-    Optional<ValidDestinationsCache> findFirst1ByProgramIdAndFacilityId(
+    Optional<ValidDestinationsCache> findByProgramIdAndFacilityId(
             @Param("programId") UUID programId,
             @Param("facilityId") UUID facilityId
     );

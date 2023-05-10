@@ -21,6 +21,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
 import static org.openlmis.stockmanagement.testutils.ValidDestinationAssignmentDataBuilder.createDestination;
 import static org.openlmis.stockmanagement.testutils.ValidSourceAssignmentDataBuilder.createSource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -97,10 +98,15 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     UUID program = randomUUID();
     UUID facility = randomUUID();
 
-    when(validDestinationsCacheRepository.findFirst1ByProgramIdAndFacilityId(program, facility))
+    when(validDestinationsCacheRepository.findByProgramIdAndFacilityId(program, facility))
             .thenReturn(Optional.of(validDestinationsCache));
 
-    when(validSourcesCacheRepository.findFirst1ByProgramIdAndFacilityId(program, facility))
+    when(validSourcesCacheRepository.findByProgramIdAndFacilityId(program, facility))
+            .thenReturn(Optional.of(validSourcesCache));
+    doNothing().when(validDestinationsCacheRepository).save(any(ValidDestinationsCache.class));
+    doNothing().when(validSourcesCacheRepository).save(any(ValidSourcesCache.class));
+
+    when(validSourcesCacheRepository.findByProgramIdAndFacilityId(program, facility))
             .thenReturn(Optional.of(validSourcesCache));
 
     when(validSourceService.findSources(program, facility, pageRequest))
@@ -117,8 +123,50 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     //2. perform valid sources
     performSourcesOrDestinations(program, facility, sourceDestination, API_VALID_SOURCES);
   }
-  // should get from cache
+
+  @Test
+  public void shouldGetValidSourcesOrDestinationsByProgramAndFacilityFromCache()
+          throws Exception {
+    //given
+    ValidSourceDestinationDto destinationAssignmentDto = new ValidSourceDestinationDto();
+    destinationAssignmentDto.setId(randomUUID());
+    destinationAssignmentDto.setName("CHW");
+    destinationAssignmentDto.setIsFreeTextAllowed(true);
+    ValidSourceDestinationDto sourceDestination = destinationAssignmentDto;
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    ValidDestinationsCache validDestinationsCache = new ValidDestinationsCache();
+    validDestinationsCache.setId(randomUUID());
+    validDestinationsCache.setValidDestinations(
+            objectMapper.writeValueAsString(singletonList(sourceDestination)));
+
+    ValidSourcesCache validSourcesCache = new ValidSourcesCache();
+    validSourcesCache.setId(randomUUID());
+    validSourcesCache.setValidSources(
+            objectMapper.writeValueAsString(singletonList(sourceDestination)));
+
+    UUID program = randomUUID();
+    UUID facility = randomUUID();
+
+    when(validDestinationsCacheRepository.findByProgramIdAndFacilityId(program, facility))
+            .thenReturn(Optional.of(validDestinationsCache));
+
+    when(validSourcesCacheRepository.findByProgramIdAndFacilityId(program, facility))
+            .thenReturn(Optional.of(validSourcesCache));
+
+    verifyZeroInteractions(permissionService);
+
+    //1. perform valid destinations
+    performSourcesOrDestinations(program, facility, sourceDestination, API_VALID_DESTINATIONS);
+
+    //2. perform valid sources
+    performSourcesOrDestinations(program, facility, sourceDestination, API_VALID_SOURCES);
+
+    verifyZeroInteractions(validSourceService);
+    verifyZeroInteractions(validDestinationService);
+  }
   // should get from base service
+  //
 
   @Test
   public void shouldGeAllValidSourcesOrDestinationsWhenProgramAndFacilityAreNotProvided()
@@ -130,6 +178,14 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     destinationAssignmentDto.setIsFreeTextAllowed(true);
     ValidSourceDestinationDto sourceAssignmentDto = destinationAssignmentDto;
 
+    when(validDestinationsCacheRepository.findByProgramIdAndFacilityId(null, null))
+            .thenReturn(Optional.empty());
+
+    when(validSourcesCacheRepository.findByProgramIdAndFacilityId(null, null))
+            .thenReturn(Optional.empty());
+    doNothing().when(validDestinationsCacheRepository).save(any(ValidDestinationsCache.class));
+    doNothing().when(validSourcesCacheRepository).save(any(ValidSourcesCache.class));
+
     when(validSourceService.findSources(null, null, pageRequest))
             .thenReturn(Pagination.getPage(singletonList(sourceAssignmentDto)));
 
@@ -139,10 +195,10 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     verifyZeroInteractions(permissionService);
 
     //1. perform valid destinations
-    // performSourcesOrDestinations(null, null, destinationAssignmentDto, API_VALID_DESTINATIONS);
+    performSourcesOrDestinations(null, null, destinationAssignmentDto, API_VALID_DESTINATIONS);
 
     //2. perform valid sources
-    // performSourcesOrDestinations(null, null, sourceAssignmentDto, API_VALID_SOURCES);
+    performSourcesOrDestinations(null, null, sourceAssignmentDto, API_VALID_SOURCES);
   }
 
   @Test
@@ -294,8 +350,8 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     resultActions
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content", hasSize(1)))
-        .andExpect(jsonPath("$.content[0].id", is(sourceDestinationDto.getId().toString())));
-    // .andExpect(jsonPath("$.content[0].name", is(sourceDestinationDto.getName())))
-    // .andExpect(jsonPath("$.content[0].isFreeTextAllowed", is(true)));
+        .andExpect(jsonPath("$.content[0].id", is(sourceDestinationDto.getId().toString())))
+        .andExpect(jsonPath("$.content[0].name", is(sourceDestinationDto.getName())))
+        .andExpect(jsonPath("$.content[0].isFreeTextAllowed", is(true)));
   }
 }

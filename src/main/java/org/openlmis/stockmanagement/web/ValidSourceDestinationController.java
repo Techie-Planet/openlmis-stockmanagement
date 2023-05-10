@@ -81,24 +81,6 @@ public class ValidSourceDestinationController {
   @Autowired
   private ValidSourcesCacheRepository validSourcesCacheRepository;
 
-  // /**
-  //  * Get a page with list of valid destinations.
-  //  *
-  //  * @param parameters filtering parameters.
-  //  * @param pageable valid sources pagination parameters
-  //  * @return found valid destinations
-  //  */
-  // @GetMapping(value = "/validDestinations")
-  // public Page<ValidSourceDestinationDto> getValidDestinations(
-  //         @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
-  //     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
-
-  //     LOGGER.info(format("Try to find valid destinations with program %s and facility %s",
-  //             params.getProgramId(), params.getFacilityId()));
-  //     return validDestinationService.findDestinations(
-  //             params.getProgramId(), params.getFacilityId(), pageable);
-  // }
-
   /**
    * Get a page with list of valid destinations.
    *
@@ -112,25 +94,27 @@ public class ValidSourceDestinationController {
       Pageable pageable) throws IOException {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
+    LOGGER.info(format("Try to find valid destinations with program %s and facility %s",
+            params.getProgramId(), params.getFacilityId()));
 
+    return getValidDestinationsDtoPage(pageable, params);
+  }
 
+  private Page<ValidSourceDestinationDto> getValidDestinationsDtoPage(
+          Pageable pageable, ValidSourceDestinationSearchParams params) {
     ObjectMapper objectMapper = new ObjectMapper();
-
     Optional<ValidDestinationsCache> destinationsCache = validDestinationsCacheRepository
-            .findFirst1ByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
+            .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
     if (destinationsCache.isPresent()) {
       List<ValidSourceDestinationDto> listOfValidSourceDestination =
               objectMapper.readValue(destinationsCache.get().getValidDestinations(),
                       new TypeReference<List<ValidSourceDestinationDto>>() {});
       return new PageImpl<>(listOfValidSourceDestination,
               pageable, listOfValidSourceDestination.size());
-    //      return ResponseEntity.ok().headers(headers).body(destinationsCache.get()
-    //              .getValidDestinations().toString());
     }
     Page<ValidSourceDestinationDto> resultPage = validDestinationService
             .findDestinations(params.getProgramId(), params.getFacilityId(),
                     PageRequest.of(0, Integer.MAX_VALUE));
-
 
     String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
 
@@ -168,25 +152,6 @@ public class ValidSourceDestinationController {
         validDestinationService.assignDestination(assignment), CREATED);
   }
 
-  //  /**
-  //   * Get a page with list of valid sources.
-  //   *
-  //   * @param parameters filtering parameters.
-  //   * @param pageable valid sources pagination parameters
-  //   * @return found valid sources
-  //   */
-  //  @GetMapping(value = "/validSources")
-  //  public Page<ValidSourceDestinationDto> getValidSources(
-  //      @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
-  //    ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
-  //
-  //    LOGGER.debug(format("Try to find valid sources with program %s and facility %s",
-  //        params.getProgramId(), params.getFacilityId()));
-  //    return validSourceService.findSources(
-  //        params.getProgramId(), params.getFacilityId(), pageable);
-  //    // return new PageImpl<>(Collections.emptyList(), pageable, 0);
-  //  }
-
   /**
    * Get a page with list of valid sources.
    *
@@ -200,34 +165,39 @@ public class ValidSourceDestinationController {
       Pageable pageable) throws IOException {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
+    LOGGER.debug(format("Try to find valid sources with program %s and facility %s",
+            params.getProgramId(), params.getFacilityId()));
+
+    return getValidSourcesDtoPage(pageable, params);
+  }
+
+  private Page<ValidSourceDestinationDto> getValidSourcesDtoPage(
+          Pageable pageable, ValidSourceDestinationSearchParams params) {
     ObjectMapper objectMapper = new ObjectMapper();
     Optional<ValidSourcesCache> sourcesCache = validSourcesCacheRepository
-            .findFirst1ByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
+            .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
     if (sourcesCache.isPresent()) {
       List<ValidSourceDestinationDto> listOfValidSourceDestination =
               objectMapper.readValue(sourcesCache.get().getValidSources(),
                       new TypeReference<List<ValidSourceDestinationDto>>() {});
       return new PageImpl<>(listOfValidSourceDestination,
               pageable, listOfValidSourceDestination.size());
-      // return ResponseEntity.ok().headers(headers).body(sourcesCache.get()
-      //         .getValidSources().toString());
     }
     Page<ValidSourceDestinationDto> resultPage = validSourceService
             .findSources(params.getProgramId(), params.getFacilityId(), pageable);
 
     String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
 
-      if (!validSourcesCacheRepository
-              .existsByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId())) {
-          ValidSourcesCache newValidSource = new ValidSourcesCache();
-          newValidSource.setFacilityId(params.getFacilityId());
-          newValidSource.setProgramId(params.getProgramId());
-          newValidSource.setValidSources(jsonString);
-          validSourcesCacheRepository.save(newValidSource);
-      }
+    if (!validSourcesCacheRepository
+            .existsByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId())) {
+        ValidSourcesCache newValidSource = new ValidSourcesCache();
+        newValidSource.setFacilityId(params.getFacilityId());
+        newValidSource.setProgramId(params.getProgramId());
+        newValidSource.setValidSources(jsonString);
+        validSourcesCacheRepository.save(newValidSource);
+    }
 
     return new PageImpl<>(resultPage.getContent(), pageable, resultPage.getTotalElements());
-    // return new PageImpl<>(Collections.emptyList(), pageable, 0);
   }
 
   /**
