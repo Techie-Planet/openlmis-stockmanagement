@@ -144,8 +144,7 @@ public class ValidSourceDestinationController {
         validDestinationsCacheRepository.save(newValidDestination);
     }
 
-    return ResponseEntity.ok().body(new PageImpl<>(resultPage.getContent(),
-            pageable, resultPage.getTotalElements()));
+    return new PageImpl<>(resultPage.getContent(), pageable, resultPage.getTotalElements());
   }
 
   /**
