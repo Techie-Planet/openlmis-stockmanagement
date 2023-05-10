@@ -200,8 +200,6 @@ public class ValidSourceDestinationController {
       Pageable pageable) throws IOException {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
     ObjectMapper objectMapper = new ObjectMapper();
     Optional<ValidSourcesCache> sourcesCache = validSourcesCacheRepository
             .findFirst1ByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());

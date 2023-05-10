@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.Test;
@@ -82,13 +83,16 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     destinationAssignmentDto.setIsFreeTextAllowed(true);
     ValidSourceDestinationDto sourceDestination = destinationAssignmentDto;
 
+    ObjectMapper objectMapper = new ObjectMapper();
     ValidDestinationsCache validDestinationsCache = new ValidDestinationsCache();
     validDestinationsCache.setId(randomUUID());
-    validDestinationsCache.setValidDestinations(singletonList(sourceDestination).toString());
+    validDestinationsCache.setValidDestinations(
+            objectMapper.writeValueAsString(singletonList(sourceDestination)));
 
     ValidSourcesCache validSourcesCache = new ValidSourcesCache();
     validSourcesCache.setId(randomUUID());
-    validSourcesCache.setValidSources(singletonList(sourceDestination).toString());
+    validSourcesCache.setValidSources(
+            objectMapper.writeValueAsString(singletonList(sourceDestination)));
 
     UUID program = randomUUID();
     UUID facility = randomUUID();
