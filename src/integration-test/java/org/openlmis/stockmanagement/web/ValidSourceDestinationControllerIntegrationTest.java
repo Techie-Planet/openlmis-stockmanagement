@@ -20,7 +20,6 @@ import static java.util.UUID.randomUUID;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.openlmis.stockmanagement.testutils.ValidDestinationAssignmentDataBuilder.createDestination;
@@ -95,8 +94,10 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
 
     when(validSourcesCacheRepository.findByProgramIdAndFacilityId(program, facility))
             .thenReturn(Optional.empty());
-    doNothing().when(validDestinationsCacheRepository).save(any(ValidDestinationsCache.class));
-    doNothing().when(validSourcesCacheRepository).save(any(ValidSourcesCache.class));
+    when(validDestinationsCacheRepository.save(any(ValidDestinationsCache.class)))
+            .thenReturn(Optional.of(new ValidDestinationsCache()));
+    when(validSourcesCacheRepository.save(any(ValidSourcesCache.class)))
+            .thenReturn(Optional.of(new ValidSourcesCache()));
 
     when(validSourceService.findSources(program, facility, pageRequest))
         .thenReturn(Pagination.getPage(singletonList(sourceDestination)));
@@ -154,8 +155,6 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     verifyZeroInteractions(validSourceService);
     verifyZeroInteractions(validDestinationService);
   }
-  // should get from base service
-  //
 
   @Test
   public void shouldGeAllValidSourcesOrDestinationsWhenProgramAndFacilityAreNotProvided()
@@ -172,8 +171,10 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
 
     when(validSourcesCacheRepository.findByProgramIdAndFacilityId(null, null))
             .thenReturn(Optional.empty());
-    doNothing().when(validDestinationsCacheRepository).save(any(ValidDestinationsCache.class));
-    doNothing().when(validSourcesCacheRepository).save(any(ValidSourcesCache.class));
+    when(validDestinationsCacheRepository.save(any(ValidDestinationsCache.class)))
+            .thenReturn(Optional.of(new ValidDestinationsCache()));
+    when(validSourcesCacheRepository.save(any(ValidSourcesCache.class)))
+            .thenReturn(Optional.of(new ValidSourcesCache()));
 
     when(validSourceService.findSources(null, null, pageRequest))
             .thenReturn(Pagination.getPage(singletonList(sourceAssignmentDto)));
