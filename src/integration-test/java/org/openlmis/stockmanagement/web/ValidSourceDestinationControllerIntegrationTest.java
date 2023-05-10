@@ -108,10 +108,10 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     verifyZeroInteractions(permissionService);
 
     //1. perform valid destinations
-    // performSourcesOrDestinations(program, facility, sourceDestination, API_VALID_DESTINATIONS);
+    performSourcesOrDestinations(program, facility, sourceDestination, API_VALID_DESTINATIONS);
 
     //2. perform valid sources
-    // performSourcesOrDestinations(program, facility, sourceDestination, API_VALID_SOURCES);
+    performSourcesOrDestinations(program, facility, sourceDestination, API_VALID_SOURCES);
   }
   // should get from cache
   // should get from base service
