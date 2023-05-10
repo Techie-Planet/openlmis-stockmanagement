@@ -19,7 +19,6 @@ import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.openlmis.stockmanagement.testutils.ValidDestinationAssignmentDataBuilder.createDestination;
@@ -59,7 +58,7 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
   private static final String PROGRAM_EXP = "$.programId";
   private static final String FACILITY_TYPE_EXP = "$.facilityTypeId";
   private static final String NODE_REFERENCE_ID_EXP = "$.node.referenceId";
-  private Pageable pageRequest = PageRequest.of(0, 20);
+  // private Pageable pageRequest = PageRequest.of(0, 20);
 
   @MockBean
   private ValidSourceService validSourceService;
