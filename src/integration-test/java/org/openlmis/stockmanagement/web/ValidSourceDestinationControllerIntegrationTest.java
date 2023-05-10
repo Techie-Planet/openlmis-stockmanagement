@@ -20,7 +20,6 @@ import static java.util.UUID.randomUUID;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 import static org.openlmis.stockmanagement.testutils.ValidDestinationAssignmentDataBuilder.createDestination;
@@ -95,10 +94,12 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     when(validSourcesCacheRepository.findByProgramIdAndFacilityId(program, facility))
             .thenReturn(Optional.empty());
 
-    when(validSourceService.findSources(program, facility, any(PageRequest.class)))
+    when(validSourceService.findSources(
+            program, facility, PageRequest.of(0, Integer.MAX_VALUE)))
         .thenReturn(Pagination.getPage(singletonList(sourceDestination)));
 
-    when(validDestinationService.findDestinations(program, facility, any(PageRequest.class)))
+    when(validDestinationService.findDestinations(
+            program, facility, PageRequest.of(0, Integer.MAX_VALUE)))
         .thenReturn(Pagination.getPage(singletonList(sourceDestination)));
 
     verifyZeroInteractions(permissionService);
@@ -168,11 +169,12 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     when(validSourcesCacheRepository.findByProgramIdAndFacilityId(null, null))
             .thenReturn(Optional.empty());
 
-    when(validSourceService.findSources(null, null, any(PageRequest.class)))
+    when(validSourceService.findSources(
+            null, null, PageRequest.of(0, Integer.MAX_VALUE)))
             .thenReturn(Pagination.getPage(singletonList(sourceAssignmentDto)));
 
     when(validDestinationService.findDestinations(
-            null, null, PageRequest.of(anyInt(), anyInt())))
+            null, null, PageRequest.of(0, Integer.MAX_VALUE)))
             .thenReturn(Pagination.getPage(singletonList(destinationAssignmentDto)));
 
     verifyZeroInteractions(permissionService);
