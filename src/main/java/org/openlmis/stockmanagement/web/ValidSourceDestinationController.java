@@ -21,8 +21,10 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
@@ -42,6 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -77,23 +80,23 @@ public class ValidSourceDestinationController {
   @Autowired
   private ValidSourcesCacheRepository validSourcesCacheRepository;
 
-  //  /**
-  //   * Get a page with list of valid sources.
-  //   *
-  //   * @param parameters filtering parameters.
-  //   * @param pageable valid sources pagination parameters
-  //   * @return found valid sources
-  //   */
-  //  @GetMapping(value = "/validSources")
-  //  public Page<ValidSourceDestinationDto> getValidSources(
-  //          @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
-  //    ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
-  //
-  //    LOGGER.debug(format("Try to find valid sources with program %s and facility %s",
-  //            params.getProgramId(), params.getFacilityId()));
-  //    return validSourceService.findSources(
-  //            params.getProgramId(), params.getFacilityId(), pageable);
-  //  }
+  // /**
+  //  * Get a page with list of valid destinations.
+  //  *
+  //  * @param parameters filtering parameters.
+  //  * @param pageable valid sources pagination parameters
+  //  * @return found valid destinations
+  //  */
+  // @GetMapping(value = "/validDestinations")
+  // public Page<ValidSourceDestinationDto> getValidDestinations(
+  //         @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
+  //     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
+
+  //     LOGGER.info(format("Try to find valid destinations with program %s and facility %s",
+  //             params.getProgramId(), params.getFacilityId()));
+  //     return validDestinationService.findDestinations(
+  //             params.getProgramId(), params.getFacilityId(), pageable);
+  // }
 
   /**
    * Get a page with list of valid destinations.
@@ -111,17 +114,25 @@ public class ValidSourceDestinationController {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
+    ObjectMapper objectMapper = new ObjectMapper();
+
     Optional<ValidDestinationsCache> destinationsCache = validDestinationsCacheRepository
             .findFirst1ByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
     if (destinationsCache.isPresent()) {
-      return ResponseEntity.ok().headers(headers).body(destinationsCache.get()
-              .getValidDestinations().toString());
+      List<ValidSourceDestinationDto> listOfValidSourceDestination =
+              objectMapper.readValue(destinationsCache.get().getValidDestinations(),
+                      new TypeReference<List<ValidSourceDestinationDto>>() {});
+      return new PageImpl<>(listOfValidSourceDestination,
+              pageable, listOfValidSourceDestination.size());
+    //      return ResponseEntity.ok().headers(headers).body(destinationsCache.get()
+    //              .getValidDestinations().toString());
     }
     Page<ValidSourceDestinationDto> resultPage = validDestinationService
-            .findDestinations(params.getProgramId(), params.getFacilityId(), pageable);
+            .findDestinations(params.getProgramId(), params.getFacilityId(),
+                    PageRequest.of(0, Integer.MAX_VALUE));
 
-    ObjectMapper objectMapper = new ObjectMapper();
-    String jsonString = objectMapper.writeValueAsString(resultPage);
+
+    String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
 
     if (!validDestinationsCacheRepository
             .existsByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId())) {
@@ -132,7 +143,8 @@ public class ValidSourceDestinationController {
         validDestinationsCacheRepository.save(newValidDestination);
     }
 
-    return ResponseEntity.ok().body(resultPage);
+    return ResponseEntity.ok().body(new PageImpl<>(resultPage.getContent(),
+            pageable, resultPage.getTotalElements()));
   }
 
   /**
