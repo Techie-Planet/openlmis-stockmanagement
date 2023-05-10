@@ -84,11 +84,11 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
 
     ValidDestinationsCache validDestinationsCache = new ValidDestinationsCache();
     validDestinationsCache.setId(randomUUID());
-    validDestinationsCache.setValidDestinations(singletonList(sourceDestination.toString()));
+    validDestinationsCache.setValidDestinations(singletonList(sourceDestination).toString());
 
     ValidSourcesCache validSourcesCache = new ValidSourcesCache();
     validSourcesCache.setId(randomUUID());
-    validSourcesCache.setValidSources(singletonList(sourceDestination.toString()));
+    validSourcesCache.setValidSources(singletonList(sourceDestination).toString());
 
     UUID program = randomUUID();
     UUID facility = randomUUID();
