@@ -187,12 +187,13 @@ public class ValidSourceDestinationController {
               pageable, listOfValidSourceDestination.size());
     }
     Page<ValidSourceDestinationDto> resultPage = validSourceService
-            .findSources(params.getProgramId(), params.getFacilityId(), pageable);
+            .findSources(params.getProgramId(), params.getFacilityId(),
+                    PageRequest.of(0, Integer.MAX_VALUE));
 
-    String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
 
     if (!validSourcesCacheRepository
             .existsByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId())) {
+        String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
         ValidSourcesCache newValidSource = new ValidSourcesCache();
         newValidSource.setFacilityId(params.getFacilityId());
         newValidSource.setProgramId(params.getProgramId());
