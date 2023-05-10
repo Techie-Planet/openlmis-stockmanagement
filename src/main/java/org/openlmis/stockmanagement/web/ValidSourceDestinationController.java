@@ -112,8 +112,7 @@ public class ValidSourceDestinationController {
       Pageable pageable) throws IOException {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
+
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -203,18 +202,22 @@ public class ValidSourceDestinationController {
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-
+    ObjectMapper objectMapper = new ObjectMapper();
     Optional<ValidSourcesCache> sourcesCache = validSourcesCacheRepository
             .findFirst1ByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
     if (sourcesCache.isPresent()) {
-      return ResponseEntity.ok().headers(headers).body(sourcesCache.get()
-              .getValidSources().toString());
+      List<ValidSourceDestinationDto> listOfValidSourceDestination =
+              objectMapper.readValue(sourcesCache.get().getValidSources(),
+                      new TypeReference<List<ValidSourceDestinationDto>>() {});
+      return new PageImpl<>(listOfValidSourceDestination,
+              pageable, listOfValidSourceDestination.size());
+      // return ResponseEntity.ok().headers(headers).body(sourcesCache.get()
+      //         .getValidSources().toString());
     }
     Page<ValidSourceDestinationDto> resultPage = validSourceService
             .findSources(params.getProgramId(), params.getFacilityId(), pageable);
 
-    ObjectMapper objectMapper = new ObjectMapper();
-    String jsonString = objectMapper.writeValueAsString(resultPage);
+    String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
 
       if (!validSourcesCacheRepository
               .existsByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId())) {
@@ -225,7 +228,7 @@ public class ValidSourceDestinationController {
           validSourcesCacheRepository.save(newValidSource);
       }
 
-    return ResponseEntity.ok().body(resultPage);
+    return new PageImpl<>(resultPage.getContent(), pageable, resultPage.getTotalElements());
     // return new PageImpl<>(Collections.emptyList(), pageable, 0);
   }
 
