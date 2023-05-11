@@ -24,7 +24,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -117,9 +116,7 @@ public class ValidDestinationService extends SourceDestinationBaseService {
       return new PageImpl<>(listOfValidSourceDestination,
               pageable, listOfValidSourceDestination.size());
     }
-    // importing directly to avoid naming conflict error
-    org.springframework.data.domain.Pageable pageableToGetAllAssignments =
-            org.springframework.data.domain.PageRequest.of(0, Integer.MAX_VALUE);
+    Pageable pageableToGetAllAssignments = PageRequest.of(0, Integer.MAX_VALUE);
     Page<ValidSourceDestinationDto> resultPage = findAssignments(
             programId, facilityId, profiler,
             pageableToGetAllAssignments);
