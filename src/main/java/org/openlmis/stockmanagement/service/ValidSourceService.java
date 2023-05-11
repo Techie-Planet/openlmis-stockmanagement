@@ -19,16 +19,25 @@ import static org.openlmis.stockmanagement.i18n.MessageKeys.ERROR_SOURCE_ASSIGNM
 import static org.openlmis.stockmanagement.i18n.MessageKeys.ERROR_SOURCE_NOT_FOUND;
 import static org.slf4j.ext.XLoggerFactory.getXLogger;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourceAssignment;
+import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourcesCache;
 import org.openlmis.stockmanagement.dto.ValidSourceDestinationDto;
 import org.openlmis.stockmanagement.exception.ValidationMessageException;
 import org.openlmis.stockmanagement.repository.ValidSourceAssignmentRepository;
+import org.openlmis.stockmanagement.repository.ValidSourcesCacheRepository;
 import org.slf4j.ext.XLogger;
 import org.slf4j.profiler.Profiler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,6 +47,29 @@ public class ValidSourceService extends SourceDestinationBaseService {
 
   @Autowired
   private ValidSourceAssignmentRepository validSourceRepository;
+  @Autowired
+  private ValidSourcesCacheRepository validSourcesCacheRepository;
+
+  //  /**
+  //   * Find valid destinations page by program ID and facility ID.
+  //   *
+  //   * @param programId      program ID
+  //   * @param facilityId facility ID
+  //   * @param pageable pagination and sorting parameters
+  //   * @return page of valid destination assignment DTOs
+  //   */
+  //  public Page<ValidSourceDestinationDto> findSources(UUID programId,
+  //                                                     UUID facilityId, Pageable pageable) {
+  //    XLOGGER.entry();
+  //    Profiler profiler = new Profiler("FIND_SOURCE_ASSIGNMENTS");
+  //    profiler.setLogger(XLOGGER);
+  //
+  //    Page<ValidSourceDestinationDto> sourceAssignments =
+  //            findAssignments(programId, facilityId, validSourceRepository, profiler, pageable);
+  //    profiler.stop().log();
+  //    XLOGGER.exit();
+  //    return sourceAssignments;
+  //  }
 
   /**
    * Find valid destinations page by program ID and facility ID.
@@ -47,17 +79,47 @@ public class ValidSourceService extends SourceDestinationBaseService {
    * @param pageable pagination and sorting parameters
    * @return page of valid destination assignment DTOs
    */
-  public Page<ValidSourceDestinationDto> findSources(UUID programId,
-                                                     UUID facilityId, Pageable pageable) {
+  public Page<ValidSourceDestinationDto> findSources(
+          UUID programId, UUID facilityId, Pageable pageable
+  ) throws JsonProcessingException {
     XLOGGER.entry();
     Profiler profiler = new Profiler("FIND_SOURCE_ASSIGNMENTS");
     profiler.setLogger(XLOGGER);
 
     Page<ValidSourceDestinationDto> sourceAssignments =
-            findAssignments(programId, facilityId, validSourceRepository, profiler, pageable);
+            getValidSourceDestinationDtoPage(programId, facilityId, pageable, profiler);
     profiler.stop().log();
     XLOGGER.exit();
     return sourceAssignments;
+  }
+
+  private Page<ValidSourceDestinationDto> getValidSourceDestinationDtoPage(
+          UUID programId, UUID facilityId, Pageable pageable, Profiler profiler
+  ) throws JsonProcessingException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    Optional<ValidSourcesCache> sourcesCache = validSourcesCacheRepository
+            .findByProgramIdAndFacilityId(programId, facilityId);
+    if (sourcesCache.isPresent()) {
+      List<ValidSourceDestinationDto> listOfValidSourceDestination =
+              objectMapper.readValue(sourcesCache.get().getValidSources(),
+                      new TypeReference<List<ValidSourceDestinationDto>>() {});
+      return new PageImpl<>(listOfValidSourceDestination,
+              pageable, listOfValidSourceDestination.size());
+    }
+    Page<ValidSourceDestinationDto> resultPage = findAssignments(
+            programId, facilityId, profiler,
+            PageRequest.of(0, Integer.MAX_VALUE));
+
+    if (!validSourcesCacheRepository
+            .existsByProgramIdAndFacilityId(programId, facilityId)) {
+      String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
+      ValidSourcesCache newValidSource = new ValidSourcesCache();
+      newValidSource.setFacilityId(facilityId);
+      newValidSource.setProgramId(programId);
+      newValidSource.setValidSources(jsonString);
+      validSourcesCacheRepository.save(newValidSource);
+    }
+    return new PageImpl<>(resultPage.getContent(), pageable, resultPage.getTotalElements());
   }
 
   /**

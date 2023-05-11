@@ -21,37 +21,21 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
-import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationsCache;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourceAssignment;
-import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourcesCache;
 import org.openlmis.stockmanagement.dto.ValidSourceDestinationDto;
-import org.openlmis.stockmanagement.repository.ValidDestinationsCacheRepository;
-import org.openlmis.stockmanagement.repository.ValidSourcesCacheRepository;
 import org.openlmis.stockmanagement.service.PermissionService;
 import org.openlmis.stockmanagement.service.ValidDestinationService;
 import org.openlmis.stockmanagement.service.ValidSourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -77,10 +61,6 @@ public class ValidSourceDestinationController {
 
   @Autowired
   private ValidDestinationService validDestinationService;
-  @Autowired
-  private ValidDestinationsCacheRepository validDestinationsCacheRepository;
-  @Autowired
-  private ValidSourcesCacheRepository validSourcesCacheRepository;
 
   /**
    * Get a page with list of valid destinations.
@@ -91,45 +71,13 @@ public class ValidSourceDestinationController {
    */
   @GetMapping(value = "/validDestinations")
   public Page<ValidSourceDestinationDto> getValidDestinations(
-      @RequestParam MultiValueMap<String, String> parameters,
-      Pageable pageable) throws IOException {
+      @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
     LOGGER.info(format("Try to find valid destinations with program %s and facility %s",
-            params.getProgramId(), params.getFacilityId()));
-
-    return getValidDestinationsDtoPage(pageable, params);
-  }
-
-  private Page<ValidSourceDestinationDto> getValidDestinationsDtoPage(
-          Pageable pageable, ValidSourceDestinationSearchParams params
-  ) throws JsonProcessingException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    Optional<ValidDestinationsCache> destinationsCache = validDestinationsCacheRepository
-            .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
-    if (destinationsCache.isPresent()) {
-      List<ValidSourceDestinationDto> listOfValidSourceDestination =
-              objectMapper.readValue(destinationsCache.get().getValidDestinations(),
-                      new TypeReference<List<ValidSourceDestinationDto>>() {});
-      return new PageImpl<>(listOfValidSourceDestination,
-              pageable, listOfValidSourceDestination.size());
-    }
-    Page<ValidSourceDestinationDto> resultPage = validDestinationService
-            .findDestinations(params.getProgramId(), params.getFacilityId(),
-                    PageRequest.of(0, Integer.MAX_VALUE));
-
-
-    if (!validDestinationsCacheRepository
-            .existsByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId())) {
-        String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
-        ValidDestinationsCache newValidDestination = new ValidDestinationsCache();
-        newValidDestination.setFacilityId(params.getFacilityId());
-        newValidDestination.setProgramId(params.getProgramId());
-        newValidDestination.setValidDestinations(jsonString);
-        validDestinationsCacheRepository.save(newValidDestination);
-    }
-
-    return new PageImpl<>(resultPage.getContent(), pageable, resultPage.getTotalElements());
+        params.getProgramId(), params.getFacilityId()));
+    return validDestinationService.findDestinations(
+            params.getProgramId(), params.getFacilityId(), pageable);
   }
 
   /**
@@ -163,45 +111,13 @@ public class ValidSourceDestinationController {
    */
   @GetMapping(value = "/validSources")
   public Page<ValidSourceDestinationDto> getValidSources(
-      @RequestParam MultiValueMap<String, String> parameters,
-      Pageable pageable) throws IOException {
+      @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
     LOGGER.debug(format("Try to find valid sources with program %s and facility %s",
-            params.getProgramId(), params.getFacilityId()));
-
-    return getValidSourcesDtoPage(pageable, params);
-  }
-
-  private Page<ValidSourceDestinationDto> getValidSourcesDtoPage(
-          Pageable pageable, ValidSourceDestinationSearchParams params
-  ) throws JsonProcessingException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    Optional<ValidSourcesCache> sourcesCache = validSourcesCacheRepository
-            .findByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId());
-    if (sourcesCache.isPresent()) {
-      List<ValidSourceDestinationDto> listOfValidSourceDestination =
-              objectMapper.readValue(sourcesCache.get().getValidSources(),
-                      new TypeReference<List<ValidSourceDestinationDto>>() {});
-      return new PageImpl<>(listOfValidSourceDestination,
-              pageable, listOfValidSourceDestination.size());
-    }
-    Page<ValidSourceDestinationDto> resultPage = validSourceService
-            .findSources(params.getProgramId(), params.getFacilityId(),
-                    PageRequest.of(0, Integer.MAX_VALUE));
-
-
-    if (!validSourcesCacheRepository
-            .existsByProgramIdAndFacilityId(params.getProgramId(), params.getFacilityId())) {
-        String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
-        ValidSourcesCache newValidSource = new ValidSourcesCache();
-        newValidSource.setFacilityId(params.getFacilityId());
-        newValidSource.setProgramId(params.getProgramId());
-        newValidSource.setValidSources(jsonString);
-        validSourcesCacheRepository.save(newValidSource);
-    }
-
-    return new PageImpl<>(resultPage.getContent(), pageable, resultPage.getTotalElements());
+        params.getProgramId(), params.getFacilityId()));
+    return validSourceService.findSources(
+        params.getProgramId(), params.getFacilityId(), pageable);
   }
 
   /**

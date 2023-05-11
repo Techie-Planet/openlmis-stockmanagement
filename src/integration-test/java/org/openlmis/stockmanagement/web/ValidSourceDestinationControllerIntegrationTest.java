@@ -29,22 +29,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Optional;
 import java.util.UUID;
 import org.junit.Test;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
-import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationsCache;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourceAssignment;
-import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourcesCache;
 import org.openlmis.stockmanagement.dto.ValidSourceDestinationDto;
-import org.openlmis.stockmanagement.repository.ValidDestinationsCacheRepository;
-import org.openlmis.stockmanagement.repository.ValidSourcesCacheRepository;
 import org.openlmis.stockmanagement.service.PermissionService;
 import org.openlmis.stockmanagement.service.ValidDestinationService;
 import org.openlmis.stockmanagement.service.ValidSourceService;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -57,7 +52,7 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
   private static final String PROGRAM_EXP = "$.programId";
   private static final String FACILITY_TYPE_EXP = "$.facilityTypeId";
   private static final String NODE_REFERENCE_ID_EXP = "$.node.referenceId";
-  // private Pageable pageRequest = PageRequest.of(0, 20);
+  private Pageable pageRequest = PageRequest.of(0, 20);
 
   @MockBean
   private ValidSourceService validSourceService;
@@ -67,10 +62,6 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
 
   @MockBean
   private PermissionService permissionService;
-  @MockBean
-  private ValidDestinationsCacheRepository validDestinationsCacheRepository;
-  @MockBean
-  private ValidSourcesCacheRepository validSourcesCacheRepository;
 
   @Test
   public void shouldGetValidSourcesOrDestinationsByProgramAndFacility()
@@ -82,22 +73,13 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     destinationAssignmentDto.setIsFreeTextAllowed(true);
     ValidSourceDestinationDto sourceDestination = destinationAssignmentDto;
 
-
     UUID program = randomUUID();
     UUID facility = randomUUID();
 
-    when(validDestinationsCacheRepository.findByProgramIdAndFacilityId(program, facility))
-            .thenReturn(Optional.empty());
-
-    when(validSourcesCacheRepository.findByProgramIdAndFacilityId(program, facility))
-            .thenReturn(Optional.empty());
-
-    when(validSourceService.findSources(
-            program, facility, PageRequest.of(0, Integer.MAX_VALUE)))
+    when(validSourceService.findSources(program, facility, pageRequest))
         .thenReturn(Pagination.getPage(singletonList(sourceDestination)));
 
-    when(validDestinationService.findDestinations(
-            program, facility, PageRequest.of(0, Integer.MAX_VALUE)))
+    when(validDestinationService.findDestinations(program, facility, pageRequest))
         .thenReturn(Pagination.getPage(singletonList(sourceDestination)));
 
     verifyZeroInteractions(permissionService);
@@ -107,48 +89,6 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
 
     //2. perform valid sources
     performSourcesOrDestinations(program, facility, sourceDestination, API_VALID_SOURCES);
-  }
-
-  @Test
-  public void shouldGetValidSourcesOrDestinationsByProgramAndFacilityFromCache()
-          throws Exception {
-    //given
-    ValidSourceDestinationDto destinationAssignmentDto = new ValidSourceDestinationDto();
-    destinationAssignmentDto.setId(randomUUID());
-    destinationAssignmentDto.setName("CHW");
-    destinationAssignmentDto.setIsFreeTextAllowed(true);
-    ValidSourceDestinationDto sourceDestination = destinationAssignmentDto;
-
-    ObjectMapper objectMapper = new ObjectMapper();
-    ValidDestinationsCache validDestinationsCache = new ValidDestinationsCache();
-    validDestinationsCache.setId(randomUUID());
-    validDestinationsCache.setValidDestinations(
-            objectMapper.writeValueAsString(singletonList(sourceDestination)));
-
-    ValidSourcesCache validSourcesCache = new ValidSourcesCache();
-    validSourcesCache.setId(randomUUID());
-    validSourcesCache.setValidSources(
-            objectMapper.writeValueAsString(singletonList(sourceDestination)));
-
-    UUID program = randomUUID();
-    UUID facility = randomUUID();
-
-    when(validDestinationsCacheRepository.findByProgramIdAndFacilityId(program, facility))
-            .thenReturn(Optional.of(validDestinationsCache));
-
-    when(validSourcesCacheRepository.findByProgramIdAndFacilityId(program, facility))
-            .thenReturn(Optional.of(validSourcesCache));
-
-    verifyZeroInteractions(permissionService);
-
-    //1. perform valid destinations
-    performSourcesOrDestinations(program, facility, sourceDestination, API_VALID_DESTINATIONS);
-
-    //2. perform valid sources
-    performSourcesOrDestinations(program, facility, sourceDestination, API_VALID_SOURCES);
-
-    verifyZeroInteractions(validSourceService);
-    verifyZeroInteractions(validDestinationService);
   }
 
   @Test
@@ -161,18 +101,10 @@ public class ValidSourceDestinationControllerIntegrationTest extends BaseWebTest
     destinationAssignmentDto.setIsFreeTextAllowed(true);
     ValidSourceDestinationDto sourceAssignmentDto = destinationAssignmentDto;
 
-    when(validDestinationsCacheRepository.findByProgramIdAndFacilityId(null, null))
-            .thenReturn(Optional.empty());
-
-    when(validSourcesCacheRepository.findByProgramIdAndFacilityId(null, null))
-            .thenReturn(Optional.empty());
-
-    when(validSourceService.findSources(
-            null, null, PageRequest.of(0, Integer.MAX_VALUE)))
+    when(validSourceService.findSources(null, null, pageRequest))
             .thenReturn(Pagination.getPage(singletonList(sourceAssignmentDto)));
 
-    when(validDestinationService.findDestinations(
-            null, null, PageRequest.of(0, Integer.MAX_VALUE)))
+    when(validDestinationService.findDestinations(null, null, pageRequest))
             .thenReturn(Pagination.getPage(singletonList(destinationAssignmentDto)));
 
     verifyZeroInteractions(permissionService);
