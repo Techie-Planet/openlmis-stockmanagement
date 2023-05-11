@@ -107,10 +107,9 @@ public class ValidSourceService extends SourceDestinationBaseService {
       return new PageImpl<>(listOfValidSourceDestination,
               pageable, listOfValidSourceDestination.size());
     }
-    Pageable pageableToGetAllAssignments = PageRequest.of(0, Integer.MAX_VALUE);
     Page<ValidSourceDestinationDto> resultPage = findAssignments(
-            programId, facilityId, profiler,
-            pageableToGetAllAssignments);
+            programId, facilityId, validSourceRepository, profiler,
+            PageRequest.of(0, Integer.MAX_VALUE));
 
     if (!validSourcesCacheRepository
             .existsByProgramIdAndFacilityId(programId, facilityId)) {

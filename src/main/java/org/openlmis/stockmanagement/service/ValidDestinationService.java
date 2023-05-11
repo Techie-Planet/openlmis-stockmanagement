@@ -74,7 +74,8 @@ public class ValidDestinationService extends SourceDestinationBaseService {
   //    profiler.setLogger(XLOGGER);
   //
   //    Page<ValidSourceDestinationDto> assignments =
-  //            findAssignments(programId, facilityId, validDestinationRepository, profiler, pageable);
+  //            findAssignments(programId, facilityId,
+  //            validDestinationRepository, profiler, pageable);
   //    profiler.stop().log();
   //    XLOGGER.exit();
   //    return assignments;
@@ -116,10 +117,9 @@ public class ValidDestinationService extends SourceDestinationBaseService {
       return new PageImpl<>(listOfValidSourceDestination,
               pageable, listOfValidSourceDestination.size());
     }
-    Pageable pageableToGetAllAssignments = PageRequest.of(0, Integer.MAX_VALUE);
     Page<ValidSourceDestinationDto> resultPage = findAssignments(
-            programId, facilityId, profiler,
-            pageableToGetAllAssignments);
+            programId, facilityId, validDestinationRepository, profiler,
+            PageRequest.of(0, Integer.MAX_VALUE));
 
     if (!validDestinationsCacheRepository
             .existsByProgramIdAndFacilityId(programId, facilityId)) {
