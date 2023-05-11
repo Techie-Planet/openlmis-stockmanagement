@@ -21,6 +21,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.UUID;
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
@@ -71,7 +72,8 @@ public class ValidSourceDestinationController {
    */
   @GetMapping(value = "/validDestinations")
   public Page<ValidSourceDestinationDto> getValidDestinations(
-      @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
+      @RequestParam MultiValueMap<String, String> parameters, Pageable pageable
+  ) throws JsonProcessingException {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
     LOGGER.info(format("Try to find valid destinations with program %s and facility %s",
@@ -111,7 +113,8 @@ public class ValidSourceDestinationController {
    */
   @GetMapping(value = "/validSources")
   public Page<ValidSourceDestinationDto> getValidSources(
-      @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
+      @RequestParam MultiValueMap<String, String> parameters, Pageable pageable
+  ) throws JsonProcessingException {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
     LOGGER.debug(format("Try to find valid sources with program %s and facility %s",

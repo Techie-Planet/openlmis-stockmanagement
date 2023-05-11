@@ -23,6 +23,8 @@ import static org.slf4j.ext.XLoggerFactory.getXLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -117,7 +119,7 @@ public class ValidDestinationService extends SourceDestinationBaseService {
     }
     Page<ValidSourceDestinationDto> resultPage = findAssignments(
             programId, facilityId, profiler,
-                    PageRequest.of(0, Integer.MAX_VALUE));
+            (Pageable) PageRequest.of(0, Integer.MAX_VALUE));
 
     if (!validDestinationsCacheRepository
             .existsByProgramIdAndFacilityId(programId, facilityId)) {
