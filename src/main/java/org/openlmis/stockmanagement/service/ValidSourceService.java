@@ -29,6 +29,7 @@ import java.util.UUID;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourceAssignment;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidSourcesCache;
 import org.openlmis.stockmanagement.dto.ValidSourceDestinationDto;
+import org.openlmis.stockmanagement.exception.ResourceNotFoundException;
 import org.openlmis.stockmanagement.exception.ValidationMessageException;
 import org.openlmis.stockmanagement.repository.ValidSourceAssignmentRepository;
 import org.openlmis.stockmanagement.repository.ValidSourcesCacheRepository;
@@ -81,8 +82,7 @@ public class ValidSourceService extends SourceDestinationBaseService {
    * @return page of valid destination assignment DTOs
    */
   public Page<ValidSourceDestinationDto> findSources(
-          UUID programId, UUID facilityId, Pageable pageable
-  ) throws JsonProcessingException {
+          UUID programId, UUID facilityId, Pageable pageable) {
     XLOGGER.entry();
     Profiler profiler = new Profiler("FIND_SOURCE_ASSIGNMENTS");
     profiler.setLogger(XLOGGER);
@@ -95,32 +95,36 @@ public class ValidSourceService extends SourceDestinationBaseService {
   }
 
   private Page<ValidSourceDestinationDto> getValidSourceDestinationDtoPage(
-          UUID programId, UUID facilityId, Pageable pageable, Profiler profiler
-  ) throws JsonProcessingException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    Optional<ValidSourcesCache> sourcesCache = validSourcesCacheRepository
-            .findByProgramIdAndFacilityId(programId, facilityId);
-    if (sourcesCache.isPresent()) {
-      List<ValidSourceDestinationDto> listOfValidSourceDestination =
-              objectMapper.readValue(sourcesCache.get().getValidSources(),
-                      new TypeReference<List<ValidSourceDestinationDto>>() {});
-      return new PageImpl<>(listOfValidSourceDestination,
-              pageable, listOfValidSourceDestination.size());
-    }
-    Page<ValidSourceDestinationDto> resultPage = findAssignments(
-            programId, facilityId, validSourceRepository, profiler,
-            PageRequest.of(0, Integer.MAX_VALUE));
+          UUID programId, UUID facilityId, Pageable pageable, Profiler profiler) {
+    try {
+      ObjectMapper objectMapper = new ObjectMapper();
+      Optional<ValidSourcesCache> sourcesCache = validSourcesCacheRepository
+              .findByProgramIdAndFacilityId(programId, facilityId);
+      if (sourcesCache.isPresent()) {
+        List<ValidSourceDestinationDto> listOfValidSourceDestination =
+                objectMapper.readValue(sourcesCache.get().getValidSources(),
+                        new TypeReference<List<ValidSourceDestinationDto>>() {
+                        });
+        return new PageImpl<>(listOfValidSourceDestination,
+                pageable, listOfValidSourceDestination.size());
+      }
+      Page<ValidSourceDestinationDto> resultPage = findAssignments(
+              programId, facilityId, validSourceRepository, profiler,
+              PageRequest.of(0, Integer.MAX_VALUE));
 
-    if (!validSourcesCacheRepository
-            .existsByProgramIdAndFacilityId(programId, facilityId)) {
-      String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
-      ValidSourcesCache newValidSource = new ValidSourcesCache();
-      newValidSource.setFacilityId(facilityId);
-      newValidSource.setProgramId(programId);
-      newValidSource.setValidSources(jsonString);
-      validSourcesCacheRepository.save(newValidSource);
+      if (!validSourcesCacheRepository
+              .existsByProgramIdAndFacilityId(programId, facilityId)) {
+        String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
+        ValidSourcesCache newValidSource = new ValidSourcesCache();
+        newValidSource.setFacilityId(facilityId);
+        newValidSource.setProgramId(programId);
+        newValidSource.setValidSources(jsonString);
+        validSourcesCacheRepository.save(newValidSource);
+      }
+      return new PageImpl<>(resultPage.getContent(), pageable, resultPage.getTotalElements());
+    } catch (JsonProcessingException jsonProcessingException) {
+      throw new ResourceNotFoundException("JSON processing exception");
     }
-    return new PageImpl<>(resultPage.getContent(), pageable, resultPage.getTotalElements());
   }
 
   /**

@@ -90,8 +90,7 @@ public class ValidDestinationService extends SourceDestinationBaseService {
    * @return valid source assignment DTOs
    */
   public Page<ValidSourceDestinationDto> findDestinations(
-          UUID programId, UUID facilityId, Pageable pageable
-  ) throws JsonProcessingException {
+          UUID programId, UUID facilityId, Pageable pageable) {
     XLOGGER.entry();
     Profiler profiler = new Profiler("FIND_DESTINATION_ASSIGNMENTS");
     profiler.setLogger(XLOGGER);
@@ -105,32 +104,36 @@ public class ValidDestinationService extends SourceDestinationBaseService {
   }
 
   private Page<ValidSourceDestinationDto> getValidSourceDestinationDtoPage(
-          UUID programId, UUID facilityId, Pageable pageable, Profiler profiler
-  ) throws JsonProcessingException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    Optional<ValidDestinationsCache> destinationsCache = validDestinationsCacheRepository
-            .findByProgramIdAndFacilityId(programId, facilityId);
-    if (destinationsCache.isPresent()) {
-      List<ValidSourceDestinationDto> listOfValidSourceDestination =
-              objectMapper.readValue(destinationsCache.get().getValidDestinations(),
-                      new TypeReference<List<ValidSourceDestinationDto>>() {});
-      return new PageImpl<>(listOfValidSourceDestination,
-              pageable, listOfValidSourceDestination.size());
-    }
-    Page<ValidSourceDestinationDto> resultPage = findAssignments(
-            programId, facilityId, validDestinationRepository, profiler,
-            PageRequest.of(0, Integer.MAX_VALUE));
+          UUID programId, UUID facilityId, Pageable pageable, Profiler profiler) {
+    try {
+      ObjectMapper objectMapper = new ObjectMapper();
+      Optional<ValidDestinationsCache> destinationsCache = validDestinationsCacheRepository
+              .findByProgramIdAndFacilityId(programId, facilityId);
+      if (destinationsCache.isPresent()) {
+        List<ValidSourceDestinationDto> listOfValidSourceDestination =
+                objectMapper.readValue(destinationsCache.get().getValidDestinations(),
+                        new TypeReference<List<ValidSourceDestinationDto>>() {
+                        });
+        return new PageImpl<>(listOfValidSourceDestination,
+                pageable, listOfValidSourceDestination.size());
+      }
+      Page<ValidSourceDestinationDto> resultPage = findAssignments(
+              programId, facilityId, validDestinationRepository, profiler,
+              PageRequest.of(0, Integer.MAX_VALUE));
 
-    if (!validDestinationsCacheRepository
-            .existsByProgramIdAndFacilityId(programId, facilityId)) {
-      String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
-      ValidDestinationsCache newValidDestination = new ValidDestinationsCache();
-      newValidDestination.setFacilityId(facilityId);
-      newValidDestination.setProgramId(programId);
-      newValidDestination.setValidDestinations(jsonString);
-      validDestinationsCacheRepository.save(newValidDestination);
+      if (!validDestinationsCacheRepository
+              .existsByProgramIdAndFacilityId(programId, facilityId)) {
+        String jsonString = objectMapper.writeValueAsString(resultPage.getContent());
+        ValidDestinationsCache newValidDestination = new ValidDestinationsCache();
+        newValidDestination.setFacilityId(facilityId);
+        newValidDestination.setProgramId(programId);
+        newValidDestination.setValidDestinations(jsonString);
+        validDestinationsCacheRepository.save(newValidDestination);
+      }
+      return new PageImpl<>(resultPage.getContent(), pageable, resultPage.getTotalElements());
+    } catch (JsonProcessingException jsonProcessingException) {
+      throw new ResourceNotFoundException("JSON processing exception");
     }
-    return new PageImpl<>(resultPage.getContent(), pageable, resultPage.getTotalElements());
   }
 
   /**
