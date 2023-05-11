@@ -117,7 +117,9 @@ public class ValidDestinationService extends SourceDestinationBaseService {
       return new PageImpl<>(listOfValidSourceDestination,
               pageable, listOfValidSourceDestination.size());
     }
-    Pageable pageableToGetAllAssignments = PageRequest.of(0, Integer.MAX_VALUE);
+    // importing directly to avoid naming conflict error
+    org.springframework.data.domain.Pageable pageableToGetAllAssignments =
+            PageRequest.of(0, Integer.MAX_VALUE);
     Page<ValidSourceDestinationDto> resultPage = findAssignments(
             programId, facilityId, profiler,
             pageableToGetAllAssignments);
