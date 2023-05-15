@@ -49,6 +49,8 @@ import org.openlmis.stockmanagement.service.referencedata.FacilityReferenceDataS
 import org.openlmis.stockmanagement.service.referencedata.LotReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.OrderableReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.ProgramReferenceDataService;
+import org.openlmis.stockmanagement.service.ValidDestinationService;
+import org.openlmis.stockmanagement.service.ValidSourceService;
 import org.openlmis.stockmanagement.util.AuthenticationHelper;
 import org.openlmis.stockmanagement.util.LazyGrouping;
 import org.openlmis.stockmanagement.util.LazyList;
@@ -105,10 +107,15 @@ public class StockEventProcessContextBuilder {
   private CalculatedStockOnHandService calculatedStockOnHandService;
 
   @Autowired
-  private ValidSourceAssignmentRepository validSourceAssignmentRepository;
-
+  private ValidSourceService validSourceService;
   @Autowired
-  private ValidDestinationAssignmentRepository validDestinationAssignmentRepository;
+  private ValidDestinationService validDestinationService;
+
+  //  @Autowired
+  //  private ValidSourceAssignmentRepository validSourceAssignmentRepository;
+  //
+  //  @Autowired
+  //  private ValidDestinationAssignmentRepository validDestinationAssignmentRepository;
 
   @Value("${stockmanagement.kit.unpack.reasonId}")
   private UUID unpackReasonId;
@@ -213,17 +220,22 @@ public class StockEventProcessContextBuilder {
     context.setCardReasons(cardReasonsGroupedById);
 
     profiler.start("CREATE_LAZY_SOURCES");
-    Supplier<List<ValidSourceAssignment>> sourcesSupplier = () -> validSourceAssignmentRepository
-        .findByProgramIdAndFacilityTypeId(
-                eventDto.getProgramId(), context.getFacilityTypeId(), Pageable.unpaged());
+    Supplier<List<ValidSourceAssignment>> sourcesSupplier = () ->
+            validSourceService.getValidSourceAssignmentsList(
+                    eventDto.getProgramId(), context.getFacilityTypeId(), profiler);
+        //     validSourceAssignmentRepository
+        // .findByProgramIdAndFacilityTypeId(
+        //         eventDto.getProgramId(), context.getFacilityTypeId(), Pageable.unpaged());
     LazyList<ValidSourceAssignment> sources = new LazyList<>(sourcesSupplier);
     context.setSources(sources);
 
     profiler.start("CREATE_LAZY_DESTINATIONS");
     Supplier<List<ValidDestinationAssignment>> destinationsSupplier = () ->
-        validDestinationAssignmentRepository
-        .findByProgramIdAndFacilityTypeId(
-                eventDto.getProgramId(), context.getFacilityTypeId(), Pageable.unpaged());
+         validDestinationService.getValidDestinationAssignmentsList(
+                 eventDto.getProgramId(), context.getFacilityTypeId(), profiler);
+        // validDestinationAssignmentRepository
+        // .findByProgramIdAndFacilityTypeId(
+        //         eventDto.getProgramId(), context.getFacilityTypeId(), Pageable.unpaged());
     LazyList<ValidDestinationAssignment> destinations = new LazyList<>(destinationsSupplier);
     context.setDestinations(destinations);
 

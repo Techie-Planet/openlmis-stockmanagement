@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.openlmis.stockmanagement.domain.sourcedestination.Node;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationAssignment;
 import org.openlmis.stockmanagement.domain.sourcedestination.ValidDestinationsCache;
@@ -134,6 +136,25 @@ public class ValidDestinationService extends SourceDestinationBaseService {
     } catch (JsonProcessingException jsonProcessingException) {
       throw new ResourceNotFoundException("JSON processing exception");
     }
+  }
+
+  /**
+   * Find valid sources List by program ID and facility ID.
+   *
+   * @return List valid source destination assignments
+   */
+  public List<ValidDestinationAssignment> getValidDestinationAssignmentsList(
+          UUID programId, UUID facilityId, Profiler profiler) {
+    Page<ValidSourceDestinationDto> pageOfValidDestinationDto = getValidSourceDestinationDtoPage(
+            programId, facilityId, PageRequest.of(0, Integer.MAX_VALUE), profiler);
+    return pageOfValidDestinationDto.stream()
+            .forEach(dto -> {
+              ValidDestinationAssignment destination = new ValidDestinationAssignment();
+              destination.setId(dto.getId());
+              destination.setNode(dto.setNode());
+              destination.setProgramId(dto.getProgramId());
+              destination.setFacilityTypeId(dto.getFacilityTypeId());
+            }).collect(Collectors.toList());
   }
 
   /**
