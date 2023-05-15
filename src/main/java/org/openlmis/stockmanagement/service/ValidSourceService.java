@@ -145,6 +145,8 @@ public class ValidSourceService extends SourceDestinationBaseService {
                       source.setNode(dto.getNode());
                       source.setProgramId(dto.getProgramId());
                       source.setFacilityTypeId(dto.getFacilityTypeId());
+
+                      return source;
                     }).collect(Collectors.toList());
   }
 
