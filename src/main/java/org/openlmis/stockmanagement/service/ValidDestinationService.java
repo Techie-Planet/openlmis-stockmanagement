@@ -151,7 +151,7 @@ public class ValidDestinationService extends SourceDestinationBaseService {
             .forEach(dto -> {
               ValidDestinationAssignment destination = new ValidDestinationAssignment();
               destination.setId(dto.getId());
-              destination.setNode(dto.setNode());
+              destination.setNode(dto.getNode());
               destination.setProgramId(dto.getProgramId());
               destination.setFacilityTypeId(dto.getFacilityTypeId());
             }).collect(Collectors.toList());

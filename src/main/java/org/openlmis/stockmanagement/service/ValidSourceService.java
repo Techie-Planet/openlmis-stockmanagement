@@ -142,7 +142,7 @@ public class ValidSourceService extends SourceDestinationBaseService {
                     .forEach(dto -> {
                       ValidSourceAssignment source = new ValidSourceAssignment();
                       source.setId(dto.getId());
-                      source.setNode(dto.setNode());
+                      source.setNode(dto.getNode());
                       source.setProgramId(dto.getProgramId());
                       source.setFacilityTypeId(dto.getFacilityTypeId());
                     }).collect(Collectors.toList());
