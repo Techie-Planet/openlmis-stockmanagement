@@ -139,7 +139,7 @@ public class ValidSourceService extends SourceDestinationBaseService {
     Page<ValidSourceDestinationDto> pageOfValidSourceDtos = getValidSourceDestinationDtoPage(
             programId, facilityId, PageRequest.of(0, Integer.MAX_VALUE), profiler);
     return pageOfValidSourceDtos.stream()
-                    .forEach(dto -> {
+                    .map(dto -> {
                       ValidSourceAssignment source = new ValidSourceAssignment();
                       source.setId(dto.getId());
                       source.setNode(dto.getNode());

@@ -148,7 +148,7 @@ public class ValidDestinationService extends SourceDestinationBaseService {
     Page<ValidSourceDestinationDto> pageOfValidDestinationDto = getValidSourceDestinationDtoPage(
             programId, facilityId, PageRequest.of(0, Integer.MAX_VALUE), profiler);
     return pageOfValidDestinationDto.stream()
-            .forEach(dto -> {
+            .map(dto -> {
               ValidDestinationAssignment destination = new ValidDestinationAssignment();
               destination.setId(dto.getId());
               destination.setNode(dto.getNode());
