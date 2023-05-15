@@ -85,62 +85,17 @@ public class StockEventValidationsService {
    * @param stockEventDto the event to be validated.
    */
   public void validate(StockEventDto stockEventDto) {
-    long startTime, endTime;
-
-    startTime = System.currentTimeMillis();
     approvedOrderableValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("approvedOrderableValidator: " + (endTime - startTime) + "ms");
-
-    startTime = System.currentTimeMillis();
     lotValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("lotValidator: " + (endTime - startTime) + "ms");
-
-    startTime = System.currentTimeMillis();
     mandatoryFieldsValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("mandatoryFieldsValidator: " + (endTime - startTime) + "ms");
-
-    startTime = System.currentTimeMillis();
     orderableLotDuplicationValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("orderableLotDuplicationValidator: " + (endTime - startTime) + "ms");
-
-    startTime = System.currentTimeMillis();
     physicalInventoryAdjustmentReasonsValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("physicalInventoryAdjustmentReasonsValidator: " + (endTime - startTime) + "ms");
-
-    startTime = System.currentTimeMillis();
     quantityValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("quantityValidator: " + (endTime - startTime) + "ms");
-
-    startTime = System.currentTimeMillis();
     existenceValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("existenceValidator: " + (endTime - startTime) + "ms");
-
-    startTime = System.currentTimeMillis();
     receiveIssueReasonValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("receiveIssueReasonValidator: " + (endTime - startTime) + "ms");
-
-    startTime = System.currentTimeMillis();
     destinationAssignmentValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("destinationAssignmentValidator: " + (endTime - startTime) + "ms");
-
-    startTime = System.currentTimeMillis();
     destinationGeoLevelAffinityValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("destinationGeoLevelAffinityValidator: " + (endTime - startTime) + "ms");
-
-    startTime = System.currentTimeMillis();
     stockEventVvmValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("stockEventVvmValidator: " + (endTime - startTime) + "ms");
 
     AdjustmentReasonValidator adjustmentReasonValidator = extensionManager.getExtension(
         ExtensionPointId.ADJUSTMENT_REASON_POINT_ID, AdjustmentReasonValidator.class);
@@ -149,21 +104,9 @@ public class StockEventValidationsService {
     UnpackKitValidator unpackKitValidator = extensionManager.getExtension(
         ExtensionPointId.UNPACK_KIT_POINT_ID, UnpackKitValidator.class);
 
-    startTime = System.currentTimeMillis();
     adjustmentReasonValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("adjustmentReasonValidator: " + (endTime - startTime) + "ms");
-
-    startTime = System.currentTimeMillis();
     freeTextValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("freeTextValidator: " + (endTime - startTime) + "ms");
-
-    startTime = System.currentTimeMillis();
     unpackKitValidator.validate(stockEventDto);
-    endTime = System.currentTimeMillis();
-    System.out.println("unpackKitValidator: " + (endTime - startTime) + "ms");
   }
-
 
 }
