@@ -15,6 +15,8 @@
 
 package org.openlmis.stockmanagement.web;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -23,23 +25,27 @@ import org.openlmis.stockmanagement.repository.SublotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping('/api')
+@RequestMapping("/api")
 public class SublotController {
     @Autowired
     private SublotRepository sublotRepository;
 
     @RequestMapping(value = "sublots", method = RequestMethod.GET)
     public ResponseEntity<List<Sublot>> getSublotsByFacilityIdAndLotId(
-            @RequestParam(name = "facilityId", required = false) UUID facilityId,
-            @RequestParam(name = "lotId", required = false) UUID lotId
+            @RequestParam(name = "facilityId", required = true) UUID facilityId,
+            @RequestParam(name = "lotId", required = true) UUID lotId
     ) {
-        return new ResponseEntity<>(sublotRepository.findByFacilityIdAndLotId(facilityId, lotId), OK);
+        return new ResponseEntity<>(
+                sublotRepository.findByFacilityIdAndLotId(
+                        facilityId, lotId), OK
+        );
 
     }
 }

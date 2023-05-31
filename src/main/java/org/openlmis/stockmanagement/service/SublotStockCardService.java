@@ -15,45 +15,62 @@
 
 package org.openlmis.stockmanagement.service;
 
-
-
 import static java.time.ZonedDateTime.now;
-import static org.openlmis.stockmanagement.domain.card.StockCard.createStockCardFrom;
 import static org.openlmis.stockmanagement.domain.card.StockCardLineItem.createLineItemFrom;
 import static org.openlmis.stockmanagement.domain.identity.OrderableLotIdentity.identityOf;
+import static org.openlmis.stockmanagement.domain.reason.ReasonCategory.PHYSICAL_INVENTORY;
 import static org.openlmis.stockmanagement.domain.reason.ReasonCategory.SUBLOT;
 import static org.openlmis.stockmanagement.domain.reason.ReasonType.CREDIT;
+import static org.openlmis.stockmanagement.dto.SublotStockCardDto.createFrom;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.openlmis.stockmanagement.domain.card.StockCard;
 import org.openlmis.stockmanagement.domain.card.StockCardLineItem;
 import org.openlmis.stockmanagement.domain.identity.OrderableLotIdentity;
 import org.openlmis.stockmanagement.domain.reason.StockCardLineItemReason;
+import org.openlmis.stockmanagement.domain.sourcedestination.Node;
+import org.openlmis.stockmanagement.domain.sourcedestination.Organization;
 import org.openlmis.stockmanagement.domain.sublot.Sublot;
+import org.openlmis.stockmanagement.domain.sublot.SublotCalculatedStockOnHand;
 import org.openlmis.stockmanagement.domain.sublot.SublotStockCard;
 import org.openlmis.stockmanagement.domain.sublot.SublotStockCardLineItem;
+import org.openlmis.stockmanagement.dto.SublotStockCardLineItemDto;
 import org.openlmis.stockmanagement.dto.referencedata.FacilityDto;
 import org.openlmis.stockmanagement.dto.referencedata.LotDto;
 import org.openlmis.stockmanagement.dto.StockEventDto;
 import org.openlmis.stockmanagement.dto.StockEventLineItemDto;
+import org.openlmis.stockmanagement.dto.SublotStockCardDto;
+import org.openlmis.stockmanagement.i18n.MessageService;
+import org.openlmis.stockmanagement.repository.OrganizationRepository;
 import org.openlmis.stockmanagement.repository.StockCardLineItemReasonRepository;
 import org.openlmis.stockmanagement.repository.StockCardRepository;
+import org.openlmis.stockmanagement.repository.SublotCalculatedStockOnHandRepository;
 import org.openlmis.stockmanagement.repository.SublotRepository;
+import org.openlmis.stockmanagement.repository.SublotStockCardLineItemRepository;
 import org.openlmis.stockmanagement.repository.SublotStockCardRepository;
 import org.openlmis.stockmanagement.service.referencedata.FacilityReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.LotReferenceDataService;
-import org.openlmis.stockmanagement.service.StockCardService;
+import org.openlmis.stockmanagement.util.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SublotStockCardService {
   private static final Logger LOGGER = LoggerFactory.getLogger(SublotStockCardService.class);
+  private static final String PHYSICAL_INVENTORY_REASON_PREFIX =
+          "stockmanagement.reason.physicalInventory.";
 
   @Autowired
   private StockCardLineItemReasonRepository stockCardLineItemReasonRepository;
@@ -69,8 +86,16 @@ public class SublotStockCardService {
   private SublotStockCardRepository sublotStockCardRepository;
   @Autowired
   private StockCardRepository stockCardRepository;
-
-
+  @Autowired
+  private SublotCalculatedStockOnHandRepository sublotCalculatedStockOnHandRepository;
+  @Autowired
+  private SublotCalculatedStockOnHandService sublotCalculatedStockOnHandService;
+  @Autowired
+  private SublotStockCardLineItemRepository sublotStockCardLineItemRepository;
+  @Autowired
+  private OrganizationRepository organizationRepository;
+  @Autowired
+  private MessageService messageService;
 
 
   /**
@@ -86,15 +111,19 @@ public class SublotStockCardService {
             List<StockCard> stockCardsToUpdate,
             ZonedDateTime processedDate
     ) {
-      // check sublot reason, save sublots from event, create sublot stockcard
-      // sublots SOH recalculate SOH
-      // send all the cardsToUpdate into sublotStockCardService. it also contains all the line items (and sublotId in extradata)
-      // if reason is sublot reason, create new sublotstockcard,
-      // else, just check for sublot id in extra data, and find the sublotstockcard, and recalculate the CSOH for that card
-      // find sublot cards by parentStockCard, and sublotid, or create new
+      /* Get the sublot credit reason.
+       For every stockEventLineitemDto, if it is a debit reason,
+       get it's stock card from the list of stock cards.
+       Create a new stockCardLineItem with the credit reason,
+       create a new sublotStockCard, and its line item, from the credit lineitem
+       if reason is sublot reason, create new sublotstockcard,
+       else, just check for sublot id in extra data, and find the sublotstockcard, and recalculate the CSOH for that card
+       find sublot cards by parentStockCard, and sublotid, or create new*/
 
       StockCardLineItemReason creditReason =
-              stockCardLineItemReasonRepository.findByReasonTypeAndReasonCategory(CREDIT, SUBLOT);
+              stockCardLineItemReasonRepository.findByReasonTypeAndReasonCategory(
+                      CREDIT, SUBLOT
+              );
 
       for (StockEventLineItemDto lineItem : stockEventDto.getLineItems()) {
         StockCardLineItemReason reason =
@@ -102,22 +131,53 @@ public class SublotStockCardService {
         if (reason != null &&
                 (reason.isSublotReasonCategory() && reason.isDebitReasonType())) {
 
-          // create a sublot credit
-          // create sublot
-          StockCard stockCard =
-                  findCard(stockEventDto, lineItem, stockCardsToUpdate);
+          LOGGER.info("find stock card, sublot");
+          StockCard stockCard = findCard(stockEventDto, lineItem, stockCardsToUpdate);
 
+          LOGGER.info("create credit line item");
           StockCardLineItem stockCardLineItem =
                   createLineItemFrom(
                           stockEventDto, lineItem, stockCard, savedEventId, processedDate);
           stockCardLineItem.setReason(creditReason);
-          stockCard.getLineItems().add(stockCardLineItem);
-          // create new sublotStockcard line item
+          stockCardLineItem.setProcessedDate(ZonedDateTime.now());
+
+          LOGGER.info("create sublot stock card line item");
           SublotStockCardLineItem sublotStockCardLineItem = new SublotStockCardLineItem();
           sublotStockCardLineItem.setStockCardLineItem(stockCardLineItem);
           sublotStockCardLineItem.setSublotStockCardLineItemExtraData(lineItem.getExtraData());
 
-          // add the updated stock card back into the list
+          LOGGER.info("create and save a new sublot from this lot");
+          LotDto lotDto = lotReferenceDataService.findOne(stockCard.getLotId());
+          Sublot newSublot = new Sublot();
+          newSublot.setSublotCode(generateSublotCode(stockCard.getFacilityId(), lotDto));
+          newSublot.setFacilityId(stockCard.getFacilityId());
+          newSublot.setLotId(lotDto.getId());
+          Sublot savedSublot = sublotRepository.save(newSublot);
+
+          LOGGER.info("create new sublot stockcard");
+          SublotStockCard sublotStockCard = new SublotStockCard();
+          sublotStockCard.setSublot(savedSublot);
+          sublotStockCard.setStockCard(stockCard);
+          sublotStockCard.setOriginEventId(savedEventId);
+
+          LOGGER.info("saving sublotstockcard and line items");
+          SublotStockCard savedSublotStockCard = sublotStockCardRepository.save(sublotStockCard);
+          sublotStockCardLineItem.setSublotStockCard(savedSublotStockCard);
+          sublotStockCardLineItemRepository.save(sublotStockCardLineItem);
+
+          LOGGER.info("use old extraData");
+          stockCardService.checkSublotDebitReasonAndUsePreviousStatus(
+                  stockCard, lineItem, stockEventDto);
+
+          LOGGER.info("save the new sublot stockCard calculated SOH");
+          SublotCalculatedStockOnHand sublotCalculatedStockOnHand = new SublotCalculatedStockOnHand();
+          sublotCalculatedStockOnHand.setSublotStockCard(savedSublotStockCard);
+          sublotCalculatedStockOnHand.setSublotStockOnHand(lineItem.getQuantity());
+          sublotCalculatedStockOnHand.setOccurredDate(lineItem.getOccurredDate());
+          sublotCalculatedStockOnHand.setProcessedDate(stockCardLineItem.getProcessedDate());
+          sublotCalculatedStockOnHandRepository.save(sublotCalculatedStockOnHand);
+
+          LOGGER.info("set updated card back into list");
           stockCardsToUpdate.stream()
                   .filter(card -> card.getId() == stockCard.getId())
                   .findFirst()
@@ -126,32 +186,9 @@ public class SublotStockCardService {
                     stockCardsToUpdate.set(index, stockCard);
                   });
 
-          LotDto lotDto = lotReferenceDataService.findOne(stockCard.getLotId());
-
-          Sublot newSublot = new Sublot();
-          newSublot.setSublotCode(generateSublotCode(stockCard.getFacilityId(), lotDto));
-          newSublot.setFacilityId(stockCard.getFacilityID());
-          newSublot.setLot(lotDto);
-          Sublot savedSublot = sublotRepository.save(newSublot);
-
-          //return
-
-
-          //create new sublotStockCard
-          SublotStockCard sublotStockCard = new SublotStockCard();
-          sublotStockCard.setSublot(savedSublot);
-          sublotStockCard.setStockCard(stockCard);
-          sublotStockCard.setOriginEventId(savedEventId);
-          sublotStockCard.getLineItems().add(sublotStockCardLineItem);
-          // recalculate cSOH for sublot stockcard
-
-          sublotRepository.save(sublotStockCard);
-          stockCardService.checkSublotDebitReasonAndUsePreviousStatus(stockCard, lineItem, stockEventDto);
-
         }
-
       }
-        LOGGER.debug("Stock cards and line items saved");
+        LOGGER.info("Sublot Stock cards and line items saved");
     }
   private StockCard findCard(StockEventDto eventDto, StockEventLineItemDto eventLineItem,
                                      List<StockCard> cardsToUpdate) {
@@ -169,21 +206,104 @@ public class SublotStockCardService {
     }
 
     System.out.println("found card");
-    System.out.println(card.toString());
 
     return card;
   }
 
+  public SublotStockCardDto findSublotStockCard(String sublotCode) {
+      LOGGER.info("finding sublot stock card");
+    Optional<SublotStockCard> sublotStockCard = sublotStockCardRepository
+            .findBySublotSublotCode(sublotCode);
+    if (sublotStockCard.isPresent()) {
+      SublotStockCard foundsublotStockCard = sublotStockCard.get();
+      calculateSublotLineItemsSOH(foundsublotStockCard);
+      sublotCalculatedStockOnHandService.fetchStockOnHand(
+              foundsublotStockCard, LocalDate.now());
+      sublotCalculatedStockOnHandService.recalculateStockOnHand(foundsublotStockCard);
+      SublotStockCardDto sublotStockCardDto = createFrom(foundsublotStockCard);
+      assignSourceDestinationReasonNameForLineItems(sublotStockCardDto.getSublotLineItems());
+
+      return sublotStockCardDto;
+    }
+    throw new RuntimeException("Sublot Stock card not found");
+
+  }
+
   private String generateSublotCode(UUID facilityId, LotDto lotDto) {
-      FacilityDto facilityDto = facilityReferenceDataService.findOne(facilityId);
-      List<Sublot> sublotsInFacility =
-              sublotRepository.findByFacilityIdAndLotId(facilityId, lotDto.getId());
+    FacilityDto facilityDto = facilityReferenceDataService.findOne(facilityId);
+    List<String> sublotsInFacility = sublotRepository
+            .findByFacilityIdAndLotId(facilityId, lotDto.getId())
+            .stream()
+            .map(Sublot::getSublotCode)
+            .collect(Collectors.toList());
+
+    Set<String> existingSublotCodes = new HashSet<>(sublotsInFacility);
+
     int numberOfSublots = sublotsInFacility.size();
-    String formattedNumber = String.format("%02d", numberOfSublots + 1);
-    String sublotCode = "" + facilityDto.getCode()
-            + "/" + lotDto.getLotCode() + "/SUB0" + formattedNumber;
+    String sublotCode;
+
+    do {
+      int incrementedNumber = numberOfSublots + 1;
+      String formattedNumber = String.format("%02d", incrementedNumber);
+      sublotCode = facilityDto.getCode() + "/" + lotDto.getLotCode() + "/SUB0" + formattedNumber;
+
+      if (!existingSublotCodes.contains(sublotCode)) {
+        break;
+      }
+
+      numberOfSublots++;
+    } while (true);
+
     System.out.println(sublotCode);
     return sublotCode;
+  }
 
+  private void calculateSublotLineItemsSOH(SublotStockCard sublotStockCard) {
+    List<SublotStockCardLineItem> lineItems = sublotStockCard.getLineItems();
+    if (lineItems != null && !lineItems.isEmpty()) {
+      AtomicInteger soh = new AtomicInteger();
+      lineItems.forEach(sublotStockCardLineItem -> {
+        StockCardLineItem stockCardLineItem = sublotStockCardLineItem.getStockCardLineItem();
+        int newSoh = sublotCalculatedStockOnHandService
+                .calculateStockOnHand(stockCardLineItem, soh.get());
+        soh.set(newSoh);
+      });
+    }
+
+  }
+
+  private void assignSourceDestinationReasonNameForLineItems(
+          List<SublotStockCardLineItemDto> sublotStockCardLineItemDtos) {
+    sublotStockCardLineItemDtos.forEach(lineItemDto -> {
+      StockCardLineItem lineItem = lineItemDto.getStockCardLineItemDto().getLineItem();
+      assignReasonName(lineItem);
+      lineItemDto.getStockCardLineItemDto()
+              .setSource(getFromRefDataOrConvertOrg(lineItem.getSource()));
+      lineItemDto.getStockCardLineItemDto()
+              .setDestination(getFromRefDataOrConvertOrg(lineItem.getDestination()));
+    });
+  }
+
+  private void assignReasonName(StockCardLineItem lineItem) {
+    lineItem.setReasonFreeText(lineItem.getReason().getName());
+  }
+
+  private FacilityDto getFromRefDataOrConvertOrg(Node node) {
+    if (node == null) {
+      return null;
+    }
+
+    if (node.isRefDataFacility()) {
+      LOGGER.debug("Calling ref data to retrieve facility info for line item");
+      return facilityReferenceDataService.findOne(node.getReferenceId());
+    } else {
+      Organization org = organizationRepository.findById(node.getReferenceId()).orElse(null);
+      if (null != org) {
+        return FacilityDto.createFrom(org);
+      } else {
+        LOGGER.warn("Could not find any organization matching node id {}", node.getReferenceId());
+        return FacilityDto.createFrom(new Organization());
+      }
+    }
   }
 }

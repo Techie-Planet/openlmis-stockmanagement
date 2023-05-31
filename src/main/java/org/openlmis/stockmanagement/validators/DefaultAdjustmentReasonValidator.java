@@ -79,7 +79,8 @@ public class DefaultAdjustmentReasonValidator implements AdjustmentReasonValidat
   }
 
   private void validReasonCategory(StockCardLineItemReason reason) {
-    if (!reason.isAdjustmentReasonCategory()) {
+    if (!reason.isAdjustmentReasonCategory()
+            && !reason.isSublotReasonCategory()) {
       throw new ValidationMessageException(
           new Message(ERROR_EVENT_ADJUSTMENT_REASON_CATEGORY_INVALID,
               reason.getReasonCategory()));

@@ -15,13 +15,18 @@
 
 package org.openlmis.stockmanagement.repository;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
-import org.openlmis.stockmanagement.domain.sublot.Sublot;
-import org.openlmis.stockmanagement.domain.sublot.SublotStockCard;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.openlmis.stockmanagement.domain.sublot.SublotCalculatedStockOnHand;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
-public interface SublotStockCardRepository extends JpaRepository<SublotStockCard, UUID>  {
-    Optional<SublotStockCard> findBySublotSublotCode(String sublotCode);
+public interface SublotCalculatedStockOnHandRepository
+        extends  PagingAndSortingRepository<SublotCalculatedStockOnHand, UUID>  {
+    Optional<SublotCalculatedStockOnHand> findFirstBySublotStockCardIdAndOccurredDateLessThanEqualOrderByOccurredDateDesc(
+            @Param("sublotStockCardId") UUID sublotStockCardId,
+            @Param("asOfDate") LocalDate asOfDate);
+
 
 }

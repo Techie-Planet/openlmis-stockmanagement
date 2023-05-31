@@ -13,15 +13,31 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
 
-package org.openlmis.stockmanagement.repository;
+package org.openlmis.stockmanagement.domain.sublot;
 
-import java.util.Optional;
-import java.util.UUID;
-import org.openlmis.stockmanagement.domain.sublot.Sublot;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import lombok.Data;
+import org.openlmis.stockmanagement.domain.BaseEntity;
 import org.openlmis.stockmanagement.domain.sublot.SublotStockCard;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SublotStockCardRepository extends JpaRepository<SublotStockCard, UUID>  {
-    Optional<SublotStockCard> findBySublotSublotCode(String sublotCode);
+@Data
+@Entity
+@Table(name = "sublot_calculated_stocks_on_hand", schema = "stockmanagement")
+public class SublotCalculatedStockOnHand extends BaseEntity {
+    @ManyToOne
+    @JoinColumn(name = "sublot_stock_card_id", referencedColumnName = "id", nullable = false)
+    private SublotStockCard sublotStockCard;
+    @Column(nullable = false)
+    private Integer sublotStockOnHand;
+    @Column(nullable = false)
+    private LocalDate occurredDate;
 
+    @Column(nullable = false, columnDefinition = "timestamp")
+    private ZonedDateTime processedDate;
 }

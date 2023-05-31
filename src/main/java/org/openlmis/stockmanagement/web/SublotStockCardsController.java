@@ -15,38 +15,34 @@
 
 package org.openlmis.stockmanagement.web;
 
-import static java.util.Arrays.asList;
-import static org.openlmis.stockmanagement.domain.reason.ReasonCategory.ADJUSTMENT;
-import static org.openlmis.stockmanagement.domain.reason.ReasonCategory.SUBLOT;
-import static org.openlmis.stockmanagement.domain.reason.ReasonCategory.TRANSFER;
-import static org.openlmis.stockmanagement.domain.reason.ReasonType.CREDIT;
-import static org.openlmis.stockmanagement.domain.reason.ReasonType.DEBIT;
+import static org.springframework.http.HttpStatus.OK;
 
-import java.util.List;
-import org.openlmis.stockmanagement.domain.reason.ReasonCategory;
-import org.openlmis.stockmanagement.domain.reason.ReasonType;
-import org.openlmis.stockmanagement.service.PermissionService;
+import org.openlmis.stockmanagement.domain.sublot.Sublot;
+import org.openlmis.stockmanagement.dto.SublotStockCardDto;
+import org.openlmis.stockmanagement.service.SublotStockCardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/api")
-public class ReasonConfigurationOptionsController {
+public class SublotStockCardsController {
+    @Autowired
+    private SublotStockCardService sublotStockCardService;
 
-  @Autowired
-  private PermissionService permissionService;
+    /**
+     * Get stock card by id.
+     *
+     * @param sublot sublot.
+     * @return found sublot stock card.
+     */
+    @RequestMapping(value = "/sublotStockCards")
+    public ResponseEntity<SublotStockCardDto> getSublotStockCard(@RequestParam String sublot) {
+        return new ResponseEntity(sublotStockCardService.findSublotStockCard(sublot), OK);
 
-  @RequestMapping(value = "/reasonTypes", method = RequestMethod.GET)
-  public List<ReasonType> getReasonTypes() {
-    permissionService.canManageReasons();
-    return asList(CREDIT, DEBIT);
-  }
-
-  @RequestMapping(value = "/reasonCategories", method = RequestMethod.GET)
-  public List<ReasonCategory> getReasonCategories() {
-    permissionService.canManageReasons();
-    return asList(TRANSFER, ADJUSTMENT, SUBLOT);
-  }
+    }
 }
