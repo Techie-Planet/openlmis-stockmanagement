@@ -13,27 +13,15 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
 
-package org.openlmis.stockmanagement.domain.reason;
+package org.openlmis.stockmanagement.repository;
 
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import java.util.List;
+import java.util.UUID;
+import org.openlmis.stockmanagement.domain.sublot.Sublot;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public enum ReasonCategory {
-  TRANSFER, ADJUSTMENT, PHYSICAL_INVENTORY, AGGREGATION, SUBLOT;
+public interface SublotRepository extends PagingAndSortingRepository<Sublot, UUID> {
+    List<Sublot> findByFacilityIdAndLotId(UUID facilityId, UUID lotId);
+    Sublot findBySublotCode(String sublotCode);
 
-  /**
-   * Find a correct {@link ReasonCategory} instance based on the passed string. The method ignores
-   * the case.
-   *
-   * @param arg string representation of one of reason category.
-   * @return instance of {@link ReasonCategory} if the given string matches type; otherwise null.
-   */
-  public static ReasonCategory fromString(String arg) {
-    for (ReasonCategory status : values()) {
-      if (equalsIgnoreCase(arg, status.name())) {
-        return status;
-      }
-    }
-
-    return null;
-  }
 }

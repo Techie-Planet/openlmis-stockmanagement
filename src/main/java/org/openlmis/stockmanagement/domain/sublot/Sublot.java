@@ -13,27 +13,30 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
 
-package org.openlmis.stockmanagement.domain.reason;
+package org.openlmis.stockmanagement.domain.sublot;
 
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import org.hibernate.annotations.Type;
+import lombok.Data;
+import org.openlmis.stockmanagement.domain.BaseEntity;
+import org.openlmis.stockmanagement.dto.referencedata.LotDto;
 
-public enum ReasonCategory {
-  TRANSFER, ADJUSTMENT, PHYSICAL_INVENTORY, AGGREGATION, SUBLOT;
+import java.time.LocalDate;
+import java.util.UUID;
 
-  /**
-   * Find a correct {@link ReasonCategory} instance based on the passed string. The method ignores
-   * the case.
-   *
-   * @param arg string representation of one of reason category.
-   * @return instance of {@link ReasonCategory} if the given string matches type; otherwise null.
-   */
-  public static ReasonCategory fromString(String arg) {
-    for (ReasonCategory status : values()) {
-      if (equalsIgnoreCase(arg, status.name())) {
-        return status;
-      }
-    }
-
-    return null;
-  }
+@Entity
+@Data
+@Table(name = "sublots", schema = "stockmanagement")
+public class Sublot extends BaseEntity {
+    @ManyToOne
+    @Column(nullable = false, name = "lotid")
+    @Type(type = PG_UUID)
+    private LotDto lot;
+    @Column(nullable = false)
+    private String sublotCode;
+    @Column(nullable = false)
+    private UUID facilityId;
 }

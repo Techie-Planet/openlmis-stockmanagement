@@ -29,6 +29,9 @@ public interface StockCardLineItemReasonRepository extends
   List<StockCardLineItemReason> findAll();
 
   StockCardLineItemReason findByName(@Param("name") String name);
+  StockCardLineItemReason findByReasonTypeAndReasonCategory(
+          @Param("reasonType") String reasonType,
+          @Param("reasonCategory") String reasonCategory);
 
   List<StockCardLineItemReason> findByIdIn(Collection<UUID> ids);
 

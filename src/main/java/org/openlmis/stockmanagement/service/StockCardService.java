@@ -60,6 +60,7 @@ import org.openlmis.stockmanagement.service.referencedata.LotReferenceDataServic
 import org.openlmis.stockmanagement.service.referencedata.OrderableReferenceDataService;
 import org.openlmis.stockmanagement.service.referencedata.PermissionStringDto;
 import org.openlmis.stockmanagement.service.referencedata.PermissionStrings;
+import org.openlmis.stockmanagement.service.SublotStockCardService;
 import org.openlmis.stockmanagement.util.AuthenticationHelper;
 import org.openlmis.stockmanagement.util.Message;
 import org.openlmis.stockmanagement.web.Pagination;
@@ -113,6 +114,8 @@ public class StockCardService extends StockCardBaseService {
   private StockOnHandCalculationService calculationSoHService;
   @Autowired
   private StockEventNotificationProcessor stockEventNotificationProcessor;
+  @Autowired
+  private SublotStockCardService sublotStockCardService;
 
   /**
    * Generate stock card line items and stock cards based on event, and persist them.
@@ -132,6 +135,7 @@ public class StockCardService extends StockCardBaseService {
               stockEventDto, eventLineItem, savedEventId, cardsToUpdate);
       existingLineItems.addAll(stockCard.getLineItems());
       createLineItemFrom(stockEventDto, eventLineItem, stockCard, savedEventId, processedDate);
+      checkSublotDebitReasonAndUsePreviousStatus(stockCard, eventLineItem, stockEventDto);
     }
 
     cardRepository.saveAll(cardsToUpdate);
@@ -141,6 +145,8 @@ public class StockCardService extends StockCardBaseService {
             getSavedButNewLineItems(cardsToUpdate, existingLineItems));
 
     stockEventDto.getContext().refreshCards();
+    sublotStockCardService.saveFromEvent(
+            stockEventDto, savedEventId, cardsToUpdate, processedDate);
 
     LOGGER.debug("Stock cards and line items saved");
   }
@@ -309,5 +315,22 @@ public class StockCardService extends StockCardBaseService {
         return FacilityDto.createFrom(new Organization());
       }
     }
+  }
+  public void checkSublotDebitReasonAndUsePreviousStatus(
+          StockCard stockCard,
+          StockEventLineItemDto lineItem,
+          StockEventDto stockEventDto) {
+    StockCardLineItemReason reason =
+            stockEventDto.getContext().findEventReason(lineItem.getReasonId());
+    if (reason != null &&
+            (reason.isSublotReasonCategory() && reason.isDebitReasonType())) {
+      stockCard.reorderLineItems();
+      StockCardLineItem latestLineItem =
+              stockCard.getLineItems().get(stockCard.getLineItems().size() -1 );
+      StockCardLineItem previousLineItem =
+              stockCard.getLineItems().get(stockCard.getLineItems().size() -2);
+      latestLineItem.setExtraData(previousLineItem.getExtraData());
+    }
+
   }
 }

@@ -134,6 +134,10 @@ public class StockCardLineItemReason extends BaseEntity {
     return getReasonCategory() == ReasonCategory.ADJUSTMENT;
   }
 
+  public boolean isSublotReasonCategory() {
+    return getReasonCategory() == ReasonCategory.SUBLOT;
+  }
+
   public boolean hasNoName() {
     return Strings.isNullOrEmpty(name);
   }
