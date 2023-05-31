@@ -148,13 +148,6 @@ public class SublotStockCardService {
           sublotRepository.save(sublotStockCard);
           stockCardService.checkSublotDebitReasonAndUsePreviousStatus(stockCard, lineItem, stockEventDto);
 
-          stockCardRepository.saveAll(cardsToUpdate);
-          stockCardRepository.flush();
-
-
-
-
-
         }
 
       }

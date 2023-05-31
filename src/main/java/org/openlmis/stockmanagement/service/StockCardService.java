@@ -138,6 +138,9 @@ public class StockCardService extends StockCardBaseService {
       checkSublotDebitReasonAndUsePreviousStatus(stockCard, eventLineItem, stockEventDto);
     }
 
+    sublotStockCardService.saveFromEvent(
+            stockEventDto, savedEventId, cardsToUpdate, processedDate);
+
     cardRepository.saveAll(cardsToUpdate);
     cardRepository.flush();
 
@@ -145,8 +148,6 @@ public class StockCardService extends StockCardBaseService {
             getSavedButNewLineItems(cardsToUpdate, existingLineItems));
 
     stockEventDto.getContext().refreshCards();
-    sublotStockCardService.saveFromEvent(
-            stockEventDto, savedEventId, cardsToUpdate, processedDate);
 
     LOGGER.debug("Stock cards and line items saved");
   }
