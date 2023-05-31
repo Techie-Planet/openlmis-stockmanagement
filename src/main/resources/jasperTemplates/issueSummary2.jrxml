@@ -24,6 +24,7 @@
 	<import value="java.time.LocalDate"/>
 	<import value="org.openlmis.stockmanagement.dto.StockCardLineItemReasonDto"/>
 	<import value="org.openlmis.stockmanagement.dto.referencedata.FacilityDto"/>
+	<import value="org.openlmis.stockmanagement.domain.sourcedestination.Organization"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
@@ -63,6 +64,9 @@
 		</field>
 		<field name="receivingFacility" class="org.openlmis.stockmanagement.dto.referencedata.FacilityDto">
 			<fieldDescription><![CDATA[receivingFacility]]></fieldDescription>
+		</field>
+		<field name="receivingOrganization" class="org.openlmis.stockmanagement.domain.sourcedestination.Organization">
+			<fieldDescription><![CDATA[receivingOrganization]]></fieldDescription>
 		</field>
 		<field name="lot" class="org.openlmis.stockmanagement.dto.referencedata.LotDto">
 			<fieldDescription><![CDATA[lot]]></fieldDescription>
@@ -511,7 +515,7 @@
 								<reportElement mode="Transparent" x="0" y="0" width="105" height="30" uuid="ef145284-93eb-4f5f-a9a6-b3c979a527e1"/>
 								<box padding="2" />
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{receivingFacility}.getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{receivingFacility} != null ? $F{receivingFacility}.getName() : $F{receivingOrganization}.getName()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

@@ -71,7 +71,8 @@ public class ValidSourceDestinationController {
    */
   @GetMapping(value = "/validDestinations")
   public Page<ValidSourceDestinationDto> getValidDestinations(
-      @RequestParam MultiValueMap<String, String> parameters, Pageable pageable) {
+      @RequestParam MultiValueMap<String, String> parameters, Pageable pageable
+  )  {
     ValidSourceDestinationSearchParams params = new ValidSourceDestinationSearchParams(parameters);
 
     LOGGER.info(format("Try to find valid destinations with program %s and facility %s",

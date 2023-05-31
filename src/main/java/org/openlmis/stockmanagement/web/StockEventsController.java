@@ -180,6 +180,7 @@ public class StockEventsController extends BaseController {
                                                     programId,
                                                     facilityId
       );
+    // List<String> result = new ArrayList<>();
     return new ResponseEntity<>(result, OK);
   }
 

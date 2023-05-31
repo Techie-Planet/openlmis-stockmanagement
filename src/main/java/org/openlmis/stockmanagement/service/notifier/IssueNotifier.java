@@ -138,7 +138,8 @@ public class IssueNotifier extends BaseNotifier {
     UUID receivingFacilityId = nodeRepository
             .findById(eventLine.getDestinationId()).get().getReferenceId();
     FacilityDto receivingFacility = facilityReferenceDataService.findOne(receivingFacilityId);
-    if (!receivingFacility.getType().getName().equals("Health Facility")) {
+    if (receivingFacility != null &&
+            !receivingFacility.getType().getName().equals("Health Facility")) {
 
       Collection<UserDto> recipients = getEditors(
               stockCard.getProgramId(), receivingFacilityId, rightId);
