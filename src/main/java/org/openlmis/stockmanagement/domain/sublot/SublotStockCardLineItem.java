@@ -20,22 +20,35 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+//import javax.persistence.Transient;
+import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.openlmis.stockmanagement.domain.BaseEntity;
 import org.openlmis.stockmanagement.domain.card.StockCard;
 import org.openlmis.stockmanagement.domain.card.StockCardLineItem;
+import org.openlmis.stockmanagement.domain.ExtraDataConverter;
 import org.openlmis.stockmanagement.domain.sublot.Sublot;
+import org.openlmis.stockmanagement.domain.sublot.SublotStockCard;
 
 @Data
 @Entity
-@Table(name = "sublot_stock_cards", schema = "stockmanagement")
-public class SublotStockCardLineItem {
+@Table(name = "sublot_stock_card_line_items", schema = "stockmanagement")
+public class SublotStockCardLineItem extends BaseEntity {
+    @OneToOne
     private StockCardLineItem stockCardLineItem;
+    @Column(name = "sublotstockcardlineitemextradata", columnDefinition = "jsonb")
+    @Convert(converter = ExtraDataConverter.class)
     private Map<String, String> sublotStockCardLineItemExtraData;
+    @ManyToOne
+    @JoinColumn(nullable= false)
+    private SublotStockCard sublotStockCard;
+    //@Transient
+    //private Integer sublotStockOnHand;
 }

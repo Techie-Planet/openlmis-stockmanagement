@@ -27,4 +27,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UseByStatusRepository extends PagingAndSortingRepository<UseByStatus, UUID> {
     Page<UseByStatus> findAll(Pageable pageable);
+    UseByStatus findByName(String name);
+
 }

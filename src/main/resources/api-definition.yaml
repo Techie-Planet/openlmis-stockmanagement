@@ -35,6 +35,7 @@ schemas:
   - facility: !include schemas/facility.json
   - orderable: !include schemas/orderable.json
   - lot: !include schemas/lot.json
+  - sublot: !include schemas/sublot.json
   - lineItem: !include schemas/lineItem.json
   - facilityType: !include schemas/facilityType.json
   - reason: !include schemas/reason.json
@@ -1269,6 +1270,50 @@ traits:
               body:
                 application/json:
                   schema: localizedMessage
+
+  /sublots:
+    get:
+      is: [ secured ]
+      description: |
+        Retrieve all sublots by facilityId and lotId.
+      queryParameters:
+        facilityId:
+          type: string
+          required: true
+        lotId:
+          type: string
+          required: true
+      responses:
+        200:
+          description: Returns a list of sublots.
+          body:
+            application/json:
+              schema: sublot
+        403:
+          description: User does not have permission to manage sublots.
+          body:
+            application/json:
+              schema: localizedMessage
+
+  /sublotStockCards:
+    get:
+      is: [ secured ]
+      description: |
+        Retrieve a sublot stock card by facilityId and lotId.
+      queryParameters:
+        sublot:
+          type: string
+          required: true
+      responses:
+        200:
+          description: Returns a sublot stock card.
+          body:
+            application/json: {}
+        403:
+          description: User does not have permission to manage sublots.
+          body:
+            application/json:
+              schema: localizedMessage
 
   /physicalInventories:
       get:

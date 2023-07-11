@@ -31,10 +31,9 @@ import java.util.UUID;
 @Data
 @Table(name = "sublots", schema = "stockmanagement")
 public class Sublot extends BaseEntity {
-    @ManyToOne
-    @Column(nullable = false, name = "lotid")
     @Type(type = PG_UUID)
-    private LotDto lot;
+    @Column(nullable = false)
+    private UUID lotId;
     @Column(nullable = false)
     private String sublotCode;
     @Column(nullable = false)

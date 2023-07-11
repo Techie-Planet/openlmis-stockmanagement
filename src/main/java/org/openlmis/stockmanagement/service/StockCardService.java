@@ -137,6 +137,12 @@ public class StockCardService extends StockCardBaseService {
       createLineItemFrom(stockEventDto, eventLineItem, stockCard, savedEventId, processedDate);
       checkSublotDebitReasonAndUsePreviousStatus(stockCard, eventLineItem, stockEventDto);
     }
+    System.out.println("existing line items: " + existingLineItems.size());
+    System.out.println("cards to update: " + cardsToUpdate.get(0).getLineItems().size());
+
+    sublotStockCardService.saveFromEvent(
+            stockEventDto, savedEventId, cardsToUpdate, processedDate);
+    System.out.println("cards to update: " + cardsToUpdate.get(0).getLineItems().size());
 
     cardRepository.saveAll(cardsToUpdate);
     cardRepository.flush();
@@ -145,8 +151,6 @@ public class StockCardService extends StockCardBaseService {
             getSavedButNewLineItems(cardsToUpdate, existingLineItems));
 
     stockEventDto.getContext().refreshCards();
-    sublotStockCardService.saveFromEvent(
-            stockEventDto, savedEventId, cardsToUpdate, processedDate);
 
     LOGGER.debug("Stock cards and line items saved");
   }
@@ -316,17 +320,25 @@ public class StockCardService extends StockCardBaseService {
       }
     }
   }
+
+  /**
+   * check if sublot reason, and use previous extraData
+   *
+   * @param stockCard      the stockCard to update
+   * @param lineItem      the line item to check
+   * @param stockEventDto      the current stock event
+   */
   public void checkSublotDebitReasonAndUsePreviousStatus(
           StockCard stockCard,
           StockEventLineItemDto lineItem,
           StockEventDto stockEventDto) {
     StockCardLineItemReason reason =
             stockEventDto.getContext().findEventReason(lineItem.getReasonId());
-    if (reason != null &&
-            (reason.isSublotReasonCategory() && reason.isDebitReasonType())) {
+    if (reason != null && reason.isSublotReasonCategory()) {
       stockCard.reorderLineItems();
+
       StockCardLineItem latestLineItem =
-              stockCard.getLineItems().get(stockCard.getLineItems().size() -1 );
+              stockCard.getLineItems().get(stockCard.getLineItems().size() -1);
       StockCardLineItem previousLineItem =
               stockCard.getLineItems().get(stockCard.getLineItems().size() -2);
       latestLineItem.setExtraData(previousLineItem.getExtraData());

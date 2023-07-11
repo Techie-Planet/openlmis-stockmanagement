@@ -62,9 +62,10 @@ public class ReasonConfigurationOptionsControllerIntegrationTest extends BaseWeb
     //then
     resultActions
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(2)))
+        .andExpect(jsonPath("$", hasSize(3)))
         .andExpect(jsonPath("$.[0]", is("TRANSFER")))
-        .andExpect(jsonPath("$.[1]", is("ADJUSTMENT")));
+        .andExpect(jsonPath("$.[1]", is("ADJUSTMENT")))
+        .andExpect(jsonPath("$.[2]", is("SUBLOT")));
   }
 
   @Test

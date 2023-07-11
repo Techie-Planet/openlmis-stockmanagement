@@ -119,6 +119,7 @@ public class StockCardServiceIntegrationTest extends BaseIntegrationTest {
   private Node node;
 
   private StockCardLineItemReason reason;
+  private StockCardLineItemReason reason2;
 
   @Before
   public void setUp() throws Exception {
@@ -136,6 +137,9 @@ public class StockCardServiceIntegrationTest extends BaseIntegrationTest {
     reason = new StockCardLineItemReason("reason", null, ReasonType.CREDIT,
         ReasonCategory.ADJUSTMENT, false, Collections.emptyList());
     stockCardLineItemReasonRepository.save(reason);
+    reason2 = new StockCardLineItemReason("reason2", null, ReasonType.CREDIT,
+            ReasonCategory.SUBLOT, false, Collections.emptyList());
+    stockCardLineItemReasonRepository.save(reason2);
   }
 
   @After
